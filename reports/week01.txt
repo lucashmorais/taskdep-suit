@@ -48,5 +48,13 @@ REPORT
 	3-threads: 06.8010 secs
 	4-threads: 06.5390 secs
 
-	
+	The bar and deps variants only differs the ommission of
+	taskwait pragmas in deps.
+
+	Looks like the task dependecy graph ensures that syncronization
+	thru taskwait is not so costly, so the ommission only led to
+	marginal improvement (< 5%).
+
+	[Array-Sum]
+
 	
