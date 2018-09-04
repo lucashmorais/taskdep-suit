@@ -1,0 +1,21 @@
+TODO
+	ompss-ee -> omp-ee
+	vtune
+	unibench
+
+REPORT
+
+	OMPSS-EE -> OMP-EE
+
+	The tutorial has 6 sections, from 0 to 5.
+	The first one is the introduction to the Omp-Ss paradigm,
+	therefore it will not be implemented, but also because 
+	it explore the concept of heterogeneous computing, wich
+	will not be developed here.
+
+	Section 1 - Examples
+
+	[Cholesky]
+
+	Requires instalation of Intel Math Kernel Library.
+	
