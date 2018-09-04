@@ -17,5 +17,36 @@ REPORT
 
 	[Cholesky]
 
-	Requires instalation of Intel Math Kernel Library.
+	The code itself is not very complex, but it requires intel
+	MKL and the code does not especifies the correct version to utilize.
+
+	After many attempts to update the code to the last MKL, due to lack
+	of experience with the library, the port of this example will be done later.
+
+	[Stream]
+
+	As the code only utilized the task dependecy part of Omp-Ss,
+	it was really easy to port to openMP.
+
+	The main problem was compiling it, because it requires -mcmodel=large as
+	a gcc flag.
+
+	The sintax in|out ([a]b) in Omp-Ss turns into depend(in|out: b:a)
+	[a]b is the same as an array that starts at b and has a itens.
+
+	As openMP task depend pragmas are only possible on the caller side,
+	just copy the pragma from the callee and convert it.
+
+	Usually it iterates over an array A, so [a]b turns into A[b:a].
+
+	To fully port it, a #prama omp parralel and a #pragma omp single
+	pragmas were added to encapsulate the main function and done.
+
+	Using a 2-core machine with hyperthreading:
+	1-threads: 14.3678 secs
+	2-threads: 07.6512 secs
+	3-threads: 06.8010 secs
+	4-threads: 06.5390 secs
+
+	
 	
