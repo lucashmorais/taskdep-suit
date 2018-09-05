@@ -1,0 +1,7 @@
+
+---------------------------------------------------------
+ter set  4 19:48:46 -03 2018
+./benchmarks/mgBench/search-vector/src/search-vector_gpu.c: In function ‘search_GPU’:
+./benchmarks/mgBench/search-vector/src/search-vector_gpu.c:45:13: warning: ‘target’ construct inside of ‘target’ region
+     #pragma omp target map(to: a[:SIZE]) map(from: find2[:1])
+             ^~~

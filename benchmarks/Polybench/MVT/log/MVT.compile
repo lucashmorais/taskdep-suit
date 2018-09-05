@@ -1,0 +1,7 @@
+
+---------------------------------------------------------
+ter set  4 19:48:48 -03 2018
+./benchmarks/Polybench/MVT/src/mvt.c: In function ‘runMvt_OMP’:
+./benchmarks/Polybench/MVT/src/mvt.c:79:11: warning: ‘target’ construct inside of ‘target’ region
+   #pragma omp target map(to: a[:N*N], y1[:N]) map(tofrom: x1[:N])
+           ^~~

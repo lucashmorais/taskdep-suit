@@ -1,0 +1,19 @@
+
+---------------------------------------------------------
+ter set  4 19:48:49 -03 2018
+./benchmarks/Rodinia/lud/src/lud.c: In function ‘main’:
+./benchmarks/Rodinia/lud/src/lud.c:127:3: warning: implicit declaration of function ‘lud_omp_cpu’; did you mean ‘lud_omp’? [-Wimplicit-function-declaration]
+   lud_omp_cpu(m_cpu, matrix_dim);
+   ^~~~~~~~~~~
+   lud_omp
+./benchmarks/Rodinia/lud/src/lud.c:132:3: warning: implicit declaration of function ‘lud_omp_gpu’; did you mean ‘lud_omp’? [-Wimplicit-function-declaration]
+   lud_omp_gpu(m_gpu, matrix_dim);
+   ^~~~~~~~~~~
+   lud_omp
+./benchmarks/Rodinia/lud/src/lud_omp.c: In function ‘lud_omp_gpu’:
+./benchmarks/Rodinia/lud/src/lud_omp.c:33:14: warning: ‘target’ construct inside of ‘target’ region
+      #pragma omp target map(tofrom: a[0:size*size])
+              ^~~
+/tmp/ccwe2c7I.o: Na função "create_matrix":
+common.c:(.text+0x9f2): referência não definida para "exp"
+collect2: error: ld returned 1 exit status

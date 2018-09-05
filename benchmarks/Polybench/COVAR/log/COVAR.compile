@@ -1,0 +1,10 @@
+
+---------------------------------------------------------
+ter set  4 19:48:48 -03 2018
+./benchmarks/Polybench/COVAR/src/covariance.c: In function ‘covariance_OMP’:
+./benchmarks/Polybench/COVAR/src/covariance.c:141:11: error: initializer expression refers to iteration variable ‘j1’
+   #pragma omp parallel for collapse(2) schedule(dynamic,8)
+           ^~~
+./benchmarks/Polybench/COVAR/src/covariance.c:116:11: warning: ‘target’ construct inside of ‘target’ region
+   #pragma omp target map(to: data[:(M+1)*(N+1)]) map(from: mean[:(M+1)])
+           ^~~

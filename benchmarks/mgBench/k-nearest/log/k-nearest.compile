@@ -1,0 +1,12 @@
+
+---------------------------------------------------------
+ter set  4 19:48:45 -03 2018
+./benchmarks/mgBench/k-nearest/src/k-nearest_gpu.c: In function ‘k_nearest_gpu’:
+./benchmarks/mgBench/k-nearest/src/k-nearest_gpu.c:72:13: warning: ‘target’ construct inside of ‘target’ region
+     #pragma omp target map(to: pivots[0: SIZE_2], the_points[0:SIZE]) map(tofrom: selected[0:SIZE*SIZE])
+             ^~~
+/tmp/cc8gIH6E.o: Na função "k_nearest_cpu":
+k-nearest_gpu.c:(.text+0x450): referência não definida para "sqrt"
+/tmp/cc8gIH6E.o: Na função "k_nearest_gpu._omp_fn.2":
+k-nearest_gpu.c:(.text+0xbac): referência não definida para "sqrt"
+collect2: error: ld returned 1 exit status

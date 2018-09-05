@@ -1,0 +1,21 @@
+
+---------------------------------------------------------
+ter set  4 19:48:49 -03 2018
+./benchmarks/Rodinia/hotspot/src/hotspot_openmp.cpp: In function ‘void read_input(double*, int, int, char*)’:
+./benchmarks/Rodinia/hotspot/src/hotspot_openmp.cpp:263:48: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   fatal ("file could not be opened for reading");
+                                                ^
+./benchmarks/Rodinia/hotspot/src/hotspot_openmp.cpp:268:36: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+    fatal("not enough lines in file");
+                                    ^
+./benchmarks/Rodinia/hotspot/src/hotspot_openmp.cpp:270:31: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+    fatal("invalid file format");
+                               ^
+./benchmarks/Rodinia/hotspot/src/hotspot_openmp.cpp: In function ‘int main(int, char**)’:
+./benchmarks/Rodinia/hotspot/src/hotspot_openmp.cpp:328:36: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   fatal("unable to allocate memory");
+                                    ^
+./benchmarks/Rodinia/hotspot/src/hotspot_openmp.cpp: In function ‘void single_iteration_gpu(double*, double*, double*, int, int, double, double, double, double, double)’:
+./benchmarks/Rodinia/hotspot/src/hotspot_openmp.cpp:46:17: warning: ‘target’ construct inside of ‘target’ region
+         #pragma omp target map(to: power[0:row*col], temp[0:row*col]) map(tofrom: result[0:row*col])
+                 ^~~

@@ -1,0 +1,7 @@
+
+---------------------------------------------------------
+ter set  4 19:48:48 -03 2018
+./benchmarks/Polybench/SYR2K/src/syr2k.c: In function ‘syr2k_OMP’:
+./benchmarks/Polybench/SYR2K/src/syr2k.c:95:11: warning: ‘target’ construct inside of ‘target’ region
+   #pragma omp target map(to: A[:N*M], B[:N*M]) map(tofrom: C[:N*N])
+           ^~~

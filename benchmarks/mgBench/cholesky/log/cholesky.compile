@@ -1,0 +1,12 @@
+
+---------------------------------------------------------
+ter set  4 19:48:45 -03 2018
+./benchmarks/mgBench/cholesky/src/cholesky_gpu.c: In function ‘cholesky_GPU’:
+./benchmarks/mgBench/cholesky/src/cholesky_gpu.c:54:13: warning: ‘target’ construct inside of ‘target’ region
+     #pragma omp target map(to: A[0:SIZE*SIZE]) map(tofrom: B[0:SIZE*SIZE])
+             ^~~
+/tmp/ccnBJdfr.o: Na função "cholesky_CPU":
+cholesky_gpu.c:(.text+0x3c3): referência não definida para "sqrt"
+/tmp/ccnBJdfr.o: Na função "cholesky_GPU._omp_fn.2":
+cholesky_gpu.c:(.text+0xa6b): referência não definida para "sqrt"
+collect2: error: ld returned 1 exit status

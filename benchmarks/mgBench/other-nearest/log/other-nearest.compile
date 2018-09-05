@@ -1,0 +1,10 @@
+
+---------------------------------------------------------
+ter set  4 19:48:46 -03 2018
+./benchmarks/mgBench/other-nearest/src/other-nearest_gpu.c: In function ‘k_nearest_gpu’:
+./benchmarks/mgBench/other-nearest/src/other-nearest_gpu.c:60:20: error: initializer expression refers to iteration variable ‘i’
+             for(j=i+1;j<s;j++)
+                   ~^~
+./benchmarks/mgBench/other-nearest/src/other-nearest_gpu.c:55:13: warning: ‘target’ construct inside of ‘target’ region
+     #pragma omp target map(to: vector[0: s]) map(tofrom: selected[0:q])
+             ^~~

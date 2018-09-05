@@ -1,0 +1,12 @@
+
+---------------------------------------------------------
+ter set  4 19:48:48 -03 2018
+./benchmarks/Polybench/CORR/src/correlation.c: In function ‘correlation_OMP’:
+./benchmarks/Polybench/CORR/src/correlation.c:124:11: warning: ‘target’ construct inside of ‘target’ region
+   #pragma omp target map (tofrom: data[:(M+1)*(N+1)]) map (from: mean[:(M+1)])
+           ^~~
+/tmp/ccdB910L.o: Na função "correlation":
+correlation.c:(.text+0x41a): referência não definida para "sqrt"
+/tmp/ccdB910L.o: Na função "correlation_OMP":
+correlation.c:(.text+0x971): referência não definida para "sqrt"
+collect2: error: ld returned 1 exit status

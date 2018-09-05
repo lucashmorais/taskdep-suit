@@ -1,0 +1,116 @@
+
+---------------------------------------------------------
+ter set  4 19:48:48 -03 2018
+In file included from ./benchmarks/Rodinia/b+tree/src/main.c:93:0:
+./benchmarks/Rodinia/b+tree/src/./kernel/kernel_cpu.h:26:1: warning: data definition has no type or storage class
+ kernel_gpu( int cores_arg,
+ ^~~~~~~~~~
+./benchmarks/Rodinia/b+tree/src/./kernel/kernel_cpu.h:26:1: warning: type defaults to ‘int’ in declaration of ‘kernel_gpu’ [-Wimplicit-int]
+./benchmarks/Rodinia/b+tree/src/main.c: In function ‘transform_to_cuda’:
+./benchmarks/Rodinia/b+tree/src/main.c:747:34: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long int’ [-Wformat=]
+   printf("\nNumber of records = %d, sizeof(record)=%d, total=%d\n",size,sizeof(record),size*sizeof(record));
+                                 ~^
+                                 %ld
+./benchmarks/Rodinia/b+tree/src/main.c:747:53: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘long unsigned int’ [-Wformat=]
+   printf("\nNumber of records = %d, sizeof(record)=%d, total=%d\n",size,sizeof(record),size*sizeof(record));
+                                                    ~^
+                                                    %ld
+./benchmarks/Rodinia/b+tree/src/main.c:747:63: warning: format ‘%d’ expects argument of type ‘int’, but argument 4 has type ‘long unsigned int’ [-Wformat=]
+   printf("\nNumber of records = %d, sizeof(record)=%d, total=%d\n",size,sizeof(record),size*sizeof(record));
+                                                              ~^                        ~~~~~~~~~~~~~~~~~~~
+                                                              %ld
+./benchmarks/Rodinia/b+tree/src/main.c:748:31: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long int’ [-Wformat=]
+   printf("Number of knodes = %d, sizeof(knode)=%d, total=%d\n",nodeindex,sizeof(knode),(nodeindex)*sizeof(knode));
+                              ~^
+                              %ld
+./benchmarks/Rodinia/b+tree/src/main.c:748:49: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘long unsigned int’ [-Wformat=]
+   printf("Number of knodes = %d, sizeof(knode)=%d, total=%d\n",nodeindex,sizeof(knode),(nodeindex)*sizeof(knode));
+                                                ~^
+                                                %ld
+./benchmarks/Rodinia/b+tree/src/main.c:748:59: warning: format ‘%d’ expects argument of type ‘int’, but argument 4 has type ‘long unsigned int’ [-Wformat=]
+   printf("Number of knodes = %d, sizeof(knode)=%d, total=%d\n",nodeindex,sizeof(knode),(nodeindex)*sizeof(knode));
+                                                          ~^                            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                          %ld
+./benchmarks/Rodinia/b+tree/src/main.c:749:45: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long int’ [-Wformat=]
+   printf("\nDone Transformation. Mem used: %d\n", mem_used);
+                                            ~^
+                                            %ld
+./benchmarks/Rodinia/b+tree/src/main.c: In function ‘print_tree’:
+./benchmarks/Rodinia/b+tree/src/main.c:940:13: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘node * {aka struct node *}’ [-Wformat=]
+   printf("(%x)", n);
+            ~^
+./benchmarks/Rodinia/b+tree/src/main.c:943:13: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘void *’ [-Wformat=]
+    printf("%x ", n->pointers[i]);
+            ~^    ~~~~~~~~~~~~~~
+            %p
+./benchmarks/Rodinia/b+tree/src/main.c:951:13: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘void *’ [-Wformat=]
+    printf("%x ", n->pointers[order - 1]);
+            ~^    ~~~~~~~~~~~~~~~~~~~~~~
+            %p
+./benchmarks/Rodinia/b+tree/src/main.c:953:13: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘void *’ [-Wformat=]
+    printf("%x ", n->pointers[n->num_keys]);
+            ~^    ~~~~~~~~~~~~~~~~~~~~~~~~
+            %p
+./benchmarks/Rodinia/b+tree/src/main.c: At top level:
+./benchmarks/Rodinia/b+tree/src/main.c:1853:133: error: unknown type name ‘count’; did you mean ‘const’?
+ void compareResults(long *offset_cpu, long *offset_gpu, long *currKnode_cpu, long *currKnode_gpu, record *ans_cpu, record *ans_gpu, count) {
+                                                                                                                                     ^~~~~
+                                                                                                                                     const
+./benchmarks/Rodinia/b+tree/src/main.c: In function ‘main’:
+./benchmarks/Rodinia/b+tree/src/main.c:1978:37: warning: passing argument 2 of ‘fputs’ from incompatible pointer type [-Wincompatible-pointer-types]
+        fputs ("Fail to open %s !\n",output);
+                                     ^~~~~~
+In file included from ./benchmarks/Rodinia/b+tree/src/main.c:60:0:
+/usr/include/stdio.h:626:12: note: expected ‘FILE * restrict {aka struct _IO_FILE * restrict}’ but argument is of type ‘char *’
+ extern int fputs (const char *__restrict __s, FILE *__restrict __stream);
+            ^~~~~
+./benchmarks/Rodinia/b+tree/src/main.c:2169:48: warning: comparison between pointer and integer
+     while(*commandPointer!=32 && commandPointer!='\n')
+                                                ^~
+./benchmarks/Rodinia/b+tree/src/main.c:2280:5: warning: implicit declaration of function ‘compareResults’ [-Wimplicit-function-declaration]
+     compareResults(offset_cpu, offset_gpu, currKnode_cpu, currKnode_gpu, ans_cpu, ans_gpu, count);
+     ^~~~~~~~~~~~~~
+./benchmarks/Rodinia/b+tree/src/main.c:2296:38: warning: passing argument 2 of ‘fputs’ from incompatible pointer type [-Wincompatible-pointer-types]
+         fputs ("Fail to open %s !\n",output);
+                                      ^~~~~~
+In file included from ./benchmarks/Rodinia/b+tree/src/main.c:60:0:
+/usr/include/stdio.h:626:12: note: expected ‘FILE * restrict {aka struct _IO_FILE * restrict}’ but argument is of type ‘char *’
+ extern int fputs (const char *__restrict __s, FILE *__restrict __stream);
+            ^~~~~
+./benchmarks/Rodinia/b+tree/src/main.c:2353:48: warning: comparison between pointer and integer
+     while(*commandPointer!=32 && commandPointer!='\n')
+                                                ^~
+./benchmarks/Rodinia/b+tree/src/main.c:2358:48: warning: comparison between pointer and integer
+     while(*commandPointer!=32 && commandPointer!='\n')
+                                                ^~
+./benchmarks/Rodinia/b+tree/src/main.c:2455:38: warning: passing argument 2 of ‘fputs’ from incompatible pointer type [-Wincompatible-pointer-types]
+         fputs ("Fail to open %s !\n",output);
+                                      ^~~~~~
+In file included from ./benchmarks/Rodinia/b+tree/src/main.c:60:0:
+/usr/include/stdio.h:626:12: note: expected ‘FILE * restrict {aka struct _IO_FILE * restrict}’ but argument is of type ‘char *’
+ extern int fputs (const char *__restrict __s, FILE *__restrict __stream);
+            ^~~~~
+./benchmarks/Rodinia/b+tree/src/util/timer/timer.c: In function ‘get_time’:
+./benchmarks/Rodinia/b+tree/src/util/timer/timer.c:28:2: warning: implicit declaration of function ‘gettimeofday’; did you mean ‘get_time’? [-Wimplicit-function-declaration]
+  gettimeofday(&tv, NULL);
+  ^~~~~~~~~~~~
+  get_time
+./benchmarks/Rodinia/b+tree/src/kernel/kernel_cpu.c:131:1: warning: return type defaults to ‘int’ [-Wimplicit-int]
+ kernel_cpu( int cores_arg,
+ ^~~~~~~~~~
+./benchmarks/Rodinia/b+tree/src/kernel/kernel_cpu.c: In function ‘kernel_gpu’:
+./benchmarks/Rodinia/b+tree/src/kernel/kernel_cpu.c:85:10: warning: ‘target’ construct inside of ‘target’ region
+  #pragma omp target map(to: keys[:count], knodes[:knodes_elem], records[:records_elem]) map(tofrom: offset[:count], ans[:count], currKnode[:count])
+          ^~~
+./benchmarks/Rodinia/b+tree/src/kernel/kernel_cpu_2.c: In function ‘kernel_cpu_2’:
+./benchmarks/Rodinia/b+tree/src/kernel/kernel_cpu_2.c:158:2: warning: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
+  printf("Time spent in different stages of CPU/MCPU KERNEL:\n");
+  ^~~~~~
+./benchmarks/Rodinia/b+tree/src/kernel/kernel_cpu_2.c:158:2: warning: incompatible implicit declaration of built-in function ‘printf’
+./benchmarks/Rodinia/b+tree/src/kernel/kernel_cpu_2.c:158:2: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
+./benchmarks/Rodinia/b+tree/src/kernel/kernel_cpu_2.c:160:31: warning: unknown conversion type character ‘:’ in format [-Wformat=]
+  printf("%15.12f s, %15.12f % : MCPU: SET DEVICE\n",     (float) (time1-time0) / 1000000, (float) (time1-time0) / (float) (time2-time0) * 100);
+                               ^
+./benchmarks/Rodinia/b+tree/src/kernel/kernel_cpu_2.c:161:31: warning: unknown conversion type character ‘:’ in format [-Wformat=]
+  printf("%15.12f s, %15.12f % : CPU/MCPU: KERNEL\n",     (float) (time2-time1) / 1000000, (float) (time2-time1) / (float) (time2-time0) * 100);
+                               ^

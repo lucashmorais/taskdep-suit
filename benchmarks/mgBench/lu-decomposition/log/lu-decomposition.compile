@@ -1,0 +1,7 @@
+
+---------------------------------------------------------
+ter set  4 19:48:46 -03 2018
+./benchmarks/mgBench/lu-decomposition/src/lu-decomposition_gpu.c: In function ‘Crout_GPU’:
+./benchmarks/mgBench/lu-decomposition/src/lu-decomposition_gpu.c:53:13: warning: ‘target’ construct inside of ‘target’ region
+     #pragma omp target map(to: a[0:SIZE*SIZE]) map(tofrom: b[0:SIZE*SIZE])
+             ^~~

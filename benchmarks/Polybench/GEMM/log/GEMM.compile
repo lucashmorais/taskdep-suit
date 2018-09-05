@@ -1,0 +1,7 @@
+
+---------------------------------------------------------
+ter set  4 19:48:48 -03 2018
+./benchmarks/Polybench/GEMM/src/gemm.c: In function ‘gemm_OMP’:
+./benchmarks/Polybench/GEMM/src/gemm.c:63:11: warning: ‘target’ construct inside of ‘target’ region
+   #pragma omp target map(to: A[:NI*NK], B[:NK*NJ]) map(tofrom: C[:NI*NJ])
+           ^~~

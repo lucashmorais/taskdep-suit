@@ -1,0 +1,23 @@
+
+---------------------------------------------------------
+ter set  4 19:48:46 -03 2018
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+./benchmarks/Parboil/mri-q/../common/parboil.c:164:20: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+            err_message = "Expecting file name after '-o'\n";
+                          ^
+./benchmarks/Parboil/mri-q/../common/parboil.c:173:20: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+            err_message = "Expecting file name after '-i'\n";
+                          ^
+./benchmarks/Parboil/mri-q/../common/parboil.c:181:16: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+        err_message = "Unexpected command-line parameter\n";
+                      ^
+./benchmarks/Parboil/mri-q/../common/parboil.c:437:31: warning: format string contains '\0' within the string body [-Wformat]
+  sprintf(subtimer->label, "%s\0", label);
+                           ~~~^~~
+4 warnings generated.
+In file included from ./benchmarks/Parboil/mri-q/src/main.c:37:
+./benchmarks/Parboil/mri-q/src/computeQ.cc:47:11: error: region cannot be nested inside 'target' region
+  #pragma omp target map(to: kVals[:numK], x[:numX], y[:numX], z[:numX]) map(tofrom: Qr[:numX], Qi[:numX])
+          ^
+1 error generated.

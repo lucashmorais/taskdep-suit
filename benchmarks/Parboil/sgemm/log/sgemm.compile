@@ -1,0 +1,22 @@
+
+---------------------------------------------------------
+ter set  4 19:48:46 -03 2018
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+./benchmarks/Parboil/sgemm/../common/parboil.c:164:20: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+            err_message = "Expecting file name after '-o'\n";
+                          ^
+./benchmarks/Parboil/sgemm/../common/parboil.c:173:20: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+            err_message = "Expecting file name after '-i'\n";
+                          ^
+./benchmarks/Parboil/sgemm/../common/parboil.c:181:16: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+        err_message = "Unexpected command-line parameter\n";
+                      ^
+./benchmarks/Parboil/sgemm/../common/parboil.c:437:31: warning: format string contains '\0' within the string body [-Wformat]
+  sprintf(subtimer->label, "%s\0", label);
+                           ~~~^~~
+4 warnings generated.
+In file included from ./benchmarks/Parboil/sgemm/src/main.cc:22:
+./benchmarks/Parboil/sgemm/src/sgemm_kernel.cc:29:10: error: region cannot be nested inside 'target' region
+        #pragma omp target map(to: A[:m*k], B[:n*k]) map(tofrom: C[:m*n])
+                ^
+1 error generated.
