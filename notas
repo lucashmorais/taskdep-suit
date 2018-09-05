@@ -1,0 +1,50 @@
+openMP
+ompss
+
+gomp
+iomp
+mtsp
+
+to clean intiram : clean-fs
+bbl rebuild bbl and sim;
+
+conf:: serach overlay copy
+
+sim-rocc
+
+benchmarks to ports
+kastors nano becnhmark
+
+benchs:
+	> kastors
+	** spec 
+	>>> parboil
+	> ompss-ee
+	parbench
+	UNIBench gitlab
+
+profilling:
+	vtune
+	gnu perf
+
+language:
+	duktape
+	luajit
+
+1 a 10 microsegunds
+
+
+later:
+	rdtsc
+	timing tasks
+
+Week 1:
+	> Aprofundar no VTune
+	>> Obter grafico de qual função está executando
+	>> Aprender a obter o timming no código
+	>> Achar visão que relaciona tempo de execução com linhas de código
+	> Adaptar-se ao paradgma
+	> Converter ompss-ee para openMP
+	
+-> Anotar programas
+-> Evitar nested tasks.
