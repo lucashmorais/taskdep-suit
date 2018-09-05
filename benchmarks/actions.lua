@@ -22,6 +22,7 @@ flow = function(func)
         for i, v in ipairs(benchmarks[arg[2]]) do
             bench.group = arg[2]
             bench.bench = v
+            print("Group: " .. arg[2] .. " Project: " .. v)
             func()
         end
     else
@@ -29,6 +30,7 @@ flow = function(func)
             for i, v in ipairs(t) do
                 bench.group = k
                 bench.bench = v
+                print("Group: " .. k .. " Project: " .. v)
                 func()
             end
         end
