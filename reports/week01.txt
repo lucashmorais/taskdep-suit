@@ -1,11 +1,11 @@
 TODO
 	ompss-ee -> omp-ee
-	vtune
+	vtune (done)
 	unibench
 
 REPORT
 
-	OMPSS-EE -> OMP-EE
+	[*] OMPSS-EE -> OMP-EE
 
 	The tutorial has 6 sections, from 0 to 5.
 	The first one is the introduction to the Omp-Ss paradigm,
@@ -57,4 +57,31 @@ REPORT
 
 	[Array-Sum]
 
-	
+	[*] V-Tune	
+
+	Learned how to utilize V-Tune in order to find hotspots in a program;
+
+
+	[*] UniBench
+
+	The first thing to note down is that for unknown reasons there are multiple 
+	repositories named UniBench, 3 of them looks like differents stages of the project.
+
+	The most complete is (gitlab://)ciroceissler/UniBench
+
+	But the tool is not so well designed, with a lot of hardcoded paths and 
+	improper documentation so benchmarks are also need to be ported
+
+	A new build system was done, 'bench'
+
+	It aims flexibily and little configuration. It was made using Lua and to port a benchmark,
+	the user just need to write a build.lua file and add the benchmark in the config file.
+
+	This config file also holds the user configurantion and path for libaries and programs.
+
+	For now adding config preferences also require editing the actions.lua file, so it can pass
+	the preferences to the build.lua file.
+
+	But it is in the TODO list of the bench project
+
+
