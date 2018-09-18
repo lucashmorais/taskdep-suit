@@ -26,8 +26,26 @@ MARK: Toy2 - NO
 	Bench: Toy3
 
 	Similar aos Toy1 e Toy2. O tempo de  criação de threads gira em torno de 20ms enquanto o hotspot do algoritmo leva cerca de 7~9ms.
-	Indicando ainda uma granularidade muit[o fina.
+	Indicando ainda uma granularidade muito fina.
 
 
 OMP/SEQ: Toy3 - 2,42 (0,080 x 0,033) min(0,001) u(s)
 
+MARK: Toy3 - NO
+
+	Bench: Toy4
+
+	Similar aos Toy1, Toy2 e Toy3. 
+
+
+OMP/SEQ: Toy4 - 3,5 (0,007 x 0,002) min(0,001) u(s)
+
+MARK: Toy4 - NO
+
+	Bench: Toy5
+
+	A utilização do 'depend' no 'for' gerou um overhead colossal.
+
+OMP/SEQ: Toy5 - 14,14 (0,099 x 0,007) min(0,001) u(s)
+
+MARK: Toy5 - NO
