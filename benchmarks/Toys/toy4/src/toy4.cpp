@@ -67,22 +67,16 @@ int main() {
         printf("Finishing.\n");
 
     int s;
-    FILE *file;
 
-#ifdef _OPENMP
-    file = fopen("../../output/par", "w");
-#else
-    file = fopen("../../output/seq", "w");
-#endif
-        for(s=0;s<N*100;s++) {
-              fprintf(file, "%d ", u[s]);
-        }
-        fprintf(file, "\n");
-        for(s=0;s<N*100;s++) {
-              fprintf(file, "%d ", v[s]);
-        }
-        fclose(file);
-        fprintf(stdout, "Time: %0.6lf\n", t_end - t_start);
+    for(s=0;s<N*100;s++) {
+            fprintf(stdout, "%d ", u[s]);
+    }
+    fprintf(stdout, "\n");
+    for(s=0;s<N*100;s++) {
+            fprintf(stdout, "%d ", v[s]);
+    }
+    fprintf(stdout, "Time: %0.6lf\n", t_end - t_start);
+    fprintf(stderr, "Time: %0.6lf\n", t_end - t_start);
 
 	return 0;
 }

@@ -7,6 +7,8 @@ benchmarks = {
         "pi-calc",
         "toy1",
         "toy2",
-        "toy3"
+        "toy3",
+        "toy4",
+        "toy5"
     }
 }
