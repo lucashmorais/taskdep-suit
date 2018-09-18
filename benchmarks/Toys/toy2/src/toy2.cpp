@@ -69,30 +69,23 @@ int main() {
 
 	printf("Finishing.\n");
 		int i;
-	FILE *file;
 
-#ifdef _OPENMP
-	file = fopen("../../output/par", "w");
-#else
-	file = fopen("../../output/seq", "w");
-#endif
+	/*for(i=0;i<N;i++) {
+			fprintf(file, "%d ", u[i]);
+	}
+	fprintf(file, "\n");
+	for(i=0;i<N;i++) {
+			fprintf(file, "%d ", v[i]);
+	}
+	fprintf(file, "\n");
+	for(i=0;i<N;i++) {
+			fprintf(file, "%d ", w[i]);
+	}*/
+	fwrite(u, sizeof(int), N, stdout);
+	fwrite(v, sizeof(int), N, stdout);
+	fwrite(w, sizeof(int), N, stdout);
 
-	    /*for(i=0;i<N;i++) {
-	          fprintf(file, "%d ", u[i]);
-	    }
-	    fprintf(file, "\n");
-	    for(i=0;i<N;i++) {
-	          fprintf(file, "%d ", v[i]);
-	    }
-	    fprintf(file, "\n");
-	    for(i=0;i<N;i++) {
-	          fprintf(file, "%d ", w[i]);
-	    }*/
-	    fwrite(u, sizeof(int), N, file);
-	    fwrite(v, sizeof(int), N, file);
-	    fwrite(w, sizeof(int), N, file);
-	    fclose(file);
-
-	    fprintf(stdout, "Time: %0.6lf\n", t_end - t_start);
+	fprintf(stderr, "Time: %0.6lf\n", t_end - t_start);
+	fprintf(stdout, "Time: %0.6lf\n", t_end - t_start);
 	return 0;
 }

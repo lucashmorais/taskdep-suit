@@ -4,6 +4,8 @@ lua = "lua5.3"
 
 benchmarks = {
     ["Toys"] = {
-        "pi-calc"
+        "pi-calc",
+        "toy1",
+        "toy2"
     }
 }
