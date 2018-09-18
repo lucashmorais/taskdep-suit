@@ -66,4 +66,12 @@ OMP/SEQ: Toy7 - 4,47 (0,134 x 0,030) min(0,001) u(s)
 
 MARK: Toy7 - NO
 
+	Bench: Toy8
+
+	Similar aos anteriores, o excesso de dependências gerou um overhead muito grande.
+
+OMP/SEQ: Toy8 - 4,47 (0,152 x 0,006) min(0,001) u(s)
+
+MARK: Toy8 - NO
+
 
