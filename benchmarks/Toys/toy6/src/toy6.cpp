@@ -43,17 +43,11 @@ int main() {
 	srand(100);
 	printf("Finished. %d %d\n", u[rand() %N], u[rand() % N]);
 	int s;
-            FILE *file;
 
-#ifdef _OPENMP
-    file = fopen("../../output/par", "w");
-#else
-    file = fopen("../../output/seq", "w");
-#endif
-        for(s=0;s<(2*N + N);s++) {
-              fprintf(file, "%d ", u[s]);
-        }
-        fclose(file);
-        fprintf(stdout, "Time: %0.6lf\n", t_end - t_start);
+	for(s=0;s<(2*N + N);s++) {
+			fprintf(stdout, "%d ", u[s]);
+	}
+	fprintf(stdout, "Time: %0.6lf\n", t_end - t_start);
+	fprintf(stderr, "Time: %0.6lf\n", t_end - t_start);
 	return 0;
 }
