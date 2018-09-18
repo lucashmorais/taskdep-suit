@@ -6,6 +6,7 @@ benchmarks = {
     ["Toys"] = {
         "pi-calc",
         "toy1",
-        "toy2"
+        "toy2",
+        "toy3"
     }
 }
