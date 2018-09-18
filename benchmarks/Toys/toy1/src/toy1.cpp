@@ -18,14 +18,14 @@ void fn2(int * a, int * b) {
 
 int main() {
 	int i;
-	int N = 15;
+	int N = 50;
 	int u[N*100], v[N*100];
 
 	//srand(time(NULL));
 	srand(100);
 	for(i=0;i<N*100;i++) {
-		u[i] = 111;
-		v[i] = 111;
+		u[i] = rand();
+		v[i] = rand();
 	}
 	u[0] = -1;
 	v[0] = 666;
@@ -68,21 +68,17 @@ int main() {
 
 	printf("Finishing.\n");
 
-	FILE *file;
+	for(i=0;i<N*100;i++) {
+			printf("%d ", u[i]);
+	}
 
-#ifdef _OPENMP
-	file = fopen("../../output/par", "w");
-#else
-	file = fopen("../../output/seq", "w");
-#endif
-	    for(i=0;i<N*100;i++) {
-	          fprintf(file, "%d ", u[i]);
-	    }
-	    fprintf(file, "\n");
-	    for(i=0;i<N*100;i++) {
-	          fprintf(file, "%d ", v[i]);
-	    }
-	    fclose(file);
-	    fprintf(stdout, "Time: %0.6lf\n", t_end - t_start);
+	printf("\n");
+
+	for(i=0;i<N*100;i++) {
+			printf("%d ", v[i]);
+	}
+
+	fprintf(stdout, "Time: %0.6lf\n", t_end - t_start);
+	fprintf(stderr, "Time: %0.6lf\n", t_end - t_start);
 	return 0;
 }
