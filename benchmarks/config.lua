@@ -10,6 +10,7 @@ benchmarks = {
         "toy3",
         "toy4",
         "toy5",
-        "toy6"
+        "toy6",
+        "toy7"
     }
 }

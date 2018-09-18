@@ -58,4 +58,12 @@ OMP/SEQ: Toy6 - 4,5 (0,081 x 0,020) min(0,001) u(s)
 
 MARK: Toy6 - NO
 
+	Bench: Toy7
+
+	Similar aos anteriores, sendo grande parte, overhead do libgomp.
+
+OMP/SEQ: Toy7 - 4,47 (0,134 x 0,030) min(0,001) u(s)
+
+MARK: Toy7 - NO
+
 
