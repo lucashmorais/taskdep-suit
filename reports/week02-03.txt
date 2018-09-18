@@ -1,0 +1,22 @@
+TODO
+	Porta mais benchmark
+	Listar applicações ideiais
+
+REPORT
+	Por uma série de imprevistos e compromissos, a semana 2 foi combinada com a semana 3.
+
+	Bench: Toy1
+
+	Número de dependencias geradas é muito grande, causando um overhead da libgomp.
+	Otimizações sequenciais fazem com que o programa tenha uma perda de performance ainda maior.
+
+MARK: Toy1 - NO
+
+	Bench: Toy2
+
+	Similar ao Toy1. Apresentando um indicativo que a granularidade das taks tem um limite em relação ao runtime,
+	senão o overhead passa a ser muito grande.
+
+MARK: Toy2 - NO
+
+
