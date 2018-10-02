@@ -1,0 +1,138 @@
+Program : ./strassen_seq
+Size : 4096
+Iterations : 1
+Cutoff Size : 64
+Cutoff depth : 5
+Threads : 1
+Time(sec):: avg : 42.978739 :: std : 0.000000 :: min : 42.978739 :: max : 42.978739 :: median : 42.978739
+
+Program : ./strassen_seq
+Size : 8192
+Iterations : 1
+Cutoff Size : 64
+Cutoff depth : 5
+Threads : 1
+Time(sec):: avg : 302.803038 :: std : 0.000000 :: min : 302.803038 :: max : 302.803038 :: median : 302.803038
+
+Program : ./strassen_task
+Size : 4096
+Iterations : 10
+Cutoff Size : 64
+Cutoff depth : 5
+Threads : 4
+Time(sec):: avg : 13.347443 :: std : 0.520189 :: min : 12.829014 :: max : 14.461602 :: median : 13.138910
+
+Program : ./strassen_taskdep
+Size : 4096
+Iterations : 10
+Cutoff Size : 64
+Cutoff depth : 5
+Threads : 4
+Time(sec):: avg : 13.267814 :: std : 0.145860 :: min : 13.028712 :: max : 13.482293 :: median : 13.303783
+
+Program : ./strassen_task
+Size : 8192
+Iterations : 10
+Cutoff Size : 64
+Cutoff depth : 5
+Threads : 4
+Time(sec):: avg : 91.442755 :: std : 2.546297 :: min : 88.678488 :: max : 97.452610 :: median : 90.576512
+
+Program : ./strassen_taskdep
+Size : 8192
+Iterations : 10
+Cutoff Size : 64
+Cutoff depth : 5
+Threads : 4
+Time(sec):: avg : 92.895470 :: std : 0.976136 :: min : 91.120154 :: max : 94.177595 :: median : 93.117491
+
+Program : ./jacobi_seq
+Size : 8192
+Blocksize : 128
+Iteration time : 4
+Iterations : 1
+Threads : 1
+Time(sec):: avg : 2.000244 :: std : 0.000000 :: min : 2.000244 :: max : 2.000244 :: median : 2.000244
+
+Program : ./jacobi_seq
+Size : 16384
+Blocksize : 128
+Iteration time : 4
+Iterations : 1
+Threads : 1
+Time(sec):: avg : 8.115952 :: std : 0.000000 :: min : 8.115952 :: max : 8.115952 :: median : 8.115952
+
+Program : ./jacobi_task
+Size : 8192
+Blocksize : 128
+Iteration time : 4
+Iterations : 10
+Threads : 4
+Time(sec):: avg : 1.017192 :: std : 0.044413 :: min : 0.954413 :: max : 1.059071 :: median : 1.050743
+
+Program : ./jacobi_taskdep
+Size : 8192
+Blocksize : 128
+Iteration time : 4
+Iterations : 10
+Threads : 4
+Time(sec):: avg : 1.038854 :: std : 0.020080 :: min : 1.023318 :: max : 1.094815 :: median : 1.030612
+
+Program : ./jacobi_task
+Size : 16384
+Blocksize : 128
+Iteration time : 4
+Iterations : 10
+Threads : 4
+Time(sec):: avg : 4.194030 :: std : 0.028739 :: min : 4.164288 :: max : 4.258260 :: median : 4.198047
+
+Program : ./jacobi_taskdep
+Size : 16384
+Blocksize : 128
+Iteration time : 4
+Iterations : 10
+Threads : 4
+Time(sec):: avg : 4.111975 :: std : 0.039706 :: min : 4.070240 :: max : 4.190568 :: median : 4.098976
+
+Program : ./sparselu_seq
+Size : 128
+Submatrix size : 64
+Iterations : 1
+Threads : 1
+Time(sec):: avg : 68.339478 :: std : 0.000000 :: min : 68.339478 :: max : 68.339478 :: median : 68.339478
+
+Program : ./sparselu_seq
+Size : 64
+Submatrix size : 128
+Iterations : 1
+Threads : 1
+Time(sec):: avg : 70.922049 :: std : 0.000000 :: min : 70.922049 :: max : 70.922049 :: median : 70.922049
+
+Program : ./sparselu_task
+Size : 128
+Submatrix size : 64
+Iterations : 10
+Threads : 4
+Time(sec):: avg : 21.870408 :: std : 0.289442 :: min : 21.660735 :: max : 22.551453 :: median : 21.741499
+
+Program : ./sparselu_taskdep
+Size : 128
+Submatrix size : 64
+Iterations : 10
+Threads : 4
+Time(sec):: avg : 20.361950 :: std : 0.059352 :: min : 20.272349 :: max : 20.490250 :: median : 20.355734
+
+Program : ./sparselu_task
+Size : 64
+Submatrix size : 128
+Iterations : 10
+Threads : 4
+Time(sec):: avg : 24.427217 :: std : 0.159958 :: min : 24.327196 :: max : 24.889490 :: median : 24.373939
+
+Program : ./sparselu_taskdep
+Size : 64
+Submatrix size : 128
+Iterations : 10
+Threads : 4
+Time(sec):: avg : 23.025259 :: std : 0.192725 :: min : 22.877705 :: max : 23.510811 :: median : 22.949866
+
