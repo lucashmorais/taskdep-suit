@@ -1,0 +1,44 @@
+{
+    "KASTOR-1.1" : {
+            "strassen" : [
+                {
+                    "id"              : "VPS0101",
+                    "cmd"             : "strassen_task -i 16 -n 4096",
+                    "bin"             : "./strassen_task",
+                    "args"            : "-i 16 -n 4096",
+                    "runtime"         : "libgomp (gcc5) and intel VTune",
+                    "hardware"        : "DLL0746",
+                    "runs"            : "16",
+                    "avg"             : "14.975",
+                    "dev"             : "9.12",
+                    "max"             : "26.527",
+                    "min"             : "12.662",
+                    "threads"         : "4",
+                    "avg_use"         : "3.52",
+                    "avg_thread_size" : "",
+                    "dev_thread_size" : "",
+                    "library"         : "",
+                    "notes"           : "Runing utilizing VTune, task model only"
+                },
+                {
+                    "id"              : "VPS0101",
+                    "cmd"             : "strassen_task -i 16 -n 4096",
+                    "bin"             : "./strassen_task",
+                    "args"            : "-i 16 -n 4096",
+                    "runtime"         : "libgomp (gcc5) and intel VTune",
+                    "hardware"        : "DLL0746",
+                    "runs"            : "16",
+                    "avg"             : "14.975",
+                    "dev"             : "9.12",
+                    "max"             : "26.527",
+                    "min"             : "12.662",
+                    "threads"         : "4",
+                    "avg_use"         : "3.52",
+                    "avg_thread_size" : "",
+                    "dev_thread_size" : "",
+                    "library"         : "",
+                    "notes"           : "Runing utilizing VTune, task model only"
+                }
+            ]
+    }
+}

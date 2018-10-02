@@ -18,23 +18,27 @@ REPORT
             ram: String;
             gpu: String;
             os: String;
+            model: String;
             notes: String;
         }
     }
 
     {
-        [group]: {
-            [set]: {
+        group: {
+            [bench]: {
                 id: String; /* AAABBBB -> /A is the author  and /B is a control number; eg: VPS0176 */
                 cmd: String;
                 bin: String;
                 args: String;
                 runtime: String;
+                hardware: String;
                 runs: String;
+                avg: String;
+                dev: String;
                 max: String;
                 min: String;
                 threads: String;
-                avg_use: String; /* 1 represents one thread utilization at 100%*/
+                avg_use: String; /* sum (nThreads x timeElapsed) / sum(timeElapsed)*/
                 avg_thread_size: String;
                 dev_thread_size: String; /* dev = sum((t-avg)²)/#t*/
                 library: String;
@@ -42,4 +46,8 @@ REPORT
             }
         }
     }
+
+    The folder for the data is ../results
+
+
 
