@@ -1,0 +1,4 @@
+TODO
+    Formalize Benchamark Table Format
+    Generate some results
+    libgomp
