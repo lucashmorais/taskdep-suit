@@ -48,3 +48,28 @@ Week 1:
 	
 -> Anotar programas
 -> Evitar nested tasks.
+
+
+Utilize LD Preaload.
+
+vitor@sake:/$ sudo find -iname '*gomp*.so*'
+[sudo] password for vitor: 
+Sorry, try again.
+[sudo] password for vitor: 
+find: ‘./run/user/1000/gvfs’: Permission denied
+./home/vitor/.local/share/lutris/runtime/lib64/libgomp.so.1
+./home/vitor/.local/share/lutris/runtime/lib32/libgomp.so.1
+./home/vitor/.local/share/Steam/ubuntu12_32/steam-runtime/amd64/usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0
+./home/vitor/.local/share/Steam/ubuntu12_32/steam-runtime/amd64/usr/lib/x86_64-linux-gnu/libgomp.so.1
+./home/vitor/.local/share/Steam/ubuntu12_32/steam-runtime/i386/usr/lib/i386-linux-gnu/libgomp.so.1.0.0
+./home/vitor/.local/share/Steam/ubuntu12_32/steam-runtime/i386/usr/lib/i386-linux-gnu/libgomp.so.1
+./usr/lib/debug/usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0
+./usr/lib/gcc/x86_64-linux-gnu/5/libgomp.so
+./usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0
+./usr/lib/x86_64-linux-gnu/libgomp.so.1
+vitor@sake:/$ 
+
+
+>>> ./usr/lib/debug/usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0
+
+Analyse Rust Borrowing to OpenMP

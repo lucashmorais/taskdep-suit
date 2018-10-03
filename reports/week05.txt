@@ -48,6 +48,9 @@ REPORT
     }
 
     The folder for the data is ../results
+    
+    Working on parboil stencil
 
+    Port is not that promissive
 
-
+    Look for benchmarks that do not focus on heavy matrix manipulations
