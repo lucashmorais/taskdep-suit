@@ -1,0 +1,1 @@
+./sparselu_task -c

@@ -1,0 +1,9 @@
+Program : ./jacobi_block_taskdep
+Size : 512
+Blocksize : 128
+Iteration time : 4
+Iterations : 1
+Threads : 4
+Time(sec):: avg : 0.003429 :: std : 0.000000 :: min : 0.003429 :: max : 0.003429 :: median : 0.003429
+Check : success
+

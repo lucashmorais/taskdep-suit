@@ -4,7 +4,7 @@ Iterations : 1
 Cutoff Size : 64
 Cutoff depth : 5
 Threads : 1
-Time(sec):: avg : 42.978739 :: std : 0.000000 :: min : 42.978739 :: max : 42.978739 :: median : 42.978739
+Time(sec):: avg : 44.324370 :: std : 0.000000 :: min : 44.324370 :: max : 44.324370 :: median : 44.324370
 
 Program : ./strassen_seq
 Size : 8192
@@ -12,7 +12,7 @@ Iterations : 1
 Cutoff Size : 64
 Cutoff depth : 5
 Threads : 1
-Time(sec):: avg : 302.803038 :: std : 0.000000 :: min : 302.803038 :: max : 302.803038 :: median : 302.803038
+Time(sec):: avg : 312.551604 :: std : 0.000000 :: min : 312.551604 :: max : 312.551604 :: median : 312.551604
 
 Program : ./strassen_task
 Size : 4096
@@ -20,7 +20,7 @@ Iterations : 10
 Cutoff Size : 64
 Cutoff depth : 5
 Threads : 4
-Time(sec):: avg : 13.347443 :: std : 0.520189 :: min : 12.829014 :: max : 14.461602 :: median : 13.138910
+Time(sec):: avg : 14.669535 :: std : 0.606744 :: min : 13.925118 :: max : 16.091681 :: median : 14.571140
 
 Program : ./strassen_taskdep
 Size : 4096
@@ -28,7 +28,7 @@ Iterations : 10
 Cutoff Size : 64
 Cutoff depth : 5
 Threads : 4
-Time(sec):: avg : 13.267814 :: std : 0.145860 :: min : 13.028712 :: max : 13.482293 :: median : 13.303783
+Time(sec):: avg : 14.659458 :: std : 0.440660 :: min : 13.543689 :: max : 15.353057 :: median : 14.757354
 
 Program : ./strassen_task
 Size : 8192
@@ -36,7 +36,7 @@ Iterations : 10
 Cutoff Size : 64
 Cutoff depth : 5
 Threads : 4
-Time(sec):: avg : 91.442755 :: std : 2.546297 :: min : 88.678488 :: max : 97.452610 :: median : 90.576512
+Time(sec):: avg : 100.836857 :: std : 4.616209 :: min : 92.082216 :: max : 110.322143 :: median : 100.839211
 
 Program : ./strassen_taskdep
 Size : 8192
@@ -44,7 +44,7 @@ Iterations : 10
 Cutoff Size : 64
 Cutoff depth : 5
 Threads : 4
-Time(sec):: avg : 92.895470 :: std : 0.976136 :: min : 91.120154 :: max : 94.177595 :: median : 93.117491
+Time(sec):: avg : 93.252578 :: std : 2.769084 :: min : 88.924889 :: max : 98.938196 :: median : 93.297402
 
 Program : ./jacobi_seq
 Size : 8192
@@ -52,7 +52,7 @@ Blocksize : 128
 Iteration time : 4
 Iterations : 1
 Threads : 1
-Time(sec):: avg : 2.000244 :: std : 0.000000 :: min : 2.000244 :: max : 2.000244 :: median : 2.000244
+Time(sec):: avg : 1.989875 :: std : 0.000000 :: min : 1.989875 :: max : 1.989875 :: median : 1.989875
 
 Program : ./jacobi_seq
 Size : 16384
@@ -60,7 +60,7 @@ Blocksize : 128
 Iteration time : 4
 Iterations : 1
 Threads : 1
-Time(sec):: avg : 8.115952 :: std : 0.000000 :: min : 8.115952 :: max : 8.115952 :: median : 8.115952
+Time(sec):: avg : 7.962071 :: std : 0.000000 :: min : 7.962071 :: max : 7.962071 :: median : 7.962071
 
 Program : ./jacobi_task
 Size : 8192
@@ -68,7 +68,7 @@ Blocksize : 128
 Iteration time : 4
 Iterations : 10
 Threads : 4
-Time(sec):: avg : 1.017192 :: std : 0.044413 :: min : 0.954413 :: max : 1.059071 :: median : 1.050743
+Time(sec):: avg : 0.940880 :: std : 0.055239 :: min : 0.888057 :: max : 1.012640 :: median : 0.940769
 
 Program : ./jacobi_taskdep
 Size : 8192
@@ -76,7 +76,7 @@ Blocksize : 128
 Iteration time : 4
 Iterations : 10
 Threads : 4
-Time(sec):: avg : 1.038854 :: std : 0.020080 :: min : 1.023318 :: max : 1.094815 :: median : 1.030612
+Time(sec):: avg : 1.001202 :: std : 0.004864 :: min : 0.992806 :: max : 1.009950 :: median : 1.001104
 
 Program : ./jacobi_task
 Size : 16384
@@ -84,7 +84,7 @@ Blocksize : 128
 Iteration time : 4
 Iterations : 10
 Threads : 4
-Time(sec):: avg : 4.194030 :: std : 0.028739 :: min : 4.164288 :: max : 4.258260 :: median : 4.198047
+Time(sec):: avg : 4.023639 :: std : 0.005016 :: min : 4.014195 :: max : 4.031734 :: median : 4.024687
 
 Program : ./jacobi_taskdep
 Size : 16384
@@ -92,47 +92,47 @@ Blocksize : 128
 Iteration time : 4
 Iterations : 10
 Threads : 4
-Time(sec):: avg : 4.111975 :: std : 0.039706 :: min : 4.070240 :: max : 4.190568 :: median : 4.098976
+Time(sec):: avg : 4.072786 :: std : 0.236974 :: min : 3.913170 :: max : 4.585515 :: median : 3.987347
 
 Program : ./sparselu_seq
 Size : 128
 Submatrix size : 64
 Iterations : 1
 Threads : 1
-Time(sec):: avg : 68.339478 :: std : 0.000000 :: min : 68.339478 :: max : 68.339478 :: median : 68.339478
+Time(sec):: avg : 67.587628 :: std : 0.000000 :: min : 67.587628 :: max : 67.587628 :: median : 67.587628
 
 Program : ./sparselu_seq
 Size : 64
 Submatrix size : 128
 Iterations : 1
 Threads : 1
-Time(sec):: avg : 70.922049 :: std : 0.000000 :: min : 70.922049 :: max : 70.922049 :: median : 70.922049
+Time(sec):: avg : 70.211583 :: std : 0.000000 :: min : 70.211583 :: max : 70.211583 :: median : 70.211583
 
 Program : ./sparselu_task
 Size : 128
 Submatrix size : 64
 Iterations : 10
 Threads : 4
-Time(sec):: avg : 21.870408 :: std : 0.289442 :: min : 21.660735 :: max : 22.551453 :: median : 21.741499
+Time(sec):: avg : 21.195131 :: std : 0.058098 :: min : 21.138491 :: max : 21.344468 :: median : 21.175361
 
 Program : ./sparselu_taskdep
 Size : 128
 Submatrix size : 64
 Iterations : 10
 Threads : 4
-Time(sec):: avg : 20.361950 :: std : 0.059352 :: min : 20.272349 :: max : 20.490250 :: median : 20.355734
+Time(sec):: avg : 20.888787 :: std : 0.825508 :: min : 19.857831 :: max : 21.800217 :: median : 21.424655
 
 Program : ./sparselu_task
 Size : 64
 Submatrix size : 128
 Iterations : 10
 Threads : 4
-Time(sec):: avg : 24.427217 :: std : 0.159958 :: min : 24.327196 :: max : 24.889490 :: median : 24.373939
+Time(sec):: avg : 26.313786 :: std : 0.259566 :: min : 25.980708 :: max : 26.640732 :: median : 26.408206
 
 Program : ./sparselu_taskdep
 Size : 64
 Submatrix size : 128
 Iterations : 10
 Threads : 4
-Time(sec):: avg : 23.025259 :: std : 0.192725 :: min : 22.877705 :: max : 23.510811 :: median : 22.949866
+Time(sec):: avg : 24.581876 :: std : 0.299011 :: min : 24.277272 :: max : 25.224505 :: median : 24.543476
 
