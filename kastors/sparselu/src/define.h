@@ -1,0 +1,2 @@
+#define MSIZE
+#define SMSIZE

@@ -145,6 +145,12 @@ int dump_csv(FILE * f) {
         }
     }
     fprintf(f,"0 ]");
+    for(int i = 0; i < q; i++) {
+        free(pool[i]);
+    }
+    free(pool);
+    free(ptr);
+    free(loop);
     #else
     fprintf(f, ", \"tasks\" : \"not available\"");
     #endif
