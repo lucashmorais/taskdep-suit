@@ -1,5 +1,5 @@
 {
-  "build": false,
+  "build": true,
   "build_arg": "build",
   "build_cmd": "make",
   "run_arg": "run",
