@@ -19,8 +19,8 @@ build: bench
 
 run:
 	echo "{ \"out\" : ["
-	#foo
+	./bin/fft_seq -v 0
 	echo ','
-	#foo
+	./bin/fft_omp -v 0
 	echo "]}"
 
