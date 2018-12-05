@@ -18,7 +18,14 @@
 /*  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA            */
 /**********************************************************************************************/
 
-#include "omp-tasks-app.h"
+#define MODEL OMP-TASKS
+
+#ifdef FORCE_TIED_TASKS
+#define BOTS_MODEL_DESC "OpenMP (using tied tasks)"
+#else
+#define BOTS_MODEL_DESC "OpenMP (using tasks)"
+#endif
+
 #include "fft.h"
 
 #define BOTS_APP_NAME "FFT"

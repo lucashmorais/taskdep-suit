@@ -19,9 +19,9 @@ static struct {
 
 #define BENCH_TPT (4096) /*Number of tasks per thread to be remembered*/
 
-static unsigned long long **pool;
-static int *ptr;
-static int *loop;
+unsigned long long **pool;
+int *ptr;
+int *loop;
 
 #endif
 
@@ -162,15 +162,19 @@ void * pmalloc(size_t size) {
 }
 
 int task_init_measure(void) {
-    int q = omp_get_num_threads();
-   
-    pool = pmalloc(sizeof(int *) * q);
-    ptr = pmalloc(sizeof(int) * q);
-    loop = pmalloc(sizeof(int) * q);
-    for(int i = 0; i < q; i++) {
-        pool[i] = pmalloc(sizeof(unsigned long long) * BENCH_TPT);
-        ptr[i] = 0;
-        loop[i] = 0;
+    #pragma omp parallel
+    #pragma omp single
+    {
+        int q = omp_get_num_threads();
+
+        pool = pmalloc(sizeof(unsigned long long *) * q);
+        ptr = pmalloc(sizeof(int) * q);
+        loop = pmalloc(sizeof(int) * q);
+        for(int i = 0; i < q; i++) {
+            pool[i] = pmalloc(sizeof(unsigned long long) * BENCH_TPT);
+            ptr[i] = 0;
+            loop[i] = 0;
+        }
     }
 }
 

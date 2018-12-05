@@ -31,6 +31,7 @@
 #include <string.h>
 #include "bots.h"
 #include "app-desc.h"
+#include <bench.h>
 
 /* Definitions and operations for complex numbers */
 
@@ -4784,12 +4785,19 @@ void fft(int n, COMPLEX * in, COMPLEX * out)
      int r;
      COMPLEX *W;
 
+	 task_init_measure();
+
      bots_message("Computing coefficients ");
+	 process_start_measure();
      W = (COMPLEX *) malloc((n + 1) * sizeof(COMPLEX));
      #pragma omp parallel
      #pragma omp single
      #pragma omp task untied
-     compute_w_coefficients(n, 0, n / 2, W);
+	 {
+		task_start_measure();
+     	compute_w_coefficients(n, 0, n / 2, W);
+		task_stop_measure();
+	 }
      bots_message(" completed!\n");
 
      /* 
@@ -4807,6 +4815,7 @@ void fft(int n, COMPLEX * in, COMPLEX * out)
      #pragma omp single
      #pragma omp task untied
      fft_aux(n, in, out, factors, W, n);
+	 process_stop_measure();
      bots_message(" completed!\n");
 
      free(W);

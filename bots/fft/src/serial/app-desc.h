@@ -18,7 +18,9 @@
 /*  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA            */
 /**********************************************************************************************/
 
-#include "serial-app.h"
+#define MODEL SERIAL
+#define BOTS_MODEL_DESC "Serial"
+
 #include "fft.h"
 
 #define BOTS_APP_NAME "FFT"

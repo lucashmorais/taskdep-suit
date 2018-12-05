@@ -528,7 +528,7 @@ main(int argc, char* argv[])
 
    BOTS_APP_FINI;
 
-   //bots_print_results();
+   if(bots_verbose_mode != 0) bots_print_results();
    dump_csv(stdout);
    return (0);
 }
