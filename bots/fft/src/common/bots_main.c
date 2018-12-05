@@ -469,7 +469,7 @@ void bots_set_info ()
 int
 main(int argc, char* argv[])
 {
-   process_name("BOTS-alignment");
+   process_name("BOTS-fft");
    process_mode(BENCH_MODE);
    process_args(argc, argv);
 
