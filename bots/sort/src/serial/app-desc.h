@@ -18,7 +18,8 @@
 /*  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA            */
 /**********************************************************************************************/
 
-#include "serial-app.h"
+#define MODEL SERIAL
+#define BOTS_MODEL_DESC "Serial"
 
 #define BOTS_APP_NAME "Sort"
 #define BOTS_APP_PARAMETERS_DESC "N=%d:Q=%d:I=%d:M=%d"
