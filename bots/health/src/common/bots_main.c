@@ -469,7 +469,7 @@ void bots_set_info ()
 int
 main(int argc, char* argv[])
 {
-   process_name("BOTS-fib");
+   process_name("BOTS-health");
    process_mode(BENCH_MODE);
    process_args(argc, argv);
 
