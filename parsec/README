@@ -1,0 +1,4 @@
+Original files from PARSECSs, many thanks to the BSC.
+Original repository is available at: https://pm.bsc.es/gitlab/benchmarks/parsec-ompss
+
+This version targets 'bench', a benchmark runner.
