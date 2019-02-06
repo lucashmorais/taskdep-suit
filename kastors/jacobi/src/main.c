@@ -4,30 +4,41 @@
 #include <float.h>
 #include <math.h>
 
-#ifdef _OPENMP
-#  include <omp.h>
+#include "../../../c/bench.h"
+
+#ifdef _OMPSS
+    #include <omp.h>
+#elif _OPENMP
+    #include <omp.h>
 #endif
 
-#include "bench.h"
 #include "main.h"
-
-extern enum Bench_mode run_mode();
 
 #define min(a, b) ((a<b)?a:b)
 #define max(a, b) ((a>b)?a:b)
 
 void parse(int argc, char* argv[], struct user_parameters* params)
 {
-    /*utilize define macro here later*/
-    process_name("jacobi");
-    process_mode(run_mode());
+    process_init();
+    process_name("karstors-jacobi");
     process_args(argc, argv);
+#ifdef _OMPSS
+    process_mode(OMPSS);
+    task_init_measure();
+#elif _OPENMP
+    process_mode(OPENMP_TASK);
+    task_init_measure();
+#else
+    process_mode(SEQ);
+#endif
 
     int i;
+    params->check = 1; /*Always check*/
     for(i=1; i<argc; i++) {
         if(!strcmp(argv[i], "-c"))
             params->check = 1;
         else if(!strcmp(argv[i], "--help") || !strcmp(argv[i], "-h")) {
+/*
             printf("----------------------------------------------\n");
             printf("-                KaStORS                     -\n");
             printf("-   Kaapi Starpu OpenMP Runtime task Suite   -\n");
@@ -57,6 +68,7 @@ void parse(int argc, char* argv[], struct user_parameters* params)
             printf("-d : Cutoff (depth)\n");
 #endif
             exit(EXIT_SUCCESS);
+*/
         } else if(!strcmp(argv[i], "-i")) {
             if (++i < argc)
                 params->niter = atoi(argv[i]);
@@ -153,7 +165,9 @@ int main(int argc, char* argv[])
     parse(argc, argv, &params);
 
 // get Number of thread if OpenMP is activated
-#ifdef _OPENMP
+#ifdef _OMPSS
+    num_threads = omp_get_num_threads();
+#elif _OPENMP
     #pragma omp parallel
     #pragma omp master
     num_threads = omp_get_num_threads();
@@ -170,20 +184,13 @@ int main(int argc, char* argv[])
 
     for (int i=0; i<params.niter; ++i)
     {
-        #ifdef _OPENMP
-            task_init_measure();
-        #endif
-        process_start_measure();
-        double cur_time = run(&params);
-        all_times[i] = cur_time;
-        mean += cur_time;
-        min_ = min(min_, cur_time);
-        max_ = max(max_, cur_time);
-        meansqr += cur_time * cur_time;
-        process_stop_measure();
-        dump_csv(stdout);
-        if(i != params.niter-1) printf(",");
-    }
+      double cur_time = run(&params);
+      all_times[i] = cur_time;
+      mean += cur_time;
+      min_ = min(min_, cur_time);
+      max_ = max(max_, cur_time);
+      meansqr += cur_time * cur_time;
+      }
     mean /= params.niter;
     meansqr /= params.niter;
     double stddev = sqrt(meansqr - mean * mean);
@@ -192,6 +199,50 @@ int main(int argc, char* argv[])
     double median = all_times[params.niter / 2];
 
     free(all_times);
-
+/*
+    printf("Program : %s\n", argv[0]);
+#ifdef MSIZE
+    printf("Size : %d\n", params.matrix_size);
+#endif
+#ifdef SMSIZE
+    printf("Submatrix size : %d\n", params.submatrix_size);
+#endif
+#ifdef BSIZE
+    printf("Blocksize : %d\n", params.blocksize);
+#endif
+#ifdef IBSIZE
+    printf("Internal Blocksize : %d\n", params.iblocksize);
+#endif
+#ifdef TITER
+    printf("Iteration time : %d\n", params.titer);
+#endif
+    printf("Iterations : %d\n", params.niter);
+#ifdef CUTOFF_SIZE
+    printf("Cutoff Size : %d\n", params.cutoff_size);
+#endif
+#ifdef CUTOFF_DEPTH
+    printf("Cutoff depth : %d\n", params.cutoff_depth);
+#endif
+    printf("Threads : %d\n", num_threads);
+#ifdef GFLOPS
+    printf("Gflops:: ");
+#else
+    printf("Time(sec):: ");
+#endif
+    printf("avg : %lf :: std : %lf :: min : %lf :: max : %lf :: median : %lf\n",
+           mean, stddev, min_, max_, median);
+    if(params.check)
+        printf("Check : %s\n", (params.succeed)?
+                ((params.succeed > 1)?"not implemented":"success")
+                :"fail");
+    if (params.string2display !=0)
+      printf("%s", params.string2display);
+    printf("\n");
+*/
+    if (params.succeed)
+	process_append_result("Sucess!", 7);
+    else
+        process_append_result("Fail", 4);
+    dump_csv(stdout);
     return 0;
 }

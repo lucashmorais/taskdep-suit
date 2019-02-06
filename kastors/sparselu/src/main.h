@@ -1,8 +1,6 @@
 #ifndef KASTORS_MAIN_H
 #define KASTORS_MAIN_H
 
-#include "define.h"
-
 struct user_parameters {
     int check;
     int succeed;

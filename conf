@@ -1,0 +1,6 @@
+CC=gcc
+MCC=mcc
+FLAGS_BENCH=-lssl -lcrypto
+FLAGS_OMP=-fopenmp
+FLAGS_OMPSS=--ompss
+BENCH_PATH=../../c/

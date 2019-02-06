@@ -1,11 +1,4 @@
 # include "poisson.h"
-#include "bench.h"
-
-#ifndef _OPENMP
-enum Bench_mode run_mode() {
-  return SEQ;
-}
-#endif
 
 void sweep_seq(int nx, int ny, double dx, double dy, double *f_,
         int itold, int itnew, double *u_, double *unew_)

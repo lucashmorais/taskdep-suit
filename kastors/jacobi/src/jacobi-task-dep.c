@@ -1,9 +1,5 @@
 # include "poisson.h"
-#include "bench.h"
-
-enum Bench_mode run_mode() {
-  return OPENMP_TASK_DEP;
-}
+#include "../../../c/bench.h"
 
 /* #pragma omp task depend version of SWEEP. */
 void sweep (int nx, int ny, double dx, double dy, double *f_,
@@ -16,20 +12,23 @@ void sweep (int nx, int ny, double dx, double dy, double *f_,
     double (*u)[nx][ny] = (double (*)[nx][ny])u_;
     double (*unew)[nx][ny] = (double (*)[nx][ny])unew_;
 
-#pragma omp parallel shared (u, unew, f) private (i, j, it) firstprivate(nx, ny, dx, dy, itold, itnew)
+#pragma omp parallel shared (u, unew, f, bench_data) private (i, j, it) firstprivate(nx, ny, dx, dy, itold, itnew)
 #pragma omp single
     {
         for (it = itold + 1; it <= itnew; it++) {
             // Save the current estimate.
             for (i = 0; i < nx; i++) {
 #pragma omp task shared(u, unew) firstprivate(i) private(j) depend(in: unew[i]) depend(out: u[i])
+/*{task_start_measure();*/
                 for (j = 0; j < ny; j++) {
                     (*u)[i][j] = (*unew)[i][j];
                 }
+/*task_stop_measure();}*/
             }
             // Compute a new estimate.
             for (i = 0; i < nx; i++) {
 #pragma omp task shared(u, unew, f) firstprivate(i, nx, ny, dx, dy) private(j) depend(in: f[i], u[i-1], u[i], u[i+1]) depend(out: unew[i])
+/*{task_start_measure();*/
                 for (j = 0; j < ny; j++) {
                     if (i == 0 || j == 0 || i == nx - 1 || j == ny - 1) {
                         (*unew)[i][j] = (*f)[i][j];
@@ -39,6 +38,7 @@ void sweep (int nx, int ny, double dx, double dy, double *f_,
                                               + (*f)[i][j] * dx * dy);
                     }
                 }
+/*task_stop_measure();}*/
             }
         }
     }

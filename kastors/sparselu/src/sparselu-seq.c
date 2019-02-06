@@ -23,13 +23,6 @@
 #include <string.h>
 #include <libgen.h>
 #include "sparselu.h"
-#include "bench.h"
-
-#ifndef _OPENMP
-enum Bench_mode run_mode() {
-  return SEQ;
-}
-#endif
 
 
 void sparselu_seq_call(float **BENCH, int matrix_size, int submatrix_size)

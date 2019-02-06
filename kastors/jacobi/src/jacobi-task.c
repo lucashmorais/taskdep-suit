@@ -1,9 +1,5 @@
 # include "poisson.h"
-#include "bench.h"
-
-enum Bench_mode run_mode() {
-  return OPENMP_TASK;
-}
+#include "../../../c/bench.h"
 
 /* #pragma omp task/taskwait version of SWEEP. */
 void sweep (int nx, int ny, double dx, double dy, double *f_,
@@ -23,14 +19,17 @@ void sweep (int nx, int ny, double dx, double dy, double *f_,
             // Save the current estimate.
             for (i = 0; i < nx; i++) {
 #pragma omp task firstprivate(i, ny) private(j) shared(u, unew)
+/*{task_start_measure();*/
                 for (j = 0; j < ny; j++) {
                     (*u)[i][j] = (*unew)[i][j];
                 }
+/*task_stop_measure();}*/
             }
 #pragma omp taskwait
             // Compute a new estimate.
             for (i = 0; i < nx; i++) {
 #pragma omp task firstprivate(i, dx, dy, nx, ny) private(j) shared(u, unew, f)
+/*{task_start_measure();*/
                 for (j = 0; j < ny; j++) {
                     if (i == 0 || j == 0 || i == nx - 1 || j == ny - 1) {
                         (*unew)[i][j] = (*f)[i][j];
@@ -40,6 +39,7 @@ void sweep (int nx, int ny, double dx, double dy, double *f_,
                                                 + (*f)[i][j] * dx * dy);
                     }
                 }
+/*task_stop_measure();}*/
             }
 #pragma omp taskwait
         }

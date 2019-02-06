@@ -23,11 +23,6 @@
 #include <string.h>
 #include <libgen.h>
 #include "sparselu.h"
-#include "bench.h"
-
-enum Bench_mode run_mode() {
-  return OPENMP_TASK_DEP;
-}
 
 
 void sparselu_par_call(float **BENCH, int matrix_size, int submatrix_size)
