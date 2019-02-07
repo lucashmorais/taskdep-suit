@@ -12,7 +12,7 @@
 
 // Multi-threaded OpenMP header
 #include <omp.h>
-#include "c/bench.h"
+#include "../../../c/bench.h"
 
 
 //Precision to use for calculations
@@ -216,9 +216,10 @@ int bs_thread(void *tid_ptr) {
 
 int main (int argc, char **argv)
 {
-    process_name("Blackschole");
+    process_name("parsec-blackscholes");
     process_mode(OPENMP);
     process_args(argc, argv);
+    process_init();
 
     task_init_measure();
 
@@ -341,6 +342,8 @@ int main (int argc, char **argv)
 #endif
     free(data);
     free(prices);
+
+    process_append_file(outputFile);
 
     dump_csv(stdout);
     return 0;

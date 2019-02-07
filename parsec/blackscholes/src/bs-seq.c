@@ -10,7 +10,7 @@
 #include <math.h>
 #include <string.h>
 
-#include "c/bench.h"
+#include "../../../c/bench.h"
 
 // Multi-threaded pthreads header
 #ifdef ENABLE_THREADS
@@ -249,9 +249,10 @@ int bs_thread(void *tid_ptr) {
 
 int main (int argc, char **argv)
 {
-    process_name("Blackschole");
+    process_name("parsec-blackscholes");
     process_mode(SEQ);
     process_args(argc, argv);
+    process_init();
 
     FILE *file;
     int i;
@@ -417,6 +418,8 @@ int main (int argc, char **argv)
 #endif
     free(data);
     free(prices);
+
+    process_append_file(outputFile);
 
     dump_csv(stdout);
 

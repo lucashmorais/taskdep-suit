@@ -14,15 +14,18 @@
 #include <math.h>
 #include <string.h>
 #include <sys/time.h>
+
 #include "../../../c/bench.h"
 
+#ifdef ENABLE_PARSEC_HOOKS
+#include <hooks.h>
+#endif
 
 // Multi-threaded OpenMP header
 //#include <omp.h>
 
-#define BSIZE_UNIT 1024;
+#define BSIZE_UNIT 1024
 int BSIZE;
-//#define BSIZE 1024
 
 //Precision to use for calculations
 #define fptype float
@@ -122,7 +125,7 @@ fptype CNDF ( fptype InputX )
 
 // For debugging
 void print_xmm(fptype in, char* s) {
-    printf("%s: %f\n", s, in);
+    //printf("%s: %f\n", s, in);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -274,53 +277,45 @@ void BlkSchlsEqEuroNoDiv_inline( fptype *sptprice,
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 void bs_thread(void *tid_ptr,fptype *prices) {
+    int i, j;
+    fptype priceDelta;
+    int tid = *(int *)tid_ptr;
 
-		#pragma omp parallel
-		{
-			#pragma omp single
-			{
-				int i, j;
-				fptype priceDelta;
-				int tid = *(int *)tid_ptr;
+    for (j=0; j<NUM_RUNS; j++) {
+        for (i=0; i<=(numOptions-BSIZE); i+=BSIZE) {
+            /* Calling main function to calculate option value based on 
+             * Black & Sholes's equation.
+             */
+             #pragma omp task in(sptprice[i],strike[i],rate[i],volatility[i],otime[i],otype[i]) out(prices[i]) label(BlkSchlsEqEuroNoDiv)
+{task_start_measure();
+	     BlkSchlsEqEuroNoDiv( &sptprice[i], &strike[i],
+                                 &rate[i], &volatility[i], &otime[i],
+                                 &otype[i], 0, &prices[i], BSIZE);
+task_stop_measure();}
+        }
+        BlkSchlsEqEuroNoDiv( &sptprice[i], &strike[i],
+                                    &rate[i], &volatility[i], &otime[i],
+                                    &otype[i], 0, &prices[i], numOptions-i); //el thread creador tambe executa les iteracions sobrants d'anar de BS en BS
 
-				for (j=0; j<NUM_RUNS; j++) {
-				    for (i=0; i<=(numOptions-BSIZE); i+=BSIZE) {
-				        /* Calling main function to calculate option value based on 
-				         * Black & Sholes's equation.
-				         */
-				   			#pragma omp task depend(in: sptprice[i]) depend(out: prices[i])
-                            {
-                            task_start_measure();
-					 		BlkSchlsEqEuroNoDiv( &sptprice[i], &strike[i],
-				                             &rate[i], &volatility[i], &otime[i],
-				                             &otype[i], 0, &prices[i], BSIZE);
-                            task_stop_measure();
-                            }
-				    }
-				    BlkSchlsEqEuroNoDiv( &sptprice[i], &strike[i],
-				                                &rate[i], &volatility[i], &otime[i],
-				                                &otype[i], 0, &prices[i], numOptions-i); //el thread creador tambe executa les iteracions sobrants d'anar de BS en BS
-
-				    //We put a barrier here to avoid overlapping the execution of
-				    // tasks in different runs
-				    // #pragma omp taskwait //THIS REQUIRES ATTENTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		#ifdef ERR_CHK
-				    for (i=0; i<numOptions; i++) {
-				        priceDelta = data[i].DGrefval - prices[i];
-				        if( fabs(priceDelta) >= 1e-4 ){
-				            printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
-				                   i, prices[i], data[i].DGrefval, priceDelta);
-				            numError ++;
-				        }
-				    }
-		#endif
-				}
-			} // end of single
-		} //end of parallel region
+        //We put a barrier here to avoid overlapping the execution of
+        // tasks in different runs
+        #pragma omp taskwait
+#ifdef ERR_CHK
+        for (i=0; i<numOptions; i++) {
+            priceDelta = data[i].DGrefval - prices[i];
+            if( fabs(priceDelta) >= 1e-4 ){
+                //printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
+                       i, prices[i], data[i].DGrefval, priceDelta);
+                numError ++;
+            }
+        }
+#endif
+    }
 }
 
 int main (int argc, char **argv)
 {
+
     process_name("parsec-blackscholes");
     process_mode(OPENMP_TASK);
     process_args(argc, argv);
@@ -338,25 +333,27 @@ int main (int argc, char **argv)
     struct timeval stop;
     unsigned long elapsed;
 
+#ifdef ENABLE_PARSEC_HOOKS
+   __parsec_bench_begin(__parsec_blackscholes);
+#endif
 
    if (argc < 4)
         {
                 //printf("Usage:\n\t%s <nthreads> <inputFile> <outputFile> [blocksize]\n", argv[0]);
-                //printf("Warning: nthreads is ignored! Use OMP_NUM_THREADS=<nthreads> instead\n");
-                exit(1);
+                //printf("Warning: nthreads is ignored! Use NX_ARGS=\"--threads=<nthreads>\" instead\n");
+       			 exit(1);
         }
+        
     char *inputFile = argv[2];
     char *outputFile = argv[3];
-	int nthreads = atoi(argv[1]);
-	
+    int nthreads = atoi(argv[1]);
+
 	if(argc > 4 ) {
 		BSIZE = atoi(argv[4]);
 	}
 	else {
 		BSIZE = BSIZE_UNIT;
 	}
-
-
 
     //Read input data from file
     file = fopen(inputFile, "r");
@@ -373,7 +370,7 @@ int main (int argc, char **argv)
     if(BSIZE > numOptions) {
       //printf("ERROR: Block size larger than number of options. Please reduce the block size, or use larger data size.\n");
       exit(1);
-      //printf("WARNING: Not enough work, reducing number of threads to match number of options.\n");
+      ////printf("WARNING: Not enough work, reducing number of threads to match number of options.\n");
       //nThreads = numOptions;
     }
 
@@ -384,19 +381,19 @@ int main (int argc, char **argv)
     {
         rv = fscanf(file, "%f %f %f %f %f %f %c %f %f", &data[loopnum].s, &data[loopnum].strike, &data[loopnum].r, &data[loopnum].divq, &data[loopnum].v, &data[loopnum].t, &data[loopnum].OptionType, &data[loopnum].divs, &data[loopnum].DGrefval);
         if(rv != 9) {
-          printf("ERROR: Unable to read from file `%s'.\n", inputFile);
+          //printf("ERROR: Unable to read from file `%s'.\n", inputFile);
           fclose(file);
           exit(1);
         }
     }
     rv = fclose(file);
     if(rv != 0) {
-      printf("ERROR: Unable to close file `%s'.\n", inputFile);
+      //printf("ERROR: Unable to close file `%s'.\n", inputFile);
       exit(1);
     }
 
-    printf("Num of Options: %d\n", numOptions);
-    printf("Num of Runs: %d\n", NUM_RUNS);
+    //printf("Num of Options: %d\n", numOptions);
+    //printf("Num of Runs: %d\n", NUM_RUNS);
 
 #define PAD 256
 #define LINESIZE 64
@@ -420,54 +417,70 @@ int main (int argc, char **argv)
         otime[i]      = data[i].t;
     }
 
-    printf("Size of data: %d\n", numOptions * (sizeof(OptionData) + sizeof(int)));
+    //printf("Size of data: %d\n", numOptions * (sizeof(OptionData) + sizeof(int)));
+
+#ifdef ENABLE_PARSEC_HOOKS
+    __parsec_roi_begin();
+#endif
 
     //do work
     int tid=0;
     //omp_set_num_threads(nThreads);
     gettimeofday(&start,NULL);
     process_start_measure();
-
     bs_thread(&tid,prices);
     process_stop_measure();
-
     gettimeofday(&stop,NULL);
+
+#ifdef ENABLE_PARSEC_HOOKS
+    __parsec_roi_end();
+#endif
 
     //Write prices to output file
     file = fopen(outputFile, "w");
     if(file == NULL) {
-      printf("ERROR: Unable to open file `%s'.\n", outputFile);
+      //printf("ERROR: Unable to open file `%s'.\n", outputFile);
       exit(1);
     }
     rv = fprintf(file, "%i\n", numOptions);
     if(rv < 0) {
-      printf("ERROR: Unable to write to file `%s'.\n", outputFile);
+      //printf("ERROR: Unable to write to file `%s'.\n", outputFile);
       fclose(file);
       exit(1);
     }
     for(i=0; i<numOptions; i++) {
       rv = fprintf(file, "%.18f\n", prices[i]);
       if(rv < 0) {
-        printf("ERROR: Unable to write to file `%s'.\n", outputFile);
+        //printf("ERROR: Unable to write to file `%s'.\n", outputFile);
         fclose(file);
         exit(1);
       }
     }
     rv = fclose(file);
     if(rv != 0) {
-      printf("ERROR: Unable to close file `%s'.\n", outputFile);
+      //printf("ERROR: Unable to close file `%s'.\n", outputFile);
       exit(1);
     }
 
 #ifdef ERR_CHK
-    printf("Num Errors: %d\n", numError);
+    //printf("Num Errors: %d\n", numError);
 #endif
     free(data);
     free(prices);
 
+    elapsed = 1000000 * (stop.tv_sec - start.tv_sec);
+    elapsed += stop.tv_usec - start.tv_usec;
+
+    //printf("par_sec_time_us:%lu\n",elapsed);
+
+#ifdef ENABLE_PARSEC_HOOKS
+    __parsec_bench_end();
+#endif
+
     process_append_file(outputFile);
 
     dump_csv(stdout);
+
     return 0;
 }
 

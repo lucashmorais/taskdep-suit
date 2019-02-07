@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include "c/bench.h"
+#include "../../../c/bench.h"
 
 
 #define MAX_THREADS 128
@@ -223,7 +223,7 @@ int bs_thread(void *tid_ptr) {
 #ifdef ERR_CHK
             priceDelta = data[i].DGrefval - price;
             if( fabs(priceDelta) >= 1e-4 ){
-                //printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
+                printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
                        i, price, data[i].DGrefval, priceDelta);
                 numError ++;
             }
@@ -236,9 +236,10 @@ int bs_thread(void *tid_ptr) {
 
 int main (int argc, char **argv)
 {
-    process_name("Blackschole");
+    process_name("parsec-blackscholes");
     process_mode(PTHREADS);
     process_args(argc, argv);
+    process_init();
 
     FILE *file;
     int i;
@@ -385,6 +386,8 @@ int main (int argc, char **argv)
 #endif
     free(data);
     free(prices);
+
+    process_append_file(outputFile);
 
     dump_csv(stdout);
     return 0;

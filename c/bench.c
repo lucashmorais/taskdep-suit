@@ -11,6 +11,8 @@
 #define GG
 
 
+
+
 void process_init() {
     bench_data.out = (char *) malloc(512);
     bench_data.out_size = 0;
@@ -29,6 +31,18 @@ void process_append_result(char * str, int size) {
     }
     memcpy(bench_data.out + bench_data.out_size, str, s_size);
     bench_data.out_size = n_size;
+}
+
+void process_append_file(char * str) {
+    FILE * out_file = fopen(str, "rb");
+    char out_bytes[128];
+    int out_size;
+    out_size = fread(out_bytes, 1, 128, out_file);
+    while(out_size > 0) {
+        process_append_result(out_bytes, out_size);
+        out_size = fread(out_bytes, 1, 128, out_file);
+    }
+    fclose(out_file);
 }
 
 #ifdef _OPENMP
@@ -89,7 +103,7 @@ int process_args(int argc, char **argv) {
     int i = 0;
     for(int s = 0; s < argc; s++)
         i += str_size(argv[s]);
-    char * q = malloc(i);
+    char * q = (char *) malloc(i);
     if(q == NULL) return 0;
     i = 0;
     for(int s = 0; s < argc; s++) {
@@ -171,7 +185,7 @@ int dump_csv(FILE * f) {
     #endif
 
     fprintf(f, ",\"output\" : \"");
-	char *d = SHA256(bench_data.out, bench_data.out_size, 0);
+	char *d = (char *) SHA256((const unsigned char *)bench_data.out, bench_data.out_size, 0);
 	for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)
 		fprintf(f, "%02hhx", d[i]);
     fprintf(f, "\"");
@@ -191,11 +205,11 @@ void * pmalloc(size_t size) {
 int task_init_measure(void) {
     int q = omp_get_num_threads();
    
-    pool = pmalloc(sizeof(int *) * q);
-    ptr = pmalloc(sizeof(int) * q);
-    loop = pmalloc(sizeof(int) * q);
+    pool = (unsigned long long int **) pmalloc(sizeof(int *) * q);
+    ptr = (int *) pmalloc(sizeof(int) * q);
+    loop = (int *) pmalloc(sizeof(int) * q);
     for(int i = 0; i < q; i++) {
-        pool[i] = pmalloc(sizeof(unsigned long long) * BENCH_TPT);
+        pool[i] = (unsigned long long int *) pmalloc(sizeof(unsigned long long) * BENCH_TPT);
         ptr[i] = 0;
         loop[i] = 0;
     }
