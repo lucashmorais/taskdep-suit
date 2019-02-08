@@ -38,5 +38,6 @@ task_stop_measure();}
 task_stop_measure();}
             }
         }
+#pragma omp taskwait
     }
 }
