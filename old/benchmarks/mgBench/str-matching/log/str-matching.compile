@@ -1,7 +1,0 @@
-
----------------------------------------------------------
-ter set  4 19:48:46 -03 2018
-./benchmarks/mgBench/str-matching/src/str-matching_gpu.c: In function ‘string_matching_GPU’:
-./benchmarks/mgBench/str-matching/src/str-matching_gpu.c:66:13: warning: ‘target’ construct inside of ‘target’ region
-     #pragma omp target map(to: frase[0:SIZE], palavra[0:SIZE2]) map(tofrom: vector[0:parallel_size])
-             ^~~

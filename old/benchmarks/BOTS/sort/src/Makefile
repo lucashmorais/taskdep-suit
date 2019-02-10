@@ -1,5 +1,0 @@
-CC=gcc
-SRC_DIR=$(BENCH_DIR)/src
-SRC_OBJS=$(SRC_DIR)/sort.c
-INPUT_FLAGS=-n 10000000 -y 10000 -a 10000 -c
-

@@ -1,7 +1,0 @@
-
----------------------------------------------------------
-ter set  4 19:48:46 -03 2018
-./benchmarks/mgBench/mat-mul/src/mat-mul_gpu.c: In function ‘mul_GPU’:
-./benchmarks/mgBench/mat-mul/src/mat-mul_gpu.c:51:13: warning: ‘target’ construct inside of ‘target’ region
-     #pragma omp target map(to: a[0:SIZE*SIZE], b[0:SIZE*SIZE]) map(tofrom: c[0:SIZE*SIZE])
-             ^~~

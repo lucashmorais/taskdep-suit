@@ -1,4 +1,0 @@
->> Automatically pass configuration to build.lua file
-        Parse configuration table
-        Gerenate a callWithAction function
-        

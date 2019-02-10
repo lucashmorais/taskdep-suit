@@ -1,7 +1,0 @@
-
----------------------------------------------------------
-ter set  4 19:48:47 -03 2018
-./benchmarks/Polybench/ATAX/src/atax.c: In function ‘atax_OMP’:
-./benchmarks/Polybench/ATAX/src/atax.c:104:11: warning: ‘target’ construct inside of ‘target’ region
-   #pragma omp target map(to: A[:NX*NY], x[:NY]) map(from: tmp[:NX])
-           ^~~

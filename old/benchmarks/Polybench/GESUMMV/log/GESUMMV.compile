@@ -1,7 +1,0 @@
-
----------------------------------------------------------
-ter set  4 19:48:48 -03 2018
-./benchmarks/Polybench/GESUMMV/src/gesummv.c: In function ‘gesummv_OMP’:
-./benchmarks/Polybench/GESUMMV/src/gesummv.c:61:11: warning: ‘target’ construct inside of ‘target’ region
-   #pragma omp target map(to: A[:N*N], B[:N*N], x[:N], tmp[:N]) map(tofrom: y[:N])
-           ^~~

@@ -1,7 +1,0 @@
-This is a research project about trask dependecy in openMP.
-
-The examples and exercices presented here are based on (github//)bsc-pm/ompss-ee repository.
-
-Many thanks to the original developers.
-
-This project also does not aim to be a port of ompss-ee from Omp-Ss to openMP.

@@ -1,7 +1,0 @@
-
----------------------------------------------------------
-ter set  4 19:48:47 -03 2018
-./benchmarks/Polybench/2MM/src/2mm.c: In function ‘mm2_OMP’:
-./benchmarks/Polybench/2MM/src/2mm.c:127:11: warning: ‘target’ construct inside of ‘target’ region
-   #pragma omp target map(to: A[:NI*NK], B[:NK*NJ]) map(from: C[:NI*NJ])
-           ^~~

@@ -1,7 +1,0 @@
-
----------------------------------------------------------
-ter set  4 19:48:45 -03 2018
-./benchmarks/mgBench/floyd/src/floyd_gpu.c: In function ‘Knearest_GPU’:
-./benchmarks/mgBench/floyd/src/floyd_gpu.c:77:13: warning: ‘target’ construct inside of ‘target’ region
-     #pragma omp target map(tofrom: matrix_dist[:SIZE*SIZE])
-             ^~~

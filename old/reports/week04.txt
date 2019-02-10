@@ -1,6 +1,0 @@
-TODO
-    Generate Benchmarks table
-    Analisys Kastors
-
-REPORT
-    Gomp behavior variables: task size, JIT acelleration

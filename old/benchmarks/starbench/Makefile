@@ -1,1 +1,0 @@
-TGT_ARCH=x86

@@ -1,9 +1,0 @@
-{
-    "id"   : "DLL0746",
-    "cpu"  : "i7-7500U 2 cores, 4 threads @2.7 GHz, turbo @3.2 GHz multi, @3.5 GHz single",
-    "ram"  : "2 x 8192MB SODIMM DDR4 @2.133GHz",
-    "gpu"  : "intel HD graphics 620 + nVIDIA 940MX",
-    "os"   : "Ubuntu 16.04 LTS + NVidia Drivers",
-    "model": "Dell Inpiron 7260",
-    "notes": "requires to be on charger to test results"
-}

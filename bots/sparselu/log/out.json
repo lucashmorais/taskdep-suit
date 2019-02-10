@@ -1,1 +1,0 @@
-{"out":[{"args":"./bin/sparselu_seq -v 0","bench":"BOTS-sparselu","id":"ANON","mode":"SEQ","tasks":"not available","time":51.211707},{"args":"./bin/sparselu_omp_single -v 0","bench":"BOTS-sparselu","id":"ANON","mode":"OPENMP","tasks":[0],"time":4.54023},{"args":"./bin/sparselu_omp_for -v 0","bench":"BOTS-sparselu","id":"ANON","mode":"OPENMP","tasks":[0],"time":5.370774}]}

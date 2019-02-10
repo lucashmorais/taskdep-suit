@@ -1,9 +1,0 @@
-Program : ./strassen_seq
-Size : 256
-Iterations : 1
-Cutoff Size : 64
-Cutoff depth : 4
-Threads : 1
-Time(sec):: avg : 0.017374 :: std : 0.000000 :: min : 0.017374 :: max : 0.017374 :: median : 0.017374
-Check : success
-

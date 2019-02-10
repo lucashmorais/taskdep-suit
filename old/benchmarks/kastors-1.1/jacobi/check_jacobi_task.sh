@@ -1,1 +1,0 @@
-./jacobi_task -c

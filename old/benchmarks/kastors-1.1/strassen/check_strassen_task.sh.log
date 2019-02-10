@@ -1,9 +1,0 @@
-Program : ./strassen_task
-Size : 256
-Iterations : 1
-Cutoff Size : 64
-Cutoff depth : 4
-Threads : 4
-Time(sec):: avg : 0.005484 :: std : 0.000000 :: min : 0.005484 :: max : 0.005484 :: median : 0.005484
-Check : success
-

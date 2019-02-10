@@ -1,7 +1,0 @@
-
----------------------------------------------------------
-ter set  4 19:48:46 -03 2018
-./benchmarks/mgBench/vector-product/src/vector-product_gpu.c: In function ‘product_GPU’:
-./benchmarks/mgBench/vector-product/src/vector-product_gpu.c:44:13: warning: ‘target’ construct inside of ‘target’ region
-     #pragma omp target map(to: A[0:SIZE], B[0:SIZE]) map(from: C[0:SIZE])
-             ^~~

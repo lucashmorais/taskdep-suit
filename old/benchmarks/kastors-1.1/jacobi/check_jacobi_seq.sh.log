@@ -1,9 +1,0 @@
-Program : ./jacobi_seq
-Size : 512
-Blocksize : 128
-Iteration time : 4
-Iterations : 1
-Threads : 1
-Time(sec):: avg : 0.007829 :: std : 0.000000 :: min : 0.007829 :: max : 0.007829 :: median : 0.007829
-Check : success
-

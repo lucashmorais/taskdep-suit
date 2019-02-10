@@ -1,5 +1,0 @@
-CC=g++-4.9
-SRC_DIR=$(BENCH_DIR)/src
-SRC_OBJS=$(SRC_DIR)/sudoku.cpp
-BENCH_FLAGS=-g -O3
-CPP_FLAG=YES

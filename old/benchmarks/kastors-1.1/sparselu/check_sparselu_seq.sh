@@ -1,1 +1,0 @@
-./sparselu_seq -c

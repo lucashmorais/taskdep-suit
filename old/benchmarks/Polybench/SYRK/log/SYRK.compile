@@ -1,7 +1,0 @@
-
----------------------------------------------------------
-ter set  4 19:48:48 -03 2018
-./benchmarks/Polybench/SYRK/src/syrk.c: In function ‘syrkFPGA’:
-./benchmarks/Polybench/SYRK/src/syrk.c:92:11: warning: ‘target’ construct inside of ‘target’ region
-   #pragma omp target map(to: A[:N*M]) map(tofrom: D[:N*M])
-           ^~~

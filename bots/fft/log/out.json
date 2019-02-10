@@ -1,1 +1,0 @@
-{"out":[{"args":"./bin/fft_seq -v 0","bench":"BOTS-fft","id":"ANON","mode":"SEQ","tasks":"not available","time":8.645627},{"args":"./bin/fft_omp -v 0","bench":"BOTS-fft","id":"ANON","mode":"OPENMP","tasks":[0],"time":2.521304}]}
