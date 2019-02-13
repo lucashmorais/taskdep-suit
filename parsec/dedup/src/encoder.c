@@ -1513,9 +1513,9 @@ void Fragment(struct thread_args *args){
 #else
 				  #pragma omp task inout(chunks[nCChunks]) firstprivate(nCChunks) label(Compress)
 #endif
-//{task_start_measure();
+{task_start_measure();
 				  FragmentRefine(chunks[nCChunks]);
-//task_stop_measure();}
+task_stop_measure();}
 		// 			#pragma omp task inout(chunks[nCChunks]) label(Deduplicate)
 		// 			Deduplicate(chunks[nCChunks]);
 		// 			#pragma omp task inout(chunks[nCChunks]) label(Compress)
@@ -1525,9 +1525,9 @@ void Fragment(struct thread_args *args){
 #else
 					#pragma omp task inout(fp) in(chunks[nCChunks]) label(WriteOutput)
 #endif
-//{task_start_measure();
+{task_start_measure();
 					WriteOutput(fp, chunks[nCChunks]);
-//task_stop_measure();}
+task_stop_measure();}
 				  nCChunks++;
 				  break;
 				}
@@ -1562,9 +1562,9 @@ void Fragment(struct thread_args *args){
 #else
 				  #pragma omp task inout(chunks[nCChunks]) firstprivate(nCChunks) label(Compress)
 #endif
-//{task_start_measure();
+{task_start_measure();
 				  FragmentRefine(chunks[nCChunks]);
-//task_stop_measure();}
+task_stop_measure();}
 		// 			#pragma omp task inout(chunks[nCChunks]) label(Deduplicate)
 		// 			Deduplicate(chunks[nCChunks]);
 		// 			#pragma omp task inout(chunks[nCChunks]) label(Compress)
@@ -1574,9 +1574,9 @@ void Fragment(struct thread_args *args){
 #else
 					#pragma omp task inout(fp) in(chunks[nCChunks]) label(WriteOutput)
 #endif
-//{task_start_measure();
+{task_start_measure();
 					WriteOutput(fp, chunks[nCChunks]);
-//task_stop_measure();}
+task_stop_measure();}
 					nCChunks++;
 				      //prepare for next iteration
 				      chunk = temp;
