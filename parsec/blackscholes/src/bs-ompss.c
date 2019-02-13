@@ -317,7 +317,7 @@ int main (int argc, char **argv)
 {
 
     process_name("parsec-blackscholes");
-    process_mode(OPENMP_TASK);
+    process_mode(OMPSS);
     process_args(argc, argv);
     process_init();
     task_init_measure();
