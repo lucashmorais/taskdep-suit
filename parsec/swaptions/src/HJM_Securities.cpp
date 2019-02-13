@@ -51,6 +51,7 @@ void * worker(void *arg)
   for(int i=0; i < nSwaptions; i++) {
      #pragma omp task firstprivate(i) private(iSuccess, pdSwaptionPrice) inout(swaptions[i])
      {
+      task_start_measure();
      iSuccess = HJM_Swaption_Blocking(pdSwaptionPrice,  swaptions[i].dStrike, 
                                        swaptions[i].dCompounding, swaptions[i].dMaturity, 
                                        swaptions[i].dTenor, swaptions[i].dPaymentInterval,
@@ -60,6 +61,7 @@ void * worker(void *arg)
      assert(iSuccess == 1);
      swaptions[i].dSimSwaptionMeanPrice = pdSwaptionPrice[0];
      swaptions[i].dSimSwaptionStdError = pdSwaptionPrice[1];
+      task_stop_measure();
      }
    }
    #pragma omp taskwait
