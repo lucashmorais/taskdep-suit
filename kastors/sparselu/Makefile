@@ -41,5 +41,5 @@ run:
 	echo ','
 	./bin/sparselu-ompss -n 128 -m 16 
 	echo ','
-	./bin/sparselu-omps -n 128 -m 16
+	./bin/sparselu-ompss -n 128 -m 16
 	echo "]}"

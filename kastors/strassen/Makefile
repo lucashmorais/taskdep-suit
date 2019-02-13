@@ -41,5 +41,5 @@ run:
 	echo ','
 	./bin/strassen-ompss -n 512 -s 64 -d 5 
 	echo ','
-	./bin/strassen-omps -n 512 -s 64 -d 5
+	./bin/strassen-ompss -n 512 -s 64 -d 5
 	echo "]}"
