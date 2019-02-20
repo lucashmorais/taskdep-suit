@@ -5,7 +5,7 @@
 //    | |___| |  | |_| | | | | |___| | | ||_|
 //     \____|_|  \_____|_| |_|\____|_| |_|(_) Media benchmarks
 //                           
-//	 © 2006, Intel Corporation, licensed under Apache 2.0 
+//  2006, Intel Corporation, licensed under Apache 2.0 
 //
 //  file : AnnealingFactor.h
 //  author : Jean-Yves Bouguet - jean-yves.bouguet@intel.com
