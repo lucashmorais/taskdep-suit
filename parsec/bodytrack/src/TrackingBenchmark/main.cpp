@@ -32,6 +32,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sys/time.h>
+#include <stdlib.h>
 
 /* Timing stuff */
 typedef struct timeval timer;
@@ -253,7 +254,8 @@ int mainOMPSS(string path, int cameras, int frames, int particles, int layers, i
 			update[k] = pf[k].Update((float)k);
 			if(!update[k])														//Run particle filter step
 			{	cout << "Error loading observation data" << endl;
-				return 0;
+				//return 0; <<- ALERT, fault behaviour from mcxx! this line make the code unable to compile DO NOT FORGET
+				exit(1);
 			}
 			//}
 		}
