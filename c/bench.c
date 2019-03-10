@@ -4,19 +4,15 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <openssl/sha.h>
 
 #include "bench.h"
-
-#define GG
-
-
-
 
 void process_init() {
     bench_data.out = (char *) malloc(512);
     bench_data.out_size = 0;
     bench_data.out_max = 512;
+
+    sha256_init(&bench_data.sha_ctx);
 }
 
 void process_append_result(char * str, int size) {
@@ -185,9 +181,11 @@ int dump_csv(FILE * f) {
     #endif
 
     fprintf(f, ",\"output\" : \"");
-	char *d = (char *) SHA256((const unsigned char *)bench_data.out, bench_data.out_size, 0);
-	for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)
-		fprintf(f, "%02hhx", d[i]);
+
+    BYTE buf[SHA256_BLOCK_SIZE];
+	sha256_update(&bench_data.sha_ctx, bench_data.out, bench_data.out_size);
+	for(int i = 0; i < SHA256_BLOCK_SIZE; i++)
+		fprintf(f, "%02x", buf[i]);
     fprintf(f, "\"");
     
     fprintf(f, "}\n");

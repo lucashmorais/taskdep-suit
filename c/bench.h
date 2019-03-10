@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#include "sha.h"
+
 enum Bench_mode {
     SEQ = 0,
     OPENMP,
@@ -23,6 +25,7 @@ static struct {
     char * out;
     int out_size;
     int out_max;
+    SHA256_CTX sha_ctx;
 } bench_data;
 
 void process_init();
