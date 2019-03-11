@@ -1,6 +1,7 @@
 CC=gcc
 MCC=mcc
-FLAGS_BENCH=-lssl -lcrypto
+FLAGS_BENCH=
 FLAGS_OMP=-fopenmp
 FLAGS_OMPSS=--ompss
 BENCH_PATH=../../c/
+BENCH_FILES=bench.c,sha256.c
