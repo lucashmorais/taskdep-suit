@@ -184,6 +184,7 @@ int dump_csv(FILE * f) {
 
     BYTE buf[SHA256_BLOCK_SIZE];
 	sha256_update(&bench_data.sha_ctx, bench_data.out, bench_data.out_size);
+    sha256_final(&bench_data.sha_ctx, buf);
 	for(int i = 0; i < SHA256_BLOCK_SIZE; i++)
 		fprintf(f, "%02x", buf[i]);
     fprintf(f, "\"");
