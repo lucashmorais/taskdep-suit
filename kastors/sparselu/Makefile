@@ -7,39 +7,39 @@ build:
 	$(MCC) src/sparselu-task-dep.c src/sparselu.c src/main.c src/sparselu-seq.c $(BENCH_PATH)bench.c $(BENCH_PATH)sha256.c $(FLAGS_BENCH) $(JACOBI) -lm --openmp -o bin/sparselu-omp
 run:
 	echo "{ \"out\" : ["
-	./bin/sparselu-seq -n 64 -m 8
+	BENCH_SILENT= ./bin/sparselu-seq -n 64 -m 8
 	echo ','
-	./bin/sparselu-seq -n 64 -m 8
+	BENCH_SILENT= ./bin/sparselu-seq -n 64 -m 8
 	echo ','
-	./bin/sparselu-omp -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-omp -n 64 -m 8 
 	echo ','
-	./bin/sparselu-omp -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-omp -n 64 -m 8 
 	echo ','
-	./bin/sparselu-omp -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-omp -n 64 -m 8 
 	echo ','
-	./bin/sparselu-omp -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-omp -n 64 -m 8 
 	echo ','
-	./bin/sparselu-omp -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-omp -n 64 -m 8 
 	echo ','
-	./bin/sparselu-omp -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-omp -n 64 -m 8 
 	echo ','
-	./bin/sparselu-omp -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-omp -n 64 -m 8 
 	echo ','
-	./bin/sparselu-omp -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-omp -n 64 -m 8 
 	echo ','
-	./bin/sparselu-ompss -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-ompss -n 64 -m 8 
 	echo ','
-	./bin/sparselu-ompss -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-ompss -n 64 -m 8 
 	echo ','
-	./bin/sparselu-ompss -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-ompss -n 64 -m 8 
 	echo ','
-	./bin/sparselu-ompss -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-ompss -n 64 -m 8 
 	echo ','
-	./bin/sparselu-ompss -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-ompss -n 64 -m 8 
 	echo ','
-	./bin/sparselu-ompss -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-ompss -n 64 -m 8 
 	echo ','
-	./bin/sparselu-ompss -n 64 -m 8 
+	BENCH_SILENT= ./bin/sparselu-ompss -n 64 -m 8 
 	echo ','
-	./bin/sparselu-ompss -n 64 -m 8
+	BENCH_SILENT= ./bin/sparselu-ompss -n 64 -m 8
 	echo "]}"
