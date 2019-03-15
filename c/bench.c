@@ -8,7 +8,7 @@
 #include "bench.h"
 
 void process_init() {
-    bench_data.out = (char *) malloc(512);
+    bench_data.out = (unsigned char *) malloc(512);
     bench_data.out_size = 0;
     bench_data.out_max = 512;
 
@@ -23,7 +23,7 @@ void process_append_result(char * str, int size) {
         do {
             bench_data.out_max = bench_data.out_max*2;
         } while(n_size >= bench_data.out_max);
-        bench_data.out = (char *) realloc(bench_data.out,   bench_data.out_max);
+        bench_data.out = (unsigned char *) realloc(bench_data.out,   bench_data.out_max);
     }
     memcpy(bench_data.out + bench_data.out_size, str, s_size);
     bench_data.out_size = n_size;
@@ -182,10 +182,10 @@ int dump_csv(FILE * f) {
 
     fprintf(f, ",\"output\" : \"");
 
-    BYTE buf[SHA256_BLOCK_SIZE];
+    BYTE buf[BENCH_SHA256_BLOCK_SIZE];
 	sha256_update(&bench_data.sha_ctx, bench_data.out, bench_data.out_size);
     sha256_final(&bench_data.sha_ctx, buf);
-	for(int i = 0; i < SHA256_BLOCK_SIZE; i++)
+	for(int i = 0; i < BENCH_SHA256_BLOCK_SIZE; i++)
 		fprintf(f, "%02x", buf[i]);
     fprintf(f, "\"");
     

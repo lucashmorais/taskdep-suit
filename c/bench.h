@@ -22,10 +22,10 @@ static struct {
     char * args;
     double begin;
     double end;
-    char * out;
+    unsigned char * out;
     int out_size;
     int out_max;
-    SHA256_CTX sha_ctx;
+    BENCH_SHA256_CTX sha_ctx;
 } bench_data;
 
 void process_init();
@@ -48,6 +48,6 @@ int task_start_measure(void);
 
 #endif
 
-int dump_csv(FILE * f); /*Usually STDOUT*/
+int dump_csv(FILE * f); /*Usually stdout*/
 
 #endif
