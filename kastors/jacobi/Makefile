@@ -7,39 +7,39 @@ build:
 	$(MCC) src/jacobi-task-dep.c src/jacobi-main.c src/main.c src/jacobi-seq.c src/poisson.c $(BENCH_PATH)bench.c $(BENCH_PATH)sha256.c $(FLAGS_BENCH) $(JACOBI) -lm --openmp -o bin/jacobi-omp
 run:
 	echo "{ \"out\" : ["
-	./bin/jacobi-seq -n 2048 -b 512
+	BENCH_SILENT= ./bin/jacobi-seq -n 2048 -b 512
 	echo ','
-	./bin/jacobi-seq -n 2048 -b 512
+	BENCH_SILENT= ./bin/jacobi-seq -n 2048 -b 512
 	echo ','
-	./bin/jacobi-omp -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-omp -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-omp -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-omp -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-omp -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-omp -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-omp -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-omp -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-omp -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-omp -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-omp -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-omp -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-omp -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-omp -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-omp -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-omp -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-ompss -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-ompss -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-ompss -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-ompss -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-ompss -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-ompss -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-ompss -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-ompss -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-ompss -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-ompss -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-ompss -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-ompss -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-ompss -n 2048 -b 512 
+	BENCH_SILENT= ./bin/jacobi-ompss -n 2048 -b 512 
 	echo ','
-	./bin/jacobi-ompss -n 2048 -b 512
+	BENCH_SILENT= ./bin/jacobi-ompss -n 2048 -b 512
 	echo "]}"
