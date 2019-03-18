@@ -12,7 +12,7 @@ ifeq "$(ostype)" "solaris"
     CFLAGS += -std=gnu99
 endif
 
-LIBS += -lm -lssl -lcrypto
+LIBS += -lm
 
 DEDUP_OBJ = hashtable.o util.o dedup.o rabin.o encoder.o decoder.o mbuffer.o sha.o
 
@@ -61,7 +61,7 @@ all: $(TARGET)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 $(TARGET): $(DEDUP_OBJ)
-	$(CC) $(CFLAGS) $(LDFLAGS) ../../../c/bench.c -o $(TARGET) $(DEDUP_OBJ) $(LIBS)
+	$(CC) $(CFLAGS) $(LDFLAGS) ../../../c/bench.c ../../../c/sha256.c -o $(TARGET) $(DEDUP_OBJ) $(LIBS)
 
 clean:
 	rm -f *~ *.o $(TARGET)

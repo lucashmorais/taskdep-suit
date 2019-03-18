@@ -6,7 +6,7 @@ OBJS= CumNormalInv.o MaxFunction.o RanUnif.o nr_routines.o icdf.o \
 	HJM_Securities.o
 
 CXXFLAGS  += -Wno-deprecated -Wno-write-strings
-LIBS:=$(LIBS) -lm -lssl -lcrypto
+LIBS:=$(LIBS) -lm
 
 ifdef version
   ifeq "$(version)" "pthreads" 
@@ -49,7 +49,7 @@ endif
 all: $(EXEC)
 
 $(EXEC): $(OBJS)
-	$(MCXX) $(CXXFLAGS) $(LDFLAGS) $(DEF) $(OBJS) $(INCLUDE) $(LIBS) ../../../c/bench.c -o $(EXEC)
+	$(MCXX) $(CXXFLAGS) $(LDFLAGS) $(DEF) $(OBJS) $(INCLUDE) $(LIBS) ../../../c/bench.c ../../../c/sha256.c -o $(EXEC)
 
 .cpp.o:
 	$(MCXX) $(CXXFLAGS) $(DEF) -c $*.cpp -o $*.o
