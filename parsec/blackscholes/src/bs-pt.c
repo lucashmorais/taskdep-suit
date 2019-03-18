@@ -10,6 +10,8 @@
 #include <math.h>
 #include <string.h>
 #include "../../../c/bench.h"
+int allow_out;
+
 
 
 #define MAX_THREADS 128
@@ -223,7 +225,7 @@ int bs_thread(void *tid_ptr) {
 #ifdef ERR_CHK
             priceDelta = data[i].DGrefval - price;
             if( fabs(priceDelta) >= 1e-4 ){
-                printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
+                if(allow_out) printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
                        i, price, data[i].DGrefval, priceDelta);
                 numError ++;
             }
@@ -236,6 +238,9 @@ int bs_thread(void *tid_ptr) {
 
 int main (int argc, char **argv)
 {
+    allow_out = 1;
+    if(getenv("BENCH_SILENT") != NULL) allow_out = 0;
+
     process_name("parsec-blackscholes");
     process_mode(PTHREADS);
     process_args(argc, argv);
@@ -250,7 +255,7 @@ int main (int argc, char **argv)
 
    if (argc < 4)
         {
-                //printf("Usage:\n\t%s <nthreads> <inputFile> <outputFile>\n", argv[0]);
+                if(allow_out) printf("Usage:\n\t%s <nthreads> <inputFile> <outputFile>\n", argv[0]);
                 exit(1);
         }
     nThreads = atoi(argv[1]);
@@ -260,17 +265,17 @@ int main (int argc, char **argv)
     //Read input data from file
     file = fopen(inputFile, "r");
     if(file == NULL) {
-      //printf("ERROR: Unable to open file `%s'.\n", inputFile);
+      if(allow_out) printf("ERROR: Unable to open file `%s'.\n", inputFile);
       exit(1);
     }
     rv = fscanf(file, "%i", &numOptions);
     if(rv != 1) {
-      //printf("ERROR: Unable to read from file `%s'.\n", inputFile);
+      if(allow_out) printf("ERROR: Unable to read from file `%s'.\n", inputFile);
       fclose(file);
       exit(1);
     }
     if(nThreads > numOptions) {
-      /*//printf("WARNING: Not enough work, reducing number of threads to match number of options.\n");*/
+      /*printf("WARNING: Not enough work, reducing number of threads to match number of options.\n");*/
       nThreads = numOptions;
     }
 
@@ -281,14 +286,14 @@ int main (int argc, char **argv)
     {
         rv = fscanf(file, "%f %f %f %f %f %f %c %f %f", &data[loopnum].s, &data[loopnum].strike, &data[loopnum].r, &data[loopnum].divq, &data[loopnum].v, &data[loopnum].t, &data[loopnum].OptionType, &data[loopnum].divs, &data[loopnum].DGrefval);
         if(rv != 9) {
-          //printf("ERROR: Unable to read from file `%s'.\n", inputFile);
+          if(allow_out) printf("ERROR: Unable to read from file `%s'.\n", inputFile);
           fclose(file);
           exit(1);
         }
     }
     rv = fclose(file);
     if(rv != 0) {
-      //printf("ERROR: Unable to close file `%s'.\n", inputFile);
+      if(allow_out) printf("ERROR: Unable to close file `%s'.\n", inputFile);
       exit(1);
     }
 
@@ -301,8 +306,8 @@ int main (int argc, char **argv)
             _M4_threadsTable[_M4_i] = -1;
         }
     }
-    //printf("Num of Options: %d\n", numOptions);
-    //printf("Num of Runs: %d\n", NUM_RUNS);
+    if(allow_out) printf("Num of Options: %d\n", numOptions);
+    if(allow_out) printf("Num of Runs: %d\n", NUM_RUNS);
 
 #define PAD 256
 #define LINESIZE 64
@@ -326,7 +331,7 @@ int main (int argc, char **argv)
         otime[i]      = data[i].t;
     }
 
-    //printf("Size of data: %d\n", numOptions * (sizeof(OptionData) + sizeof(int)));
+    if(allow_out) printf("Size of data: %d\n", numOptions * (sizeof(OptionData) + sizeof(int)));
 
     int *tids;
     tids = (int *) malloc (nThreads * sizeof(int));
@@ -341,12 +346,12 @@ int main (int argc, char **argv)
             if ( _M4_threadsTable[_M4_i] == -1)    break;
         }
         pthread_create(&_M4_threadsTable[_M4_i],NULL,(void *(*)(void *))bs_thread,(void *)&tids[i]);
-		// //printf("tid=%d %d\n", _M4_i, _M4_threadsTable[_M4_i]);
+		// if(allow_out) printf("tid=%d %d\n", _M4_i, _M4_threadsTable[_M4_i]);
     }
     int _M4_i;
     void *_M4_ret;
     for ( _M4_i = 0; _M4_i < MAX_THREADS;_M4_i++) {
-        // //printf("tid=%d %d\n", _M4_i, _M4_threadsTable[_M4_i]);
+        // if(allow_out) printf("tid=%d %d\n", _M4_i, _M4_threadsTable[_M4_i]);
         if ( _M4_threadsTable[_M4_i] == -1)    break;
         pthread_join( _M4_threadsTable[_M4_i], &_M4_ret);
     }
@@ -358,31 +363,31 @@ int main (int argc, char **argv)
     //Write prices to output file
     file = fopen(outputFile, "w");
     if(file == NULL) {
-      //printf("ERROR: Unable to open file `%s'.\n", outputFile);
+      if(allow_out) printf("ERROR: Unable to open file `%s'.\n", outputFile);
       exit(1);
     }
     rv = fprintf(file, "%i\n", numOptions);
     if(rv < 0) {
-      //printf("ERROR: Unable to write to file `%s'.\n", outputFile);
+      if(allow_out) printf("ERROR: Unable to write to file `%s'.\n", outputFile);
       fclose(file);
       exit(1);
     }
     for(i=0; i<numOptions; i++) {
       rv = fprintf(file, "%.18f\n", prices[i]);
       if(rv < 0) {
-        //printf("ERROR: Unable to write to file `%s'.\n", outputFile);
+        if(allow_out) printf("ERROR: Unable to write to file `%s'.\n", outputFile);
         fclose(file);
         exit(1);
       }
     }
     rv = fclose(file);
     if(rv != 0) {
-      //printf("ERROR: Unable to close file `%s'.\n", outputFile);
+      if(allow_out) printf("ERROR: Unable to close file `%s'.\n", outputFile);
       exit(1);
     }
 
 #ifdef ERR_CHK
-    //printf("Num Errors: %d\n", numError);
+    if(allow_out) printf("Num Errors: %d\n", numError);
 #endif
     free(data);
     free(prices);
