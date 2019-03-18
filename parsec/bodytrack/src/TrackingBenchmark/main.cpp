@@ -38,6 +38,11 @@
 typedef struct timeval timer;
 #define TIME(X) gettimeofday(&X, NULL);
 
+/* Bench API stuff */
+/*#include "../../../../c/bench.h"
+int allow_out;
+*/
+
 //#include "/apps/CEPBATOOLS/extrae/latest/default/64/include/extrae_user_events.h"
 
 //Add defines USE_OMPSS, USE_OPENMP, USE_THREADS or USE_TBB for threaded versions if not using config file (Windows).
@@ -141,7 +146,7 @@ bool ProcessCmdLine(int argc, char **argv, string &path, int &cameras, int &fram
 #else
         usage += string("(unavailable)\n");
 #endif
-        usage += string("                       4 = Serial\n");
+        usage += string("                       5 = Serial\n");
 
 	string errmsg("Error : invalid argument - ");
 	if(argc < 6 || argc > 9)															//check for valid number of arguments
@@ -205,14 +210,9 @@ int mainOMPSS(string path, int cameras, int frames, int particles, int layers, i
 	timer start, end;
 	
 	cout << "Threading with OmpSs" << endl;
-//  	if(threads < 1)																		//Set number of threads used by OpenMP
-//  		omp_set_num_threads(omp_get_num_procs());										//use number of processors by default
-//  	else
-//  		omp_set_num_threads(threads);
-	
+
 	work_units=threads;
-	//omp_set_num_threads(threads);
-	cout << "Number of Threads : " << omp_get_max_threads() << endl;
+	cout << "Number of Threads : " << threads << endl;
 	
 	//load data for first frame
 	//ParticleFilterOMPSS<TrackingModel> pf;												//particle filter (OMPSS threaded) instantiated with body tracking model type
@@ -248,7 +248,7 @@ int mainOMPSS(string path, int cameras, int frames, int particles, int layers, i
 #endif
 	TIME(start);
 	bool update[frames];
-
+	//process_start_measure()
 	//for(int i = 0; i < frames; i++)														//process each set of frames
 	//for(int i = frames-1; i > -1; i--) WORKS!! The oredring of frames does not matter
 	for(int k=0; k < frames; k++ )	
@@ -276,7 +276,7 @@ int mainOMPSS(string path, int cameras, int frames, int particles, int layers, i
 		}
 	}
 	#pragma omp taskwait
-
+	//process_stop_measure();
 	TIME(end);
 	double ctime_msec = (double)timevaldiff(&start, &end);
   printf("Critical code execution time: %d\n", (int)ctime_msec);
@@ -490,6 +490,7 @@ int mainSingleThread(string path, int cameras, int frames, int particles, int la
         __parsec_roi_begin();
 #endif
 	TIME(start);
+	//process_start_measure();
 	for(int i = 0; i < frames; i++)														//process each set of frames
 	{	cout << "Processing frame " << i << endl;
 		if(!pf.Update((float)i))														//Run particle filter step
@@ -501,6 +502,7 @@ int mainSingleThread(string path, int cameras, int frames, int particles, int la
 		if(OutputBMP)
 			pf.Model().OutputBMP(estimate, i);											//save output bitmap file
 	}
+	//process_stop_measure();
 	TIME(end);
   double ctime_msec = (double)timevaldiff(&start, &end);
   printf("Critical code execution time: %d\n", (int)ctime_msec);
@@ -513,6 +515,20 @@ int mainSingleThread(string path, int cameras, int frames, int particles, int la
 
 int main(int argc, char **argv)
 {
+	/* BENCH API
+	allow_out = 1;
+	if(getenv("BENCH_SILENT") != NULL) allow_out = 0;
+
+	process_init();
+	process_name("parsec-bodytrack");
+	process_args(argc, argv);
+#ifdef USE_OMPSS
+	process_mode(OMPSS);
+	task_init_measure();
+#else
+	process_mode(SEQ);
+#endif
+	*/
 	
 	string path;
 	bool OutputBMP;
@@ -612,5 +628,9 @@ int main(int argc, char **argv)
 #if defined(ENABLE_PARSEC_HOOKS)
         __parsec_bench_end();
 #endif
+
+	/* BENCH API
+	dumps_csv(stdout);
+	*/
 	return 0;
 }
