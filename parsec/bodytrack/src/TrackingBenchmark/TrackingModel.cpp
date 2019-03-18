@@ -54,7 +54,7 @@ TrackingModel::TrackingModel()
 
 //Allocate space for multi-threaded code
 void TrackingModel::SetNumThreads(int n)
-{	
+{
 	mPoses.resize(n);  
 	mBodies.resize(n); 
 	mProjections.resize(n); 

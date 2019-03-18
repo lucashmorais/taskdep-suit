@@ -169,6 +169,12 @@ bool ProcessCmdLine(int argc, char **argv, string &path, int &cameras, int &fram
 	}
 	threads = -1;
 	threadModel = 0;
+
+	// define number of threads in order to resize vectors to correct value when using OmpSs
+	#ifdef USE_OMPSS
+	threads = omp_get_num_threads();
+	#endif //USE_OMPSS
+
 	if(argc < 7) 																		//use default single thread mode if no threading arguments present
 		return true;
 	if(!num(string(argv[6]), threadModel))
@@ -221,8 +227,9 @@ int mainOMPSS(string path, int cameras, int frames, int particles, int layers, i
 	cout << particles << " particles with " << layers << " annealing layers" << endl << endl;
 	//ofstream outputFileAvg((path + "poses.txt").c_str());
 
-	ParticleFilterOMPSS<TrackingModel>* pf = new ParticleFilterOMPSS<TrackingModel>[frames];   
+	ParticleFilterOMPSS<TrackingModel>* pf = new ParticleFilterOMPSS<TrackingModel>[frames];
 	vector<float> *estimate  = new vector<float>[frames];
+	
 
 	for(int i = 0; i < frames; i++)								
   {
