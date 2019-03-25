@@ -6,3 +6,4 @@ FLAGS_OMPSS=--ompss
 BENCH_PATH=../../c/
 BENCH_FILES=bench.c sha256.c
 PREFIX=
+ARCH_CCARGS=
