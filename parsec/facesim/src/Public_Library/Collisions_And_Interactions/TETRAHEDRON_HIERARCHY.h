@@ -27,6 +27,7 @@ public:
 	using BOX_HIERARCHY<T>::box_hierarchy;
 	using BOX_HIERARCHY<T>::box_radius;
 	using BOX_HIERARCHY<T>::Update_Nonleaf_Boxes;
+	using BOX_HIERARCHY<T>::Thicken_Leaf_Boxes;
 
 	TETRAHEDRON_MESH& tetrahedron_mesh;
 	SOLIDS_PARTICLE<T, VECTOR_3D<T> >& particles;
@@ -96,28 +97,28 @@ public:
 	{
 		Calculate_Bounding_Boxes (box_hierarchy);
 
-		if (extra_thickness) this->Thicken_Leaf_Boxes (extra_thickness);
+		if (extra_thickness) Thicken_Leaf_Boxes (extra_thickness);
 	}
 
 	void Update_Leaf_Boxes (const ARRAY<VECTOR_3D<T> >& X, const T extra_thickness = 0) // use X instead of the current particle positions
 	{
 		Calculate_Bounding_Boxes (box_hierarchy, X);
 
-		if (extra_thickness) this->Thicken_Leaf_Boxes (extra_thickness);
+		if (extra_thickness) Thicken_Leaf_Boxes (extra_thickness);
 	}
 
 	void Update_Leaf_Boxes (const ARRAY<VECTOR_3D<T> >& start_X, const ARRAY<VECTOR_3D<T> >& end_X, const T extra_thickness = 0) // bound tetrahedrons moving from start_X to end_X
 	{
 		Calculate_Bounding_Boxes (box_hierarchy, start_X, end_X);
 
-		if (extra_thickness) this->Thicken_Leaf_Boxes (extra_thickness);
+		if (extra_thickness) Thicken_Leaf_Boxes (extra_thickness);
 	}
 
 	void Update_Leaf_Boxes (const RIGID_BODY_STATE_3D<T>& start_state, const RIGID_BODY_STATE_3D<T>& end_state, const T extra_thickness = 0) // for a moving rigid body
 	{
 		Calculate_Bounding_Boxes (box_hierarchy, start_state, end_state);
 
-		if (extra_thickness) this->Thicken_Leaf_Boxes (extra_thickness);
+		if (extra_thickness) Thicken_Leaf_Boxes (extra_thickness);
 	}
 
 	void Calculate_Bounding_Boxes (ARRAY<BOX_3D<T> >& bounding_boxes)

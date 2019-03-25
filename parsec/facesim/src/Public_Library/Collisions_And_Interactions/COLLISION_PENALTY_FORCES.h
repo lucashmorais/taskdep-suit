@@ -278,6 +278,45 @@ public:
         //#endif
     }
 
+	void Update_Forces_And_Derivatives()
+	{
+		for (int p = 1; p <= check_collision.m; p++)
+		{
+			int index = check_collision (p);
+			collision_force (p) = VECTOR_3D<T>();
+			collision_force_derivative (p) = SYMMETRIC_MATRIX_3X3<T>();
+
+			for (int r = 1; r <= collision_body_list->collision_bodies.m; r++) if (!skip_collision_body (r))
+				{
+					int collision_body_particle_index = 0;
+
+					if (collision_body_list_id == r) collision_body_particle_index = index;
+
+					T phi_value;
+					int aggregate = -1;
+					VECTOR_3D<T> normal = collision_body_list->collision_bodies (r)->Implicit_Surface_Extended_Normal (particles.X (index), phi_value, aggregate, collision_body_particle_index);
+
+					if (phi_value <= 0)
+					{
+						collision_force (p) += stiffness * (-phi_value + separation_parameter) * normal;
+
+						if (collision_body_list_id == r) collision_force_derivative (p) -= self_collision_reciprocity_factor * stiffness * SYMMETRIC_MATRIX_3X3<T>::Outer_Product (normal);
+						else collision_force_derivative (p) -= stiffness * SYMMETRIC_MATRIX_3X3<T>::Outer_Product (normal);
+					}
+					else if (phi_value < collision_body_list->collision_bodies (r)->collision_thickness)
+					{
+						collision_force (p) += stiffness * separation_parameter * (T) exp (-phi_value / separation_parameter) * normal;
+
+						if (collision_body_list_id == r)
+							collision_force_derivative (p) -= self_collision_reciprocity_factor * stiffness * (T) exp (-phi_value / separation_parameter) * SYMMETRIC_MATRIX_3X3<T>::Outer_Product (normal);
+						else collision_force_derivative (p) -= stiffness * (T) exp (-phi_value / separation_parameter) * SYMMETRIC_MATRIX_3X3<T>::Outer_Product (normal);
+					}
+				}
+		}
+	}
+	
+	//This function is used in ompss version, but somehow is not found by the compiler
+	void Update_Forces_And_Derivatives_Helper(int p);
 
 
 //#####################################################################
