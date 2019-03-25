@@ -81,12 +81,18 @@ static double rtclock()
 }
 
 static unsigned long long clk_timing(void) {
+#ifdef RISCV64
+    unsigned long clk;
+    asm volatile("rdcycle %0" : "=r" (clk));
+    return (unsigned long long)clk;
+#else
 	unsigned long lo, hi;
 	unsigned long long l, h;
 	asm("rdtsc" : "=a"(lo), "=d"(hi)); 
 	h = hi;
 	l = lo | (h << 32);
 	return l;
+#endif
 }
 
 void process_name(char * str) {
