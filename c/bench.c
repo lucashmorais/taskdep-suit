@@ -218,6 +218,7 @@ int task_init_measure(void) {
 }
 
 int task_stop_measure(void) {
+#ifndef BENCH_NOTASK
     int q = omp_get_thread_num();
     double oldTime = pool[q].time;
     double newMeasure = (double) clk_timing() - pool[q].current;
@@ -232,11 +233,18 @@ int task_stop_measure(void) {
     pool[q].time = oldTime + newMeasure;
     pool[q].task = task + 1;
     pool[q].deviation = newDeviation;
+#else
+#endif
+    return 0;
 }
 
 int task_start_measure(void) {
+#ifndef BENCH_NOTASK
     int q = omp_get_thread_num();
     pool[q].current = (double) clk_timing();
+#else
+#endif
+    return 0;
 }
 
 #endif
