@@ -20,6 +20,7 @@ public:
 	using SOLIDS_FLUIDS_DRIVER<T>::time;
 	using SOLIDS_FLUIDS_DRIVER<T>::current_frame;
 	using SOLIDS_FLUIDS_DRIVER<T>::Time_At_Frame;
+	using SOLIDS_FLUIDS_DRIVER<T>::Write_Output_Files;
 
 	SOLIDS_FLUIDS_EXAMPLE_3D<T, RW>& example;
 	SOLIDS_EVOLUTION_3D<T> solids_evolution;

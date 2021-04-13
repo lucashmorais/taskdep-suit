@@ -27,6 +27,7 @@ private:
 	using DYNAMIC_LIST<RIGID_BODY_3D<T>*>::last_unique_id;
 	using DYNAMIC_LIST<RIGID_BODY_3D<T>*>::needs_write;
 	using DYNAMIC_LIST<RIGID_BODY_3D<T>*>::Element;
+	using DYNAMIC_LIST<RIGID_BODY_3D<T>*>::Add_Element;
 
 public:
 	LIST_ARRAY<RIGID_BODY_3D<T>*>& rigid_bodies; // reference to array for traditional naming

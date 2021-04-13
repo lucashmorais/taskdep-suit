@@ -9,6 +9,7 @@
 
 #include "../Math_Tools/min.h"
 #include "../Math_Tools/max.h"
+#include "../Math_Tools/clamp.h"
 #include "../Matrices_And_Vectors/VECTOR_2D.h"
 #include "../Geometry/SEGMENT_2D.h"
 #include "../Geometry/RAY_2D.h"

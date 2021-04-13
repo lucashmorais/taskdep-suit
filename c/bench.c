@@ -1,14 +1,13 @@
-/*requires -lssl -lcrypto*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <math.h>
 
 #include "bench.h"
 
 void process_init() {
-    bench_data.out = (char *) malloc(512);
+    bench_data.out = (unsigned char *) malloc(512);
     bench_data.out_size = 0;
     bench_data.out_max = 512;
 
@@ -23,7 +22,7 @@ void process_append_result(char * str, int size) {
         do {
             bench_data.out_max = bench_data.out_max*2;
         } while(n_size >= bench_data.out_max);
-        bench_data.out = (char *) realloc(bench_data.out,   bench_data.out_max);
+        bench_data.out = (unsigned char *) realloc(bench_data.out,   bench_data.out_max);
     }
     memcpy(bench_data.out + bench_data.out_size, str, s_size);
     bench_data.out_size = n_size;
@@ -44,11 +43,14 @@ void process_append_file(char * str) {
 #ifdef _OPENMP
 #include <omp.h>
 
-#define BENCH_TPT (4096) /*Number of tasks per thread to be remembered*/
+struct task {
+    double task;
+    double time;
+    double current;
+    double deviation; 
+};
 
-static unsigned long long **pool;
-static int *ptr;
-static int *loop;
+static struct task *pool;
 
 #endif
 
@@ -79,12 +81,18 @@ static double rtclock()
 }
 
 static unsigned long long clk_timing(void) {
+#ifdef RISCV64
+    unsigned long clk;
+    asm volatile("rdcycle %0" : "=r" (clk));
+    return (unsigned long long)clk;
+#else
 	unsigned long lo, hi;
 	unsigned long long l, h;
 	asm("rdtsc" : "=a"(lo), "=d"(hi)); 
 	h = hi;
 	l = lo | (h << 32);
 	return l;
+#endif
 }
 
 void process_name(char * str) {
@@ -157,35 +165,28 @@ int process_stop_measure(void) {
 int dump_csv(FILE * f) {
     fprintf(f, "{\"bench\" : \"%s\", \"id\" : \"\",\"mode\" : \"%s\",\"args\" : \"%s\",\"time\" : %lf", bench_data.name, mode[bench_data.mode], bench_data.args, bench_data.end - bench_data.begin);
     
-    #ifdef _OPENMP
+#ifdef _OPENMP
     fprintf(f, ", \"tasks\" : [");
     int q = omp_get_num_threads();
     for(int i = 0; i < q; i++) {
-        if(loop[i]) {
-            for(int j = 0; j < BENCH_TPT; j++) {
-                printf("%llu,", pool[i][j]);
-            }
-        } else {
-            for(int j = 0; j < ptr[i]; j++) {
-                printf("%llu,", pool[i][j]);
-            }
-        }
+        fprintf(f ,"%lf,", pool[i].time / pool[i].task);
+        fprintf(f ,"%lf,", sqrt(pool[i].deviation / (pool[i].task - 1)));
     }
     fprintf(f,"0 ]");
-    #else
+#else
     fprintf(f, ", \"tasks\" : \"not available\"");
-    #endif
+#endif
 
-    #ifdef DEBUG
+#ifdef DEBUG
     puts(bench_data.out);
-    #endif
+#endif
 
     fprintf(f, ",\"output\" : \"");
 
-    BYTE buf[SHA256_BLOCK_SIZE];
+    BYTE buf[BENCH_SHA256_BLOCK_SIZE];
 	sha256_update(&bench_data.sha_ctx, bench_data.out, bench_data.out_size);
     sha256_final(&bench_data.sha_ctx, buf);
-	for(int i = 0; i < SHA256_BLOCK_SIZE; i++)
+	for(int i = 0; i < BENCH_SHA256_BLOCK_SIZE; i++)
 		fprintf(f, "%02x", buf[i]);
     fprintf(f, "\"");
     
@@ -194,6 +195,7 @@ int dump_csv(FILE * f) {
 }
 
 #ifdef _OPENMP
+
 
 void * pmalloc(size_t size) {
     void * q = malloc(size);
@@ -204,29 +206,45 @@ void * pmalloc(size_t size) {
 int task_init_measure(void) {
     int q = omp_get_num_threads();
    
-    pool = (unsigned long long int **) pmalloc(sizeof(int *) * q);
-    ptr = (int *) pmalloc(sizeof(int) * q);
-    loop = (int *) pmalloc(sizeof(int) * q);
+    pool = (struct task *) pmalloc(sizeof(struct task) * q);
+    
     for(int i = 0; i < q; i++) {
-        pool[i] = (unsigned long long int *) pmalloc(sizeof(unsigned long long) * BENCH_TPT);
-        ptr[i] = 0;
-        loop[i] = 0;
+        pool[i].task = 0;
+        pool[i].time = 0;
+        pool[i].current = 0;
+        pool[i].deviation = 0; // Stored as M2,n, see https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm for more
     }
+     return 1;
 }
 
 int task_stop_measure(void) {
+#ifndef BENCH_NOTASK
     int q = omp_get_thread_num();
-    pool[q][ptr[q]] = clk_timing() - pool[q][ptr[q]];
-    ptr[q]++;
-    if(ptr[q] >= BENCH_TPT) {
-        ptr[q] = 0;
-        loop[q] = 1;
-    }
+    double oldTime = pool[q].time;
+    double newMeasure = (double) clk_timing() - pool[q].current;
+    double task = pool[q].task;
+    double oldDeviation = pool[q].deviation;
+
+    double oldMean = oldTime/task;
+    double newMean = (oldTime + newMeasure) / (task + 1);
+    double newDeviation = oldDeviation + (newMeasure - oldMean) * (newMeasure - newMean);
+    if(task == 0) newDeviation = 0;
+
+    pool[q].time = oldTime + newMeasure;
+    pool[q].task = task + 1;
+    pool[q].deviation = newDeviation;
+#else
+#endif
+    return 0;
 }
 
 int task_start_measure(void) {
+#ifndef BENCH_NOTASK
     int q = omp_get_thread_num();
-    pool[q][ptr[q]] = clk_timing();
+    pool[q].current = (double) clk_timing();
+#else
+#endif
+    return 0;
 }
 
 #endif

@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "../../../c/bench.h"
+int allow_out;
 
 #ifdef _OMPSS
     #include <omp.h>
@@ -38,42 +39,42 @@ void parse(int argc, char* argv[], struct user_parameters* params)
         if(!strcmp(argv[i], "-c"))
             params->check = 1;
         else if(!strcmp(argv[i], "--help") || !strcmp(argv[i], "-h")) {
-/*
-            printf("----------------------------------------------\n");
-            printf("-                KaStORS                     -\n");
-            printf("-   Kaapi Starpu OpenMP Runtime task Suite   -\n");
-            printf("----------------------------------------------\n");
-            printf("-h, --help : Show help information\n");
-            printf("-c : Ask to check result\n");
-            printf("-i : Number of iterations\n");
+
+           if(allow_out) printf("----------------------------------------------\n");
+           if(allow_out) printf("-                KaStORS                     -\n");
+           if(allow_out) printf("-   Kaapi Starpu OpenMP Runtime task Suite   -\n");
+           if(allow_out) printf("----------------------------------------------\n");
+           if(allow_out) printf("-h, --help : Show help information\n");
+           if(allow_out) printf("-c : Ask to check result\n");
+           if(allow_out) printf("-i : Number of iterations\n");
 #ifdef TITER
-            printf("-r : Number ot timestep iteration\n");
+           if(allow_out) printf("-r : Number ot timestep iteration\n");
 #endif
 #ifdef MSIZE
-            printf("-n : Matrix size\n");
+           if(allow_out) printf("-n : Matrix size\n");
 #endif
 #ifdef SMSIZE
-            printf("-m : SubMatrix size\n");
+           if(allow_out) printf("-m : SubMatrix size\n");
 #endif
 #ifdef BSIZE
-            printf("-b : Block size\n");
+           if(allow_out) printf("-b : Block size\n");
 #endif
 #ifdef IBSIZE
-            printf("-ib : Internal Block size\n");
+           if(allow_out) printf("-ib : Internal Block size\n");
 #endif
 #ifdef CUTOFF_SIZE
-            printf("-s : Cutoff (Size of the matrix)\n");
+           if(allow_out) printf("-s : Cutoff (Size of the matrix)\n");
 #endif
 #ifdef CUTOFF_DEPTH
-            printf("-d : Cutoff (depth)\n");
+           if(allow_out) printf("-d : Cutoff (depth)\n");
 #endif
             exit(EXIT_SUCCESS);
-*/
+
         } else if(!strcmp(argv[i], "-i")) {
             if (++i < argc)
                 params->niter = atoi(argv[i]);
             else {
-                fprintf(stderr, "-i requires a number\n");
+                if(allow_out) fprintf(stderr, "-i requires a number\n");
                 exit(EXIT_FAILURE);
             }
 #ifdef TITER
@@ -81,7 +82,7 @@ void parse(int argc, char* argv[], struct user_parameters* params)
             if (++i < argc)
                 params->titer = atoi(argv[i]);
             else {
-                fprintf(stderr, "-r requires a number\n");
+                if(allow_out) fprintf(stderr, "-r requires a number\n");
                 exit(EXIT_FAILURE);
             }
 #endif
@@ -90,7 +91,7 @@ void parse(int argc, char* argv[], struct user_parameters* params)
             if (++i < argc)
                 params->matrix_size = atoi(argv[i]);
             else {
-                fprintf(stderr, "-n requires a number\n");
+                if(allow_out) fprintf(stderr, "-n requires a number\n");
                 exit(EXIT_FAILURE);
             }
 #endif
@@ -99,7 +100,7 @@ void parse(int argc, char* argv[], struct user_parameters* params)
             if (++i < argc)
                 params->submatrix_size = atoi(argv[i]);
             else {
-                fprintf(stderr, "-m requires a number\n");
+                if(allow_out) fprintf(stderr, "-m requires a number\n");
                 exit(EXIT_FAILURE);
             }
 #endif
@@ -108,7 +109,7 @@ void parse(int argc, char* argv[], struct user_parameters* params)
             if (++i < argc)
                 params->blocksize = atoi(argv[i]);
             else {
-                fprintf(stderr, "-b requires a number\n");
+                if(allow_out) fprintf(stderr, "-b requires a number\n");
                 exit(EXIT_FAILURE);
             }
 #endif
@@ -117,7 +118,7 @@ void parse(int argc, char* argv[], struct user_parameters* params)
             if (++i < argc)
                 params->iblocksize = atoi(argv[i]);
             else {
-                fprintf(stderr, "-ib requires a number\n");
+                if(allow_out) fprintf(stderr, "-ib requires a number\n");
                 exit(EXIT_FAILURE);
             }
 #endif
@@ -126,7 +127,7 @@ void parse(int argc, char* argv[], struct user_parameters* params)
             if (++i < argc)
                 params->cutoff_size = atoi(argv[i]);
             else {
-                fprintf(stderr, "-s requires a number\n");
+                if(allow_out) fprintf(stderr, "-s requires a number\n");
                 exit(EXIT_FAILURE);
             }
 #endif
@@ -135,12 +136,12 @@ void parse(int argc, char* argv[], struct user_parameters* params)
             if (++i < argc)
                 params->cutoff_depth = atoi(argv[i]);
             else {
-                fprintf(stderr, "-d requires a number\n");
+                if(allow_out) fprintf(stderr, "-d requires a number\n");
                 exit(EXIT_FAILURE);
             }
 #endif
         } else
-            fprintf(stderr, "Unknown parameter : %s\n", argv[i]);
+            if(allow_out) fprintf(stderr, "Unknown parameter : %s\n", argv[i]);
     }
 }
 
@@ -155,6 +156,9 @@ int comp (const void * elem1, const void * elem2)
 
 int main(int argc, char* argv[])
 {
+    allow_out = 1;
+    if(getenv("BENCH_SILENT") != NULL) allow_out = 0;
+
     int num_threads = 1;
     struct user_parameters params;
     memset(&params, 0, sizeof(params));
@@ -199,46 +203,46 @@ int main(int argc, char* argv[])
     double median = all_times[params.niter / 2];
 
     free(all_times);
-/*
-    printf("Program : %s\n", argv[0]);
+
+   if(allow_out) printf("Program : %s\n", argv[0]);
 #ifdef MSIZE
-    printf("Size : %d\n", params.matrix_size);
+   if(allow_out) printf("Size : %d\n", params.matrix_size);
 #endif
 #ifdef SMSIZE
-    printf("Submatrix size : %d\n", params.submatrix_size);
+   if(allow_out) printf("Submatrix size : %d\n", params.submatrix_size);
 #endif
 #ifdef BSIZE
-    printf("Blocksize : %d\n", params.blocksize);
+   if(allow_out) printf("Blocksize : %d\n", params.blocksize);
 #endif
 #ifdef IBSIZE
-    printf("Internal Blocksize : %d\n", params.iblocksize);
+   if(allow_out) printf("Internal Blocksize : %d\n", params.iblocksize);
 #endif
 #ifdef TITER
-    printf("Iteration time : %d\n", params.titer);
+   if(allow_out) printf("Iteration time : %d\n", params.titer);
 #endif
-    printf("Iterations : %d\n", params.niter);
+   if(allow_out) printf("Iterations : %d\n", params.niter);
 #ifdef CUTOFF_SIZE
-    printf("Cutoff Size : %d\n", params.cutoff_size);
+   if(allow_out) printf("Cutoff Size : %d\n", params.cutoff_size);
 #endif
 #ifdef CUTOFF_DEPTH
-    printf("Cutoff depth : %d\n", params.cutoff_depth);
+   if(allow_out) printf("Cutoff depth : %d\n", params.cutoff_depth);
 #endif
-    printf("Threads : %d\n", num_threads);
+   if(allow_out) printf("Threads : %d\n", num_threads);
 #ifdef GFLOPS
-    printf("Gflops:: ");
+   if(allow_out) printf("Gflops:: ");
 #else
-    printf("Time(sec):: ");
+   if(allow_out) printf("Time(sec):: ");
 #endif
-    printf("avg : %lf :: std : %lf :: min : %lf :: max : %lf :: median : %lf\n",
+   if(allow_out) printf("avg : %lf :: std : %lf :: min : %lf :: max : %lf :: median : %lf\n",
            mean, stddev, min_, max_, median);
     if(params.check)
-        printf("Check : %s\n", (params.succeed)?
+       if(allow_out) printf("Check : %s\n", (params.succeed)?
                 ((params.succeed > 1)?"not implemented":"success")
                 :"fail");
     if (params.string2display !=0)
-      printf("%s", params.string2display);
-    printf("\n");
-*/
+     if(allow_out) printf("%s", params.string2display);
+   if(allow_out) printf("\n");
+
     if (params.succeed)
 	process_append_result("Sucess!", 7);
     else

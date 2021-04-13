@@ -16,6 +16,8 @@
 #include <sys/time.h>
 
 #include "../../../c/bench.h"
+int allow_out;
+
 
 #ifdef ENABLE_PARSEC_HOOKS
 #include <hooks.h>
@@ -125,7 +127,7 @@ fptype CNDF ( fptype InputX )
 
 // For debugging
 void print_xmm(fptype in, char* s) {
-    //printf("%s: %f\n", s, in);
+    if(allow_out) printf("%s: %f\n", s, in);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -304,7 +306,7 @@ task_stop_measure();}
         for (i=0; i<numOptions; i++) {
             priceDelta = data[i].DGrefval - prices[i];
             if( fabs(priceDelta) >= 1e-4 ){
-                //printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
+                if(allow_out) printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
                        i, prices[i], data[i].DGrefval, priceDelta);
                 numError ++;
             }
@@ -315,6 +317,8 @@ task_stop_measure();}
 
 int main (int argc, char **argv)
 {
+    allow_out = 1;
+    if(getenv("BENCH_SILENT") != NULL) allow_out = 0;
 
     process_name("parsec-blackscholes");
     process_mode(OMPSS);
@@ -339,8 +343,8 @@ int main (int argc, char **argv)
 
    if (argc < 4)
         {
-                //printf("Usage:\n\t%s <nthreads> <inputFile> <outputFile> [blocksize]\n", argv[0]);
-                //printf("Warning: nthreads is ignored! Use NX_ARGS=\"--threads=<nthreads>\" instead\n");
+                if(allow_out) printf("Usage:\n\t%s <nthreads> <inputFile> <outputFile> [blocksize]\n", argv[0]);
+                if(allow_out) printf("Warning: nthreads is ignored! Use NX_ARGS=\"--threads=<nthreads>\" instead\n");
        			 exit(1);
         }
         
@@ -358,19 +362,19 @@ int main (int argc, char **argv)
     //Read input data from file
     file = fopen(inputFile, "r");
     if(file == NULL) {
-      //printf("ERROR: Unable to open file `%s'.\n", inputFile);
+      if(allow_out) printf("ERROR: Unable to open file `%s'.\n", inputFile);
       exit(1);
     }
     rv = fscanf(file, "%i", &numOptions);
     if(rv != 1) {
-      //printf("ERROR: Unable to read from file `%s'.\n", inputFile);
+      if(allow_out) printf("ERROR: Unable to read from file `%s'.\n", inputFile);
       fclose(file);
       exit(1);
     }
     if(BSIZE > numOptions) {
-      //printf("ERROR: Block size larger than number of options. Please reduce the block size, or use larger data size.\n");
+      if(allow_out) printf("ERROR: Block size larger than number of options. Please reduce the block size, or use larger data size.\n");
       exit(1);
-      ////printf("WARNING: Not enough work, reducing number of threads to match number of options.\n");
+      //printf("WARNING: Not enough work, reducing number of threads to match number of options.\n");
       //nThreads = numOptions;
     }
 
@@ -381,19 +385,19 @@ int main (int argc, char **argv)
     {
         rv = fscanf(file, "%f %f %f %f %f %f %c %f %f", &data[loopnum].s, &data[loopnum].strike, &data[loopnum].r, &data[loopnum].divq, &data[loopnum].v, &data[loopnum].t, &data[loopnum].OptionType, &data[loopnum].divs, &data[loopnum].DGrefval);
         if(rv != 9) {
-          //printf("ERROR: Unable to read from file `%s'.\n", inputFile);
+          if(allow_out) printf("ERROR: Unable to read from file `%s'.\n", inputFile);
           fclose(file);
           exit(1);
         }
     }
     rv = fclose(file);
     if(rv != 0) {
-      //printf("ERROR: Unable to close file `%s'.\n", inputFile);
+      if(allow_out) printf("ERROR: Unable to close file `%s'.\n", inputFile);
       exit(1);
     }
 
-    //printf("Num of Options: %d\n", numOptions);
-    //printf("Num of Runs: %d\n", NUM_RUNS);
+    if(allow_out) printf("Num of Options: %d\n", numOptions);
+    if(allow_out) printf("Num of Runs: %d\n", NUM_RUNS);
 
 #define PAD 256
 #define LINESIZE 64
@@ -417,7 +421,7 @@ int main (int argc, char **argv)
         otime[i]      = data[i].t;
     }
 
-    //printf("Size of data: %d\n", numOptions * (sizeof(OptionData) + sizeof(int)));
+    if(allow_out) printf("Size of data: %d\n", numOptions * (sizeof(OptionData) + sizeof(int)));
 
 #ifdef ENABLE_PARSEC_HOOKS
     __parsec_roi_begin();
@@ -439,31 +443,31 @@ int main (int argc, char **argv)
     //Write prices to output file
     file = fopen(outputFile, "w");
     if(file == NULL) {
-      //printf("ERROR: Unable to open file `%s'.\n", outputFile);
+      if(allow_out) printf("ERROR: Unable to open file `%s'.\n", outputFile);
       exit(1);
     }
     rv = fprintf(file, "%i\n", numOptions);
     if(rv < 0) {
-      //printf("ERROR: Unable to write to file `%s'.\n", outputFile);
+      if(allow_out) printf("ERROR: Unable to write to file `%s'.\n", outputFile);
       fclose(file);
       exit(1);
     }
     for(i=0; i<numOptions; i++) {
       rv = fprintf(file, "%.18f\n", prices[i]);
       if(rv < 0) {
-        //printf("ERROR: Unable to write to file `%s'.\n", outputFile);
+        if(allow_out) printf("ERROR: Unable to write to file `%s'.\n", outputFile);
         fclose(file);
         exit(1);
       }
     }
     rv = fclose(file);
     if(rv != 0) {
-      //printf("ERROR: Unable to close file `%s'.\n", outputFile);
+      if(allow_out) printf("ERROR: Unable to close file `%s'.\n", outputFile);
       exit(1);
     }
 
 #ifdef ERR_CHK
-    //printf("Num Errors: %d\n", numError);
+    if(allow_out) printf("Num Errors: %d\n", numError);
 #endif
     free(data);
     free(prices);
@@ -471,7 +475,7 @@ int main (int argc, char **argv)
     elapsed = 1000000 * (stop.tv_sec - start.tv_sec);
     elapsed += stop.tv_usec - start.tv_usec;
 
-    //printf("par_sec_time_us:%lu\n",elapsed);
+    if(allow_out) printf("par_sec_time_us:%lu\n",elapsed);
 
 #ifdef ENABLE_PARSEC_HOOKS
     __parsec_bench_end();

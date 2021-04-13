@@ -11,3 +11,19 @@ The conf file it the root of this project should make it easy to tune the compil
 
 It requires the bench tool written in rust in order to provide the correct execution of the compilation process, but manual execution of makefiles may do the job.
 
+State of ported benchmarks:
+
+Kastors:
+    - Jacobi:
+        Working
+    - SparseLu:
+        Working, be carefull with values, it a demanding benchmark
+    - Strassen:
+        Working, has nested-tasks :(
+
+Parsec:
+
+
+TODO:
+
+bench API needs to update the timing function to support RISC-V.
