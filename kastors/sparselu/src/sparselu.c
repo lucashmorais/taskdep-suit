@@ -159,7 +159,7 @@ static void sparselu_init (float ***pBENCH, int matrix_size, int submatrix_size)
     genmat(*pBENCH, matrix_size, submatrix_size);
 }
 
-#ifdef _OPENMP
+#if defined(_OPENMP) || defined(_PHENTOS)
 
 /***********************************************************************
  * checkmat:
