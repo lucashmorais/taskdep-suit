@@ -224,15 +224,15 @@ double run(struct user_parameters* params)
     /// KERNEL INTENSIVE COMPUTATION
     START_TIMER;
     process_start_measure();
-#ifndef _OPENMP
-    sparselu_seq_call(BENCH, matrix_size, submatrix_size);
-#else
+#if defined(_OPENMP) || defined(_PHENTOS)
     sparselu_par_call(BENCH, matrix_size, submatrix_size);
+#else
+    sparselu_seq_call(BENCH, matrix_size, submatrix_size);
 #endif
     process_stop_measure();
     END_TIMER;
 
-#ifdef _OPENMP
+#if defined(_OPENMP) || defined(_PHENTOS)
     if(params->check) {
         float **BENCH_SEQ;
         sparselu_init(&BENCH_SEQ, matrix_size, submatrix_size);
