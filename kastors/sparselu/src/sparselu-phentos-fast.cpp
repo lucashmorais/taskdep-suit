@@ -23,7 +23,7 @@
 #include <string.h>
 #include <libgen.h>
 #include "sparselu.h"
-#include "/home/lucas/Repos/phentos/phentos/femtos.hpp"
+#include "../../../../phentos/phentos/femtos.hpp"
 
 #define MASK15BITS 0x7fff
 
