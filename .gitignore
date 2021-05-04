@@ -1,3 +1,4 @@
 old/*
-.vscode/*
+**/.vscode/*
 .DS_Store
+**/*.swp
