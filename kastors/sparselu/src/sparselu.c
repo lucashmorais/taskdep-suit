@@ -160,6 +160,7 @@ static void sparselu_init (float ***pBENCH, int matrix_size, int submatrix_size)
 }
 
 #if defined(_OPENMP) || defined(_PHENTOS)
+#pragma message "The implementations of checkmat and sparselu_check have been compiled"
 
 /***********************************************************************
  * checkmat:
@@ -225,8 +226,10 @@ double run(struct user_parameters* params)
     START_TIMER;
     process_start_measure();
 #if defined(_OPENMP) || defined(_PHENTOS)
+	#pragma message "Call to 'sparselu_par_call' has been enabled"
     sparselu_par_call(BENCH, matrix_size, submatrix_size);
 #else
+	#pragma message "Call to 'sparselu_par_call' has __NOT__ been enabled"
     sparselu_seq_call(BENCH, matrix_size, submatrix_size);
 #endif
     process_stop_measure();
