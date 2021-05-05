@@ -1,4 +1,5 @@
 #CC=gcc
+#CXX=g++
 CC=riscv64-linux-gnu-gcc
 CXX=riscv64-linux-gnu-g++
 MCC=mcc

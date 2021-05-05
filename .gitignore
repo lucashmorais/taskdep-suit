@@ -2,3 +2,4 @@ old/*
 **/.vscode/*
 .DS_Store
 **/*.swp
+kastors/sparselu/bin/*
