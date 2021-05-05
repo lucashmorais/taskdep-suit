@@ -47,6 +47,7 @@ void ORD_lu0 (uint64_t swID) {
     int i, j, k;
     int kk;
 
+	asm volatile ("fence" ::: "memory");
 	float * diag = (float *) metadataArray[swID].depAddresses0[0];
 	int submatrix_size = metadataArray[swID].depAddresses0[1];
 
@@ -57,6 +58,7 @@ void ORD_lu0 (uint64_t swID) {
             for (j=k+1; j<submatrix_size; j++)
                 diag[i*submatrix_size+j] = diag[i*submatrix_size+j] - diag[i*submatrix_size+k] * diag[k*submatrix_size+j];
         }
+	asm volatile ("fence" ::: "memory");
 }
 
 #if 0
@@ -73,6 +75,7 @@ void ORD_fwd (uint64_t swID) {
     int i, j, k;
     int ii, jj, kk;
 
+	asm volatile ("fence" ::: "memory");
 	float * diag = (float *) metadataArray[swID].depAddresses0[0];
 	float * col = (float *) metadataArray[swID].depAddresses0[1];
 	int submatrix_size = metadataArray[swID].depAddresses0[2];
@@ -81,6 +84,7 @@ void ORD_fwd (uint64_t swID) {
         for (k=0; k<submatrix_size; k++)
             for (i=k+1; i<submatrix_size; i++)
                 col[i*submatrix_size+j] = col[i*submatrix_size+j] - diag[i*submatrix_size+k]*col[k*submatrix_size+j];
+	asm volatile ("fence" ::: "memory");
 }
 
 #if 0
@@ -100,6 +104,7 @@ void ORD_bdiv (uint64_t swID) {
     int i, j, k;
     int ii, jj, kk;
 
+	asm volatile ("fence" ::: "memory");
 	float * diag = (float *) metadataArray[swID].depAddresses0[0];
 	float * row = (float *) metadataArray[swID].depAddresses0[1];
 	int submatrix_size = metadataArray[swID].depAddresses0[2];
@@ -111,6 +116,7 @@ void ORD_bdiv (uint64_t swID) {
             for (j=k+1; j<submatrix_size; j++)
                 row[i*submatrix_size+j] = row[i*submatrix_size+j] - row[i*submatrix_size+k]*diag[k*submatrix_size+j];
         }
+	asm volatile ("fence" ::: "memory");
 }
 
 #if 0
@@ -127,6 +133,7 @@ void ORD_bmod (uint64_t swID) {
     int i, j, k;
 	int ii, jj, kk;
 
+	asm volatile ("fence" ::: "memory");
 	float * row = (float *) metadataArray[swID].depAddresses0[0];
 	float * col = (float *) metadataArray[swID].depAddresses0[1];
 	float * inner = (float *) metadataArray[swID].depAddresses0[2];
@@ -136,6 +143,7 @@ void ORD_bmod (uint64_t swID) {
         for (j=0; j<submatrix_size; j++)
             for (k=0; k<submatrix_size; k++)
                 inner[i*submatrix_size+j] = inner[i*submatrix_size+j] - row[i*submatrix_size+k]*col[k*submatrix_size+j];
+	asm volatile ("fence" ::: "memory");
 }
 
 void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
@@ -225,6 +233,9 @@ void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
                                                         submit_three_or_work(swID, 3, numPendingWorkRequests);
                                                         submit_three_or_work((unsigned long long) BENCH[ii*matrix_size+kk], 0, numPendingWorkRequests);
                                                         submit_three_or_work((unsigned long long) BENCH[kk*matrix_size+jj], 0, numPendingWorkRequests);
+
+														asm volatile ("fence" ::: "memory");
+
                                                         submit_three_or_work((unsigned long long) BENCH[ii*matrix_size+jj], 2, numPendingWorkRequests);
                                                 }
                                 }
