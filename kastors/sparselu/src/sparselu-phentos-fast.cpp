@@ -184,12 +184,6 @@ void FA_bmod (uint64_t swID) {
 
 void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
 {
-        static bool femtos_initialized = false;
-
-        if (!femtos_initialized) {
-                femtos_fast_init();
-                femtos_initialized = true;
-        }
         unsigned num_iterations = 0;
         unsigned numPendingWorkRequests = 0;
 
@@ -270,7 +264,10 @@ void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
         fast_task_wait_and_try_executing_tasks(num_iterations);
 }
 
-void sparselu_par_call(float **BENCH, int matrix_size, int submatrix_size) {
+void extra_init() {
 	femtos_fast_init();
+}
+
+void sparselu_par_call(float **BENCH, int matrix_size, int submatrix_size) {
 	sparselu_par_call_core(BENCH, matrix_size, submatrix_size);
 }

@@ -238,7 +238,10 @@ void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
         task_wait_and_try_executing_tasks(num_iterations);
 }
 
-void sparselu_par_call(float **BENCH, int matrix_size, int submatrix_size) {
+void extra_init() {
 	femtos_init();
+}
+
+void sparselu_par_call(float **BENCH, int matrix_size, int submatrix_size) {
 	sparselu_par_call_core(BENCH, matrix_size, submatrix_size);
 }

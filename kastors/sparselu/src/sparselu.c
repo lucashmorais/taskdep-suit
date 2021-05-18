@@ -222,6 +222,10 @@ double run(struct user_parameters* params)
     }
     sparselu_init(&BENCH, matrix_size, submatrix_size);
 
+#ifdef _PHENTOS
+	extra_init();
+#endif
+
     /// KERNEL INTENSIVE COMPUTATION
     START_TIMER;
     process_start_measure();

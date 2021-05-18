@@ -11,6 +11,9 @@ void bdiv(float *diag, float *row, int submatrix_size);
 void bmod(float *row, float *col, float *inner, int submatrix_size);
 void fwd(float *diag, float *col, int submatrix_size);
 
+#ifdef _PHENTOS
+void extra_init();
+#endif
 void sparselu_seq_call(float **BENCH, int matrix_size, int submatrix_size);
 void sparselu_par_call(float **BENCH, int matrix_size, int submatrix_size);
 
