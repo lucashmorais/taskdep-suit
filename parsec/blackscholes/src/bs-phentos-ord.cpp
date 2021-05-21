@@ -1,51 +1,34 @@
 // Copyright (c) 2007 Intel Corp.
+
 // Black-Scholes
 // Analytical method for calculating European Options
 //
+// 
 // Reference Source: Options, Futures, and Other Derivatives, 3rd Edition, Prentice 
 // Hall, John C. Hull,
+//
+// OmpSs/OpenMP 4.0 versions written by Dimitrios Chasapis and Iulian Brumar - Barcelona Supercomputing Center
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <sys/time.h>
 
 #include "../../../c/bench.h"
 #include "../../../../phentos/phentos/femtos.hpp"
 int allow_out;
 
 
-// Multi-threaded pthreads header
-#ifdef ENABLE_THREADS
-#define MAX_THREADS 128
-// Add the following line so that icc 9.0 is compatible with pthread lib.
-#define __thread __threadp
-#ifdef _XOPEN_SOURCE
-#undef _XOPEN_SOURCE
-#define _XOPEN_SOURCE 700
-#endif
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif
-#ifndef __USE_XOPEN2K
-#define __USE_XOPEN2K
-#endif
-#ifndef __USE_UNIX98
-#define __USE_UNIX98
-#endif
-#include <pthread.h>
-#include <time.h>
-
-pthread_t _M4_threadsTable[MAX_THREADS];
-pthread_mutexattr_t _M4_normalMutexAttr;
-int _M4_numThreads = MAX_THREADS;
-#undef __thread
+#ifdef ENABLE_PARSEC_HOOKS
+#include <hooks.h>
 #endif
 
 // Multi-threaded OpenMP header
-#ifdef ENABLE_OPENMP
-#include <omp.h>
-#endif
+//#include <omp.h>
+
+#define BSIZE_UNIT 1024
+int BSIZE;
 
 //Precision to use for calculations
 #define fptype float
@@ -66,7 +49,7 @@ typedef struct OptionData_ {
 } OptionData;
 
 OptionData *data;
-fptype *prices;
+// fptype *prices;
 int numOptions;
 
 int    * otype;
@@ -76,10 +59,11 @@ fptype * rate;
 fptype * volatility;
 fptype * otime;
 int numError = 0;
-int nThreads;
+//int nThreads;
 
-int BSIZE = 0;
-
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 // Cumulative Normal Distribution Function
 // See Hull, Section 11.8, P.243-244
@@ -146,6 +130,12 @@ fptype CNDF ( fptype InputX )
     
     return OutputX;
 } 
+
+// For debugging
+void print_xmm(fptype in, char* s) {
+    if(allow_out) printf("%s: %f\n", s, in);
+}
+
 void FA_BlkSchlsEqEuroNoDiv(unsigned long long swID) {
   fptype * sptprice = (fptype * ) metadataArray[swID].depAddresses0[0];
   fptype * strike = (fptype * ) metadataArray[swID].depAddresses0[1];
@@ -153,8 +143,8 @@ void FA_BlkSchlsEqEuroNoDiv(unsigned long long swID) {
   fptype * volatility = (fptype * ) metadataArray[swID].depAddresses0[3];
   fptype * time = (fptype * ) metadataArray[swID].depAddresses0[4];
   int * otype = (int * ) metadataArray[swID].depAddresses0[5];
-  fptype * OptionPrice = (fptype * ) metadataArray[swID].depAddresses0[6];
   float timet = 0;
+  fptype * OptionPrice = (fptype * ) metadataArray[swID].depAddresses0[6];
   int & bsize = BSIZE;
 
   int i;
@@ -219,144 +209,65 @@ void FA_BlkSchlsEqEuroNoDiv(unsigned long long swID) {
       OptionPrice[i] = (FutureValueX * NegNofXd2) - (sptprice[i] * NegNofXd1);
     }
   }
-
-#ifdef ERR_CHK
-	priceDelta = data[i].DGrefval - price;
-	if( fabs(priceDelta) >= 1e-4 ){
-		if(allow_out) printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
-				i, price, data[i].DGrefval, priceDelta);
-		numError ++;
-	}
-#endif
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////
-fptype BlkSchlsEqEuroNoDiv( fptype sptprice,
-                            fptype strike, fptype rate, fptype volatility,
-                            fptype time, int otype, float timet )
-{
-    fptype OptionPrice;
-
-    // local private working variables for the calculation
-    fptype xStockPrice;
-    fptype xStrikePrice;
-    fptype xRiskFreeRate;
-    fptype xVolatility;
-    fptype xTime;
-    fptype xSqrtTime;
-
-    fptype logValues;
-    fptype xLogTerm;
-    fptype xD1; 
-    fptype xD2;
-    fptype xPowerTerm;
-    fptype xDen;
-    fptype d1;
-    fptype d2;
-    fptype FutureValueX;
-    fptype NofXd1;
-    fptype NofXd2;
-    fptype NegNofXd1;
-    fptype NegNofXd2;    
-    
-    xStockPrice = sptprice;
-    xStrikePrice = strike;
-    xRiskFreeRate = rate;
-    xVolatility = volatility;
-
-    xTime = time;
-    xSqrtTime = sqrt(xTime);
-
-    logValues = log( sptprice / strike );
-        
-    xLogTerm = logValues;
-        
-    
-    xPowerTerm = xVolatility * xVolatility;
-    xPowerTerm = xPowerTerm * 0.5;
-        
-    xD1 = xRiskFreeRate + xPowerTerm;
-    xD1 = xD1 * xTime;
-    xD1 = xD1 + xLogTerm;
-
-    xDen = xVolatility * xSqrtTime;
-    xD1 = xD1 / xDen;
-    xD2 = xD1 -  xDen;
-
-    d1 = xD1;
-    d2 = xD2;
-    
-    NofXd1 = CNDF( d1 );
-    NofXd2 = CNDF( d2 );
-
-    FutureValueX = strike * ( exp( -(rate)*(time) ) );        
-    if (otype == 0) {            
-        OptionPrice = (sptprice * NofXd1) - (FutureValueX * NofXd2);
-    } else { 
-        NegNofXd1 = (1.0 - NofXd1);
-        NegNofXd2 = (1.0 - NofXd2);
-        OptionPrice = (FutureValueX * NegNofXd2) - (sptprice * NegNofXd1);
-    }
-    
-    return OptionPrice;
-}
-
-
-int bs_thread(void *tid_ptr) {
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+void bs_thread(void *tid_ptr,fptype *prices) {
     int i, j;
-    fptype price;
     fptype priceDelta;
     int tid = *(int *)tid_ptr;
-	BSIZE = numOptions;
 
 	unsigned long long swID = 0;
 	unsigned num_iterations = 0;
 	unsigned numPendingWorkRequests = 0;
 
-
     for (j=0; j<NUM_RUNS; j++) {
-		swID = getNewSWID(swID);
-		/*
-		fptype * sptprice = (fptype * ) metadataArray[swID].depAddresses0[0];
-		fptype * strike = (fptype * ) metadataArray[swID].depAddresses0[1];
-		fptype * rate = (fptype * ) metadataArray[swID].depAddresses0[2];
-		fptype * volatility = (fptype * ) metadataArray[swID].depAddresses0[3];
-		fptype * time = (fptype * ) metadataArray[swID].depAddresses0[4];
-		int * otype = (int * ) metadataArray[swID].depAddresses0[5];
-		fptype * OptionPrice = (fptype * ) metadataArray[swID].depAddresses0[6];
-		*/
+        for (i=0; i<=(numOptions-BSIZE); i+=BSIZE) {
+			swID = getNewSWID(swID);
 
-		metadataArray[swID].functionAddr = (unsigned long long) FA_BlkSchlsEqEuroNoDiv;
-		metadataArray[swID].depAddresses0[0] = (unsigned long long) sptprice;
-		metadataArray[swID].depAddresses0[1] = (unsigned long long) strike;
-		metadataArray[swID].depAddresses0[2] = (unsigned long long) rate;
-		metadataArray[swID].depAddresses0[3] = (unsigned long long) volatility;
-		metadataArray[swID].depAddresses0[4] = (unsigned long long) time;
-		metadataArray[swID].depAddresses0[5] = (unsigned long long) otype;
-		metadataArray[swID].depAddresses0[6] = (unsigned long long) prices;
+			metadataArray[swID].functionAddr = (unsigned long long) FA_BlkSchlsEqEuroNoDiv;
+			metadataArray[swID].depAddresses0[0] = (unsigned long long) (&sptprice[i]);
+			metadataArray[swID].depAddresses0[1] = (unsigned long long) (&strike[i]);
+			metadataArray[swID].depAddresses0[2] = (unsigned long long) (&rate[i]);
+			metadataArray[swID].depAddresses0[3] = (unsigned long long) (&volatility[i]);
+			metadataArray[swID].depAddresses0[4] = (unsigned long long) (&otime[i]);
+			metadataArray[swID].depAddresses0[5] = (unsigned long long) (&otype[i]);
+			metadataArray[swID].depAddresses0[6] = (unsigned long long) (&prices[i]);
 
-		asm volatile ("fence" ::: "memory");
+			asm volatile ("fence" ::: "memory");
 
-		num_iterations++;
-		make_submission_request_or_work(24, 0, numPendingWorkRequests);
-		submit_three_or_work(swID, 7, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) sptprice, 0, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) strike, 0, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) rate, 0, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) volatility, 0, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) time, 0, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) otype, 0, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) prices, 1, numPendingWorkRequests);
+			num_iterations++;
+			make_submission_request_or_work(24, 0, numPendingWorkRequests);
+			submit_three_or_work(swID, 7, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) (&sptprice[i]), 0, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) (&strike[i]), 0, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) (&rate[i]), 0, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) (&volatility[i]), 0, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) (&otime[i]), 0, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) (&otype[i]), 0, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) (&prices[i]), 1, numPendingWorkRequests);
+        }
 
-		price = BlkSchlsEqEuroNoDiv( sptprice[i], strike[i],
-										rate[i], volatility[i], otime[i], 
-										otype[i], 0);
+        //We put a barrier here to avoid overlapping the execution of
+        // tasks in different runs
+		printf("Going to task wait until %d tasks were retired.\n", num_iterations);
+		task_wait_and_try_executing_tasks(num_iterations);
+
+#ifdef ERR_CHK
+        for (i=0; i<numOptions; i++) {
+            priceDelta = data[i].DGrefval - prices[i];
+            if( fabs(priceDelta) >= 1e-4 ){
+                if(allow_out) printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
+                       i, prices[i], data[i].DGrefval, priceDelta);
+                numError ++;
+            }
+        }
+#endif
     }
-
-	printf("Going to task wait until %d tasks were retired.\n", num_iterations);
-	task_wait_and_try_executing_tasks(num_iterations);
-
-    return 0;
 }
 
 int main (int argc, char **argv)
@@ -365,7 +276,7 @@ int main (int argc, char **argv)
     if(getenv("BENCH_SILENT") != NULL) allow_out = 0;
 
     process_name("parsec-blackscholes");
-    process_mode(SEQ);
+    process_mode(OMPSS);
     process_args(argc, argv);
     process_init();
 
@@ -373,17 +284,34 @@ int main (int argc, char **argv)
     int i;
     int loopnum;
     fptype * buffer;
+    fptype *prices;
     int * buffer2;
     int rv;
+    struct timeval start;
+    struct timeval stop;
+    unsigned long elapsed;
+
+#ifdef ENABLE_PARSEC_HOOKS
+   __parsec_bench_begin(__parsec_blackscholes);
+#endif
 
    if (argc < 4)
         {
-                if(allow_out) printf("Usage:\n\t%s <nthreads> <inputFile> <outputFile>\n", argv[0]);
-                exit(1);
+                if(allow_out) printf("Usage:\n\t%s <nthreads> <inputFile> <outputFile> [blocksize]\n", argv[0]);
+                if(allow_out) printf("Warning: nthreads is ignored! Use NX_ARGS=\"--threads=<nthreads>\" instead\n");
+       			 exit(1);
         }
-    nThreads = atoi(argv[1]);
+        
     char *inputFile = argv[2];
     char *outputFile = argv[3];
+    int nthreads = atoi(argv[1]);
+
+	if(argc > 4 ) {
+		BSIZE = atoi(argv[4]);
+	}
+	else {
+		BSIZE = BSIZE_UNIT;
+	}
 
     //Read input data from file
     file = fopen(inputFile, "r");
@@ -397,21 +325,12 @@ int main (int argc, char **argv)
       fclose(file);
       exit(1);
     }
-    if(nThreads > numOptions) {
-      /*printf("WARNING: Not enough work, reducing number of threads to match number of options.\n");*/
-      nThreads = numOptions;
+    if(BSIZE > numOptions) {
+      if(allow_out) printf("ERROR: Block size larger than number of options. Please reduce the block size, or use larger data size.\n");
+      exit(1);
+      //printf("WARNING: Not enough work, reducing number of threads to match number of options.\n");
+      //nThreads = numOptions;
     }
-
-#if !defined(ENABLE_THREADS) && !defined(ENABLE_OPENMP)
-    if(nThreads != 1) {
-        if(allow_out) printf("Error: <nthreads> must be 1 (serial version)\n");
-        exit(1);
-    }
-#endif
-
-#ifdef _PHENTOS
-	extra_init();
-#endif
 
     // alloc spaces for the option data
     data = (OptionData*)malloc(numOptions*sizeof(OptionData));
@@ -431,17 +350,6 @@ int main (int argc, char **argv)
       exit(1);
     }
 
-#ifdef ENABLE_THREADS
-    pthread_mutexattr_init( &_M4_normalMutexAttr);
-    //    pthread_mutexattr_settype( &_M4_normalMutexAttr, PTHREAD_MUTEX_NORMAL);
-    _M4_numThreads = nThreads;
-    {
-        int _M4_i;
-        for ( _M4_i = 0; _M4_i < MAX_THREADS; _M4_i++) {
-            _M4_threadsTable[_M4_i] = -1;
-        }
-    }
-#endif
     if(allow_out) printf("Num of Options: %d\n", numOptions);
     if(allow_out) printf("Num of Runs: %d\n", NUM_RUNS);
 
@@ -463,48 +371,28 @@ int main (int argc, char **argv)
         sptprice[i]   = data[i].s;
         strike[i]     = data[i].strike;
         rate[i]       = data[i].r;
-        volatility[i] = data[i].v;    
+        volatility[i] = data[i].v;
         otime[i]      = data[i].t;
     }
 
     if(allow_out) printf("Size of data: %d\n", numOptions * (sizeof(OptionData) + sizeof(int)));
 
-#ifdef ENABLE_THREADS
-    int *tids;
-    tids = (int *) malloc (nThreads * sizeof(int));
+#ifdef ENABLE_PARSEC_HOOKS
+    __parsec_roi_begin();
+#endif
 
-    for(i=0; i<nThreads; i++) {
-        tids[i]=i;
-        int _M4_i;
-        for ( _M4_i = 0; _M4_i < MAX_THREADS; _M4_i++) {
-            if ( _M4_threadsTable[_M4_i] == -1)    break;
-        }
-        pthread_create(&_M4_threadsTable[_M4_i],NULL,(void *(*)(void *))bs_thread,(void *)&tids[i]);
-		// if(allow_out) printf("tid=%d %d\n", _M4_i, _M4_threadsTable[_M4_i]);
-    }
-    int _M4_i;
-    void *_M4_ret;
-    for ( _M4_i = 0; _M4_i < MAX_THREADS;_M4_i++) {
-        // if(allow_out) printf("tid=%d %d\n", _M4_i, _M4_threadsTable[_M4_i]);
-        if ( _M4_threadsTable[_M4_i] == -1)    break;
-        pthread_join( _M4_threadsTable[_M4_i], &_M4_ret);
-    }
-    free(tids);
-#else //ENABLE_THREADS
-#ifdef ENABLE_OPENMP
-    {
-        int tid=0;
-        omp_set_num_threads(nThreads);
-        bs_thread(&tid);
-    }
-#else //ENABLE_OPENMP
-    //serial version
+    //do work
     int tid=0;
+    //omp_set_num_threads(nThreads);
+    gettimeofday(&start,NULL);
     process_start_measure();
-    bs_thread(&tid);
+    bs_thread(&tid,prices);
     process_stop_measure();
-#endif //ENABLE_OPENMP
-#endif //ENABLE_THREADS
+    gettimeofday(&stop,NULL);
+
+#ifdef ENABLE_PARSEC_HOOKS
+    __parsec_roi_end();
+#endif
 
     //Write prices to output file
     file = fopen(outputFile, "w");
@@ -537,6 +425,15 @@ int main (int argc, char **argv)
 #endif
     free(data);
     free(prices);
+
+    elapsed = 1000000 * (stop.tv_sec - start.tv_sec);
+    elapsed += stop.tv_usec - start.tv_usec;
+
+    if(allow_out) printf("par_sec_time_us:%lu\n",elapsed);
+
+#ifdef ENABLE_PARSEC_HOOKS
+    __parsec_bench_end();
+#endif
 
     process_append_file(outputFile);
 
