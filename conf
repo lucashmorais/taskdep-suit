@@ -1,7 +1,7 @@
 #CC=gcc
 #CXX=g++
-CC=riscv64-linux-gnu-gcc
-CXX=riscv64-linux-gnu-g++
+CC=riscv64-unknown-linux-gnu-gcc
+CXX=riscv64-unknown-linux-gnu-g++
 MCC=mcc
 FLAGS_BENCH=
 FLAGS_OMP=-fopenmp
