@@ -2,8 +2,8 @@ include ../../conf
 JACOBI=-DCHK_ERR
 
 build:
-	$(PREFIX)$(CC) $(ARCH_CCARGS) src/bs-seq.c $(BENCH_PATH)bench.c $(BENCH_PATH)sha256.c $(FLAGS_BENCH) $(JACOBI) -lm -o bin/bs-seq
-	$(PREFIX)$(CXX) $(ARCH_CCARGS) src/bs-phentos-ord.cpp $(BENCH_PATH)bench.c $(BENCH_PATH)sha256.c $(FLAGS_BENCH) $(JACOBI) -lm -lpthread -o bin/bs-phentos-ord -D_PHENTOS
+	$(PREFIX)$(CC) $(ARCH_CCARGS) src/bs-seq.c $(BENCH_PATH)bench.c $(BENCH_PATH)sha256.c $(FLAGS_BENCH) $(JACOBI) -lm -o bin/blackscholes-sequential
+	$(PREFIX)$(CXX) $(ARCH_CCARGS) src/bs-phentos-ord.cpp $(BENCH_PATH)bench.c $(BENCH_PATH)sha256.c $(FLAGS_BENCH) $(JACOBI) -lm -lpthread -o bin/blackscholes-phentos-ord -D_PHENTOS
 	#$(PREFIX)$(MCC) $(ARCH_CCARGS) src/bs-ompss.c $(BENCH_PATH)bench.c $(BENCH_PATH)sha256.c $(FLAGS_BENCH) $(JACOBI) -lm --ompss -D_OMPSS -o bin/bs-ompss
 	#$(MCC) src/bs-td.c $(BENCH_PATH)bench.c $(BENCH_PATH)sha256.c $(FLAGS_BENCH) $(JACOBI) -lm --openmp -o bin/bs-omp
 run:
