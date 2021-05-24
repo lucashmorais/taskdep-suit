@@ -388,6 +388,8 @@ int main (int argc, char **argv)
     __parsec_roi_begin();
 #endif
 
+	extra_init();
+
     //do work
     int tid=0;
     //omp_set_num_threads(nThreads);
