@@ -37,11 +37,11 @@ int BSIZE;
 #define NUM_RUNS 100
 
 typedef struct OptionData_ {
-        fptype s;          // spot price
-        fptype strike;     // strike price
-        fptype r;          // risk-free interest rate
-        fptype divq;       // dividend rate
-        fptype v;          // volatility
+		fptype s;          // spot price
+		fptype strike;     // strike price
+		fptype r;          // risk-free interest rate
+		fptype divq;       // dividend rate
+		fptype v;          // volatility
         fptype t;          // time to maturity or option expiration in years 
                            //     (1yr = 1.0, 6mos = 0.5, 3mos = 0.25, ..., etc)  
         char OptionType;   // Option type.  "P"=PUT, "C"=CALL
@@ -80,7 +80,7 @@ fptype CNDF ( fptype InputX )
 
     fptype OutputX;
     fptype xInput;
-    fptype xNPrimeofX;
+    	fptype xNPrimeofX;
     fptype expValues;
     fptype xK2;
     fptype xK2_2, xK2_3;
@@ -126,7 +126,7 @@ fptype CNDF ( fptype InputX )
     OutputX  = xLocal;
     
     if (sign) {
-        OutputX = 1.0 - OutputX;
+OutputX = 1.0 - OutputX;
     }
     
     return OutputX;
@@ -191,7 +191,7 @@ void FA_BlkSchlsEqEuroNoDiv(unsigned long long swID) {
     xD1 = xD1 * xTime;
     xD1 = xD1 + xLogTerm;
 
-    xDen = xVolatility * xSqrtTime;
+    	xDen = xVolatility * xSqrtTime;
     xD1 = xD1 / xDen;
     xD2 = xD1 - xDen;
 
@@ -226,9 +226,15 @@ void bs_thread(void *tid_ptr,fptype *prices) {
 	unsigned num_iterations = 0;
 	unsigned numPendingWorkRequests = 0;
 
+	printf("[bs_thread]: We are about to start the first run.\n");
+
     for (j=0; j<NUM_RUNS; j++) {
+		printf("[bs_thread]: Run #%d\n", j);
         for (i=0; i<=(numOptions-BSIZE); i+=BSIZE) {
+
+			printf("[bs_thread, run %d, stride %d]: Acquiring swID\n", j, i);
 			swID = getNewSWID(swID);
+			printf("[bs_thread, run %d, stride %d]: Acquired swID: %llu\n", j, i, swID);
 
 			metadataArray[swID].functionAddr = (unsigned long long) FA_BlkSchlsEqEuroNoDiv;
 			metadataArray[swID].depAddresses0[0] = (unsigned long long) (&sptprice[i]);
@@ -241,6 +247,8 @@ void bs_thread(void *tid_ptr,fptype *prices) {
 
 			asm volatile ("fence" ::: "memory");
 
+			printf("[bs_thread, run %d, stride %d]: We have just loaded all task info to the metadataArray\n", j, i);
+
 			num_iterations++;
 			make_submission_request_or_work(24, 0, numPendingWorkRequests);
 			submit_three_or_work(swID, 7, numPendingWorkRequests);
@@ -251,6 +259,8 @@ void bs_thread(void *tid_ptr,fptype *prices) {
 			submit_three_or_work((unsigned long long) (&otime[i]), 0, numPendingWorkRequests);
 			submit_three_or_work((unsigned long long) (&otype[i]), 0, numPendingWorkRequests);
 			submit_three_or_work((unsigned long long) (&prices[i]), 1, numPendingWorkRequests);
+
+			printf("[bs_thread, run %d, stride %d]: We have just sent all dependences\n", j, i);
         }
 
         //We put a barrier here to avoid overlapping the execution of
@@ -276,7 +286,7 @@ int main (int argc, char **argv)
     allow_out = 1;
     if(getenv("BENCH_SILENT") != NULL) allow_out = 0;
 
-    process_name("parsec-blackscholes");
+	process_name("parsec-blackscholes");
     process_mode(OMPSS);
     process_args(argc, argv);
     process_init();
@@ -366,7 +376,7 @@ int main (int argc, char **argv)
     buffer = (fptype *) malloc(5 * numOptions * sizeof(fptype) + PAD);
     sptprice = (fptype *) (((unsigned long long)buffer + PAD) & ~(LINESIZE - 1));
     strike = sptprice + numOptions;
-    rate = strike + numOptions;
+    	rate = strike + numOptions;
     volatility = rate + numOptions;
     otime = volatility + numOptions;
 
