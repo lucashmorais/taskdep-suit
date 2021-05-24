@@ -14,6 +14,7 @@
 #include <math.h>
 #include <string.h>
 #include <sys/time.h>
+#include <assert.h>
 
 #include "../../../c/bench.h"
 #include "../../../../phentos/phentos/femtos.hpp"
@@ -327,6 +328,12 @@ int main (int argc, char **argv)
     }
     if(BSIZE > numOptions) {
       if(allow_out) printf("ERROR: Block size larger than number of options. Please reduce the block size, or use larger data size.\n");
+      exit(1);
+      //printf("WARNING: Not enough work, reducing number of threads to match number of options.\n");
+      //nThreads = numOptions;
+    }
+    if(BSIZE % numOptions) {
+      if(allow_out) printf("ERROR: Number of options is not a multiple of block size.\n");
       exit(1);
       //printf("WARNING: Not enough work, reducing number of threads to match number of options.\n");
       //nThreads = numOptions;
