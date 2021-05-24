@@ -226,15 +226,23 @@ void bs_thread(void *tid_ptr,fptype *prices) {
 	unsigned num_iterations = 0;
 	unsigned numPendingWorkRequests = 0;
 
+#ifdef DEBUG
 	printf("[bs_thread]: We are about to start the first run.\n");
+#endif
 
     for (j=0; j<NUM_RUNS; j++) {
+#ifdef DEBUG
 		printf("[bs_thread]: Run #%d\n", j);
+#endif
         for (i=0; i<=(numOptions-BSIZE); i+=BSIZE) {
 
+#ifdef DEBUG
 			printf("[bs_thread, run %d, stride %d]: Acquiring swID\n", j, i);
+#endif
 			swID = getNewSWID(swID);
+#ifdef DEBUG
 			printf("[bs_thread, run %d, stride %d]: Acquired swID: %llu\n", j, i, swID);
+#endif
 
 			metadataArray[swID].functionAddr = (unsigned long long) FA_BlkSchlsEqEuroNoDiv;
 			metadataArray[swID].depAddresses0[0] = (unsigned long long) (&sptprice[i]);
@@ -247,7 +255,9 @@ void bs_thread(void *tid_ptr,fptype *prices) {
 
 			asm volatile ("fence" ::: "memory");
 
+#ifdef DEBUG
 			printf("[bs_thread, run %d, stride %d]: We have just loaded all task info to the metadataArray\n", j, i);
+#endif
 
 			num_iterations++;
 			make_submission_request_or_work(24, 0, numPendingWorkRequests);
@@ -260,7 +270,9 @@ void bs_thread(void *tid_ptr,fptype *prices) {
 			submit_three_or_work((unsigned long long) (&otype[i]), 0, numPendingWorkRequests);
 			submit_three_or_work((unsigned long long) (&prices[i]), 1, numPendingWorkRequests);
 
+#ifdef DEBUG
 			printf("[bs_thread, run %d, stride %d]: We have just sent all dependences\n", j, i);
+#endif
         }
 
         //We put a barrier here to avoid overlapping the execution of
@@ -342,7 +354,7 @@ int main (int argc, char **argv)
       //printf("WARNING: Not enough work, reducing number of threads to match number of options.\n");
       //nThreads = numOptions;
     }
-    if(BSIZE % numOptions) {
+    if(numOptions % BSIZE) {
       if(allow_out) printf("ERROR: Number of options is not a multiple of block size.\n");
       exit(1);
       //printf("WARNING: Not enough work, reducing number of threads to match number of options.\n");
