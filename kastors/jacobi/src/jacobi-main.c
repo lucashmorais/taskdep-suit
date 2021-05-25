@@ -109,6 +109,9 @@ double run(struct user_parameters* params)
     dx = 1.0 / (double) (nx - 1);
     dy = 1.0 / (double) (ny - 1);
 
+#ifdef _PHENTOS
+	extra_init();
+#endif
 
     // Set the right hand side array F.
     rhs(nx, ny, f_, block_size);
