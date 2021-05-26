@@ -109,8 +109,8 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 
 				make_submission_request_or_work(9, 0, numPendingWorkRequests);
 				submit_three_or_work(swID, 2, numPendingWorkRequests);
-				submit_three_or_work((unsigned long long) (*u)[i], 1, numPendingWorkRequests);
-				submit_three_or_work((unsigned long long) (*unew)[i], 0, numPendingWorkRequests);
+				submit_three_or_work((unsigned long long) &((*u)[i][0]), 1, numPendingWorkRequests);
+				submit_three_or_work((unsigned long long) &((*unew)[i][0]), 0, numPendingWorkRequests);
             }
             // Compute a new estimate.
             for (i = 0; i < nx; i++) {
@@ -138,11 +138,11 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 				// #pragma omp task in(f[i], u[i-1], u[i], u[i+1]) out(unew[i]) copy_out(unew[i])
 				make_submission_request_or_work(18, 0, numPendingWorkRequests);
 				submit_three_or_work(swID, 5, numPendingWorkRequests);
-				submit_three_or_work((unsigned long long) (*f)[i], 0, numPendingWorkRequests);
-				submit_three_or_work((unsigned long long) (*u)[i-1], 0, numPendingWorkRequests);
-				submit_three_or_work((unsigned long long) (*u)[i], 0, numPendingWorkRequests);
-				submit_three_or_work((unsigned long long) (*u)[i+1], 0, numPendingWorkRequests);
-				submit_three_or_work((unsigned long long) (*unew)[i], 1, numPendingWorkRequests);
+				submit_three_or_work((unsigned long long) &((*f)[i][0]), 0, numPendingWorkRequests);
+				submit_three_or_work((unsigned long long) &((*u)[i-1][0]), 0, numPendingWorkRequests);
+				submit_three_or_work((unsigned long long) &((*u)[i][0]), 0, numPendingWorkRequests);
+				submit_three_or_work((unsigned long long) &((*u)[i+1][0]), 0, numPendingWorkRequests);
+				submit_three_or_work((unsigned long long) &((*unew)[i][0]), 1, numPendingWorkRequests);
             }
         }
 		// #pragma omp taskwait
