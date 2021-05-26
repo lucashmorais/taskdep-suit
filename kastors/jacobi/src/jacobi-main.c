@@ -20,6 +20,10 @@ void timestamp(void);
 double u_exact(double x, double y);
 double uxxyy_exact(double x, double y);
 
+#ifdef PHENTOS
+	void extra_init();
+#endif
+
 /*
 Purpose:
 
