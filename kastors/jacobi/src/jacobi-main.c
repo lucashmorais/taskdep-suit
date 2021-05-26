@@ -159,7 +159,7 @@ double run(struct user_parameters* params)
     if(params->check) {
         double x;
         double y;
-        double *udiff_ = malloc(nx * ny * sizeof(double));
+        double *udiff_ = (double *) malloc(nx * ny * sizeof(double));
         double (*udiff)[nx][ny] = (double (*)[nx][ny])udiff_;
         /// CHECK OUTPUT
         // Check for convergence.
