@@ -146,6 +146,7 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
             }
         }
 		// #pragma omp taskwait
+        printf("Going to task wait until %d tasks were retired.\n", num_iterations);
 		task_wait_and_try_executing_tasks(num_iterations);
     }
 }

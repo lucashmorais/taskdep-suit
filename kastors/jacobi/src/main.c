@@ -178,7 +178,7 @@ int main(int argc, char* argv[])
 #endif
 
     // warmup
-    run(&params);
+    // run(&params);
 
     double mean = 0.0;
     double meansqr = 0.0;
