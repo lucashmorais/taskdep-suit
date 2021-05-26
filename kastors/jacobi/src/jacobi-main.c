@@ -109,7 +109,7 @@ double run(struct user_parameters* params)
     dx = 1.0 / (double) (nx - 1);
     dy = 1.0 / (double) (ny - 1);
 
-#ifdef _PHENTOS
+#ifdef PHENTOS
 	extra_init();
 #endif
 
