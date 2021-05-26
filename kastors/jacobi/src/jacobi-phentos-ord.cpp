@@ -82,6 +82,7 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 	u_ = u__;
 	unew_ = unew__;
 	
+    double (*f)[nx][ny] = (double (*)[nx][ny])f_;
     double (*u)[nx][ny] = (double (*)[nx][ny])u_;
     double (*unew)[nx][ny] = (double (*)[nx][ny])unew_;
 
@@ -134,8 +135,14 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 				asm volatile ("fence" ::: "memory");
 				num_iterations++;
 
-				make_submission_request_or_work(3, 0, numPendingWorkRequests);
-				submit_three_or_work(swID, 0, numPendingWorkRequests);
+				// #pragma omp task in(f[i], u[i-1], u[i], u[i+1]) out(unew[i]) copy_out(unew[i])
+				make_submission_request_or_work(18, 0, numPendingWorkRequests);
+				submit_three_or_work(swID, 5, numPendingWorkRequests);
+				submit_three_or_work((unsigned long long) (*f)[i], 0, numPendingWorkRequests);
+				submit_three_or_work((unsigned long long) (*u)[i-1], 0, numPendingWorkRequests);
+				submit_three_or_work((unsigned long long) (*u)[i], 0, numPendingWorkRequests);
+				submit_three_or_work((unsigned long long) (*u)[i+1], 0, numPendingWorkRequests);
+				submit_three_or_work((unsigned long long) (*unew)[i], 1, numPendingWorkRequests);
             }
         }
 		// #pragma omp taskwait
