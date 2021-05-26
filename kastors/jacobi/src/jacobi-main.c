@@ -90,10 +90,10 @@ double run(struct user_parameters* params)
     int jj,j;
     int nx = matrix_size;
     int ny = matrix_size;
-    double *f_ = malloc(nx * nx * sizeof(double));
+    double *f_ = (double *) malloc(nx * nx * sizeof(double));
     double (*f)[nx][ny] = (double (*)[nx][ny])f_;
-    double *u_ = malloc(nx * nx * sizeof(double));
-    double *unew_ = malloc(nx * ny * sizeof(double));
+    double *u_ = (double *) malloc(nx * nx * sizeof(double));
+    double *unew_ = (double *) malloc(nx * ny * sizeof(double));
     double (*unew)[nx][ny] = (double (*)[nx][ny])unew_;
 
     /* test if valid */
@@ -143,10 +143,10 @@ double run(struct user_parameters* params)
     /// KERNEL INTENSIVE COMPUTATION
     START_TIMER;
     process_start_measure();
-#ifndef _OPENMP
-    sweep_seq(nx, ny, dx, dy, f_, 0, niter, u_, unew_);
-#else
+#if defined(_OPENMP) || defined(_PHENTOS)
     sweep(nx, ny, dx, dy, f_, 0, niter, u_, unew_, block_size);
+#else
+    sweep_seq(nx, ny, dx, dy, f_, 0, niter, u_, unew_);
 #endif
     process_stop_measure();
     END_TIMER;
