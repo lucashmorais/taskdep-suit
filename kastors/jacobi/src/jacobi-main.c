@@ -143,7 +143,7 @@ double run(struct user_parameters* params)
     /// KERNEL INTENSIVE COMPUTATION
     START_TIMER;
     process_start_measure();
-#if defined(_OPENMP) || defined(_PHENTOS)
+#if defined(_OPENMP) || defined(PHENTOS)
     sweep(nx, ny, dx, dy, f_, 0, niter, u_, unew_, block_size);
 #else
     sweep_seq(nx, ny, dx, dy, f_, 0, niter, u_, unew_);
