@@ -10,6 +10,7 @@ int nx, ny;
 double dx, dy;
 
 void extra_init() {
+	numRetiredTasks = 0;
 	femtos_init();
 }
 
