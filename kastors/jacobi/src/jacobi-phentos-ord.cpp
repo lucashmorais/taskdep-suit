@@ -62,7 +62,7 @@ void ORD_sweep_partial_b(uint64_t swID) {
 }
 
 void sweep(int nx, int ny, double dx, double dy, double *f_,
-        int itold, int itnew, double *u_, double *unew_)
+        int itold, int itnew, double *u_, double *unew_, int block_size)
 {
     int i;
     int it;
