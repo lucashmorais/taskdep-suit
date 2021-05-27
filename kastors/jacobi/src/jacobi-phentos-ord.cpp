@@ -96,10 +96,12 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 						(*u)[i][j] = (*unew)[i][j];
 					}
 				*/
-				// sweep_partial_a((*u)[i], (*unew)[i]);
-
+#if 1
+				sweep_partial_a((*u)[i], (*unew)[i]);
+#else
 				swID = getNewSWID(swID);
 
+				// TODO: Cast pointers here in the same way we cast them for sending them to Picos
 				metadataArray[swID].functionAddr = (unsigned long long) ORD_sweep_partial_a;
 				metadataArray[swID].depAddresses0[0] = (unsigned long long) (*u)[i];
 				metadataArray[swID].depAddresses0[1] = (unsigned long long) (*unew)[i];
@@ -111,6 +113,7 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 				submit_three_or_work(swID, 2, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*u)[i][0]), 1, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*unew)[i][0]), 0, numPendingWorkRequests);
+#endif
             }
             // Compute a new estimate.
             for (i = 0; i < nx; i++) {
@@ -126,7 +129,9 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
                         }
                     }
 				*/
-				// sweep_partial_b(i);
+#if 1
+				sweep_partial_b(i);
+#else
 				swID = getNewSWID(swID);
 
 				metadataArray[swID].functionAddr = (unsigned long long) ORD_sweep_partial_b;
@@ -143,6 +148,7 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 				submit_three_or_work((unsigned long long) &((*u)[i][0]), 0, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*u)[i+1][0]), 0, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*unew)[i][0]), 1, numPendingWorkRequests);
+#endif
             }
         }
 		// #pragma omp taskwait
