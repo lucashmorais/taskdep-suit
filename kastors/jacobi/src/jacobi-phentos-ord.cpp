@@ -63,7 +63,7 @@ void ORD_sweep_partial_b(uint64_t swID) {
 	}
 }
 
-void sweep(int nx, int ny, double dx, double dy, double *f_,
+void sweep_old_seq(int nx, int ny, double dx, double dy, double *f_,
         int itold, int itnew, double *u_, double *unew_, int block_size)
 {
     int i;
@@ -94,7 +94,7 @@ void sweep(int nx, int ny, double dx, double dy, double *f_,
 }
 
 /* #pragma omp task depend version of SWEEP. */
-void sweep_parallel (int nx_, int ny_, double dx_, double dy_, double *f__,
+void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
         int itold, int itnew, double *u__, double *unew__, int block_size)
 {
     int i;
