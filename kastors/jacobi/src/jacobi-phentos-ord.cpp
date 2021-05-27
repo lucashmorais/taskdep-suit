@@ -85,6 +85,7 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
     double (*f)[nx][ny] = (double (*)[nx][ny])f_;
     double (*u)[nx][ny] = (double (*)[nx][ny])u_;
     double (*unew)[nx][ny] = (double (*)[nx][ny])unew_;
+	asm volatile ("fence" ::: "memory");
 
     {
         for (it = itold + 1; it <= itnew; it++) {
@@ -97,7 +98,7 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 					}
 				*/
 #if 1
-				sweep_partial_a((*u)[i], (*unew)[i]);
+				sweep_partial_a(&((*u)[i][0]), &((*unew)[i][0]));
 #else
 				swID = getNewSWID(swID);
 
