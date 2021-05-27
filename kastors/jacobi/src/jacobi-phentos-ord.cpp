@@ -93,12 +93,12 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
             for (i = 0; i < nx; i++) {
 				/*
 					#pragma omp task in(unew[i]) out(u[i]) copy_out(u[i])
+				sweep_partial_a(&((*u)[i][0]), &((*unew)[i][0]));
+				*/
+#if 1
 					for (j = 0; j < ny; j++) {
 						(*u)[i][j] = (*unew)[i][j];
 					}
-				*/
-#if 1
-				sweep_partial_a(&((*u)[i][0]), &((*unew)[i][0]));
 #else
 				swID = getNewSWID(swID);
 
@@ -120,6 +120,9 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
             for (i = 0; i < nx; i++) {
 				/*
 					#pragma omp task in(f[i], u[i-1], u[i], u[i+1]) out(unew[i]) copy_out(unew[i])
+				sweep_partial_b(i);
+				*/
+#if 1
                     for (j = 0; j < ny; j++) {
                         if (i == 0 || j == 0 || i == nx - 1 || j == ny - 1) {
                             (*unew)[i][j] = (*f)[i][j];
@@ -129,9 +132,6 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
                                                   + (*f)[i][j] * dx * dy);
                         }
                     }
-				*/
-#if 1
-				sweep_partial_b(i);
 #else
 				swID = getNewSWID(swID);
 
