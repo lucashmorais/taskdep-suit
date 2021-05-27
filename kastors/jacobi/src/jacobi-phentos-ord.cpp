@@ -6,7 +6,8 @@ double *f_;
 double *u_;
 double *unew_;
 
-int nx, ny, dx, dy;
+int nx, ny;
+double dx, dy;
 
 void extra_init() {
 	femtos_init();
@@ -125,7 +126,7 @@ void sweep_parallel (int nx_, int ny_, double dx_, double dy_, double *f__,
 					#pragma omp task in(unew[i]) out(u[i]) copy_out(u[i])
 				sweep_partial_a(&((*u)[i][0]), &((*unew)[i][0]));
 				*/
-#if 1
+#if 0
 					for (j = 0; j < ny; j++) {
 						(*u)[i][j] = (*unew)[i][j];
 					}
@@ -152,7 +153,7 @@ void sweep_parallel (int nx_, int ny_, double dx_, double dy_, double *f__,
 					#pragma omp task in(f[i], u[i-1], u[i], u[i+1]) out(unew[i]) copy_out(unew[i])
 				sweep_partial_b(i);
 				*/
-#if 1
+#if 0
                     for (j = 0; j < ny; j++) {
                         if (i == 0 || j == 0 || i == nx - 1 || j == ny - 1) {
                             (*unew)[i][j] = (*f)[i][j];
