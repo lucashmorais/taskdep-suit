@@ -123,18 +123,8 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
         for (it = itold + 1; it <= itnew; it++) {
             // Save the current estimate.
             for (i = 0; i < nx; i++) {
-				/*
-					#pragma omp task in(unew[i]) out(u[i]) copy_out(u[i])
-				sweep_partial_a(&((*u)[i][0]), &((*unew)[i][0]));
-				*/
-#if 0
-					for (j = 0; j < ny; j++) {
-						(*u)[i][j] = (*unew)[i][j];
-					}
-#else
 				swID = getNewSWID(swID);
 
-				// TODO: Cast pointers here in the same way we cast them for sending them to Picos
 				metadataArray[swID].functionAddr = (unsigned long long) ORD_sweep_partial_a;
 				metadataArray[swID].depAddresses0[0] = (unsigned long long) (*u)[i];
 				metadataArray[swID].depAddresses0[1] = (unsigned long long) (*unew)[i];
@@ -146,25 +136,9 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 				submit_three_or_work(swID, 2, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*u)[i][0]), 1, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*unew)[i][0]), 0, numPendingWorkRequests);
-#endif
             }
             // Compute a new estimate.
             for (i = 0; i < nx; i++) {
-				/*
-					#pragma omp task in(f[i], u[i-1], u[i], u[i+1]) out(unew[i]) copy_out(unew[i])
-				sweep_partial_b(i);
-				*/
-#if 0
-                    for (j = 0; j < ny; j++) {
-                        if (i == 0 || j == 0 || i == nx - 1 || j == ny - 1) {
-                            (*unew)[i][j] = (*f)[i][j];
-                        } else {
-                            (*unew)[i][j] = 0.25 * ((*u)[i-1][j] + (*u)[i][j+1]
-                                                  + (*u)[i][j-1] + (*u)[i+1][j]
-                                                  + (*f)[i][j] * dx * dy);
-                        }
-                    }
-#else
 				swID = getNewSWID(swID);
 
 				metadataArray[swID].functionAddr = (unsigned long long) ORD_sweep_partial_b;
@@ -173,7 +147,6 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 				asm volatile ("fence" ::: "memory");
 				num_iterations++;
 
-				// #pragma omp task in(f[i], u[i-1], u[i], u[i+1]) out(unew[i]) copy_out(unew[i])
 				make_submission_request_or_work(18, 0, numPendingWorkRequests);
 				submit_three_or_work(swID, 5, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*f)[i][0]), 0, numPendingWorkRequests);
@@ -181,10 +154,8 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 				submit_three_or_work((unsigned long long) &((*u)[i][0]), 0, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*u)[i+1][0]), 0, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*unew)[i][0]), 1, numPendingWorkRequests);
-#endif
             }
         }
-		// #pragma omp taskwait
         printf("Going to task wait until %d tasks were retired.\n", num_iterations);
 		task_wait_and_try_executing_tasks(num_iterations);
     }
