@@ -26,7 +26,7 @@ EXTRA = -std=c99 -O3 -Wall -Wno-unused
 EXTRA_PHENTOS = -O3 -Wall -Wno-unused -DPHENTOS
 
 $(PROGRAM)-phentos-ord: $(PROGRAM)-phentos-ord.cpp
-	$(CXX) $(GFLAGS) $(CFLAGS) $(CFLAGS_P) $(EXTRA) $(INCS) -o $@ $< $(LIBS)
+	$(CXX) $(GFLAGS) $(CFLAGS) $(CFLAGS_P) $(EXTRA_PHENTOS) $(INCS) -o $@ $< $(LIBS)
 
 $(PROGRAM)-p: $(PROGRAM).c
 	$(CC) $(GFLAGS) $(CFLAGS) $(CFLAGS_P) $(EXTRA) $(INCS) -o $@ $< $(LIBS)

@@ -116,9 +116,9 @@
 #define BSIZE N/64
 #endif
 
-static double	a[N+OFFSET],
-		b[N+OFFSET],
-		c[N+OFFSET];
+static double	_a[N+OFFSET],
+		_b[N+OFFSET],
+		_c[N+OFFSET];
 
 static double	avgtime[4] = {0}, maxtime[4] = {0},
 		mintime[4] = {FLT_MAX,FLT_MAX,FLT_MAX,FLT_MAX};
@@ -142,9 +142,6 @@ extern void tuned_STREAM_Add();
 extern void tuned_STREAM_Triad(double scalar);
 #endif
 
-double *_a;
-double *_b;
-double *_c;
 double scalar;
 
 uint64_t num_iterations = 0;
@@ -165,9 +162,9 @@ void init_task(double *a, double *b, double *c, int bs)
 void ORD_init_task(uint64_t swID)
 {
 	uint64_t i = (uint64_t) metadataArray[swID].depAddresses0[0];
-	double *a = &(a[i]);
-	double *b = &(b[i]);
-	double *c = &(c[i]);
+	double *a = &(_a[i]);
+	double *b = &(_b[i]);
+	double *c = &(_c[i]);
 
 	int j;	
 	for (j=0; j < BSIZE; j++){
@@ -181,7 +178,7 @@ void ORD_init_task(uint64_t swID)
 void tuned_initialization()
 {
 	int j;
-	uint64_t swID;
+	uint64_t swID = 0;
         for (j=0; j<N; j+=BSIZE) {
             // init_task (&a[j], &b[j], &c[j], BSIZE); 
 			swID = getNewSWID(swID);
@@ -193,9 +190,9 @@ void tuned_initialization()
 
 			make_submission_request_or_work(12, 0, numPendingWorkRequests);
 			submit_three_or_work(swID, 3, numPendingWorkRequests);
-			submit_three_or_work((unsigned long long) &(a[j]), 2, numPendingWorkRequests);
-			submit_three_or_work((unsigned long long) &(b[j]), 2, numPendingWorkRequests);
-			submit_three_or_work((unsigned long long) &(c[j]), 2, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) &(_a[j]), 2, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) &(_b[j]), 2, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) &(_c[j]), 2, numPendingWorkRequests);
 		}
 }
 
@@ -411,9 +408,9 @@ void checkSTREAMresults ()
 	bsum = 0.0;
 	csum = 0.0;
 	for (j=0; j<N; j++) {
-		asum += a[j];
-		bsum += b[j];
-		csum += c[j];
+		asum += _a[j];
+		bsum += _b[j];
+		csum += _c[j];
 	}
 #ifdef VERBOSE
 	printf ("Results Comparison: \n");
@@ -456,8 +453,8 @@ void copy_task(double *a, double *c, int bs)
 void ORD_copy_task(uint64_t swID)
 {
 	uint64_t i = (uint64_t) metadataArray[swID].depAddresses0[0];
-	double *a = &(a[i]);
-	double *c = &(c[i]);
+	double *a = &(_a[i]);
+	double *c = &(_c[i]);
 
 	int j;	
 	for (j=0; j < BSIZE; j++)
@@ -466,7 +463,7 @@ void ORD_copy_task(uint64_t swID)
 
 void tuned_STREAM_Copy()
 {
-	uint64_t swID;
+	uint64_t swID = 0;
 	int j;
 
         for (j=0; j<N; j+=BSIZE) {
@@ -480,8 +477,8 @@ void tuned_STREAM_Copy()
 
 			make_submission_request_or_work(9, 0, numPendingWorkRequests);
 			submit_three_or_work(swID, 2, numPendingWorkRequests);
-			submit_three_or_work((unsigned long long) &(a[j]), 2, numPendingWorkRequests);
-			submit_three_or_work((unsigned long long) &(c[j]), 2, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) &(_a[j]), 0, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) &(_c[j]), 2, numPendingWorkRequests);
 		}
 }
 
@@ -496,8 +493,8 @@ void scale_task (double *b, double *c, double scalar, int bs)
 void ORD_scale_task (uint64_t swID)
 {
 	uint64_t i = (uint64_t) metadataArray[swID].depAddresses0[0];
-	double *b = &(b[i]);
-	double *c = &(c[i]);
+	double *b = &(_b[i]);
+	double *c = &(_c[i]);
 
 	int j;	
 	for (j=0; j < BSIZE; j++)
@@ -507,7 +504,7 @@ void ORD_scale_task (uint64_t swID)
 void tuned_STREAM_Scale(double scalar)
 {
 	int j;
-	uint64_t swID;
+	uint64_t swID = 0;
 
 	for (j=0; j<N; j+=BSIZE) {
 			// scale_task (&b[j], &c[j], scalar, BSIZE); 
@@ -520,8 +517,8 @@ void tuned_STREAM_Scale(double scalar)
 
 			make_submission_request_or_work(9, 0, numPendingWorkRequests);
 			submit_three_or_work(swID, 2, numPendingWorkRequests);
-			submit_three_or_work((unsigned long long) &(b[j]), 2, numPendingWorkRequests);
-			submit_three_or_work((unsigned long long) &(c[j]), 2, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) &(_b[j]), 2, numPendingWorkRequests);
+			submit_three_or_work((unsigned long long) &(_c[j]), 0, numPendingWorkRequests);
 	}
 }
 
@@ -536,9 +533,9 @@ void add_task (double *a, double *b, double *c, int bs)
 void ORD_add_task (uint64_t swID)
 {
 	uint64_t i = (uint64_t) metadataArray[swID].depAddresses0[0];
-	double *a = &(a[i]);
-	double *b = &(b[i]);
-	double *c = &(c[i]);
+	double *a = &(_a[i]);
+	double *b = &(_b[i]);
+	double *c = &(_c[i]);
 
 	int j;	
 	for (j=0; j < BSIZE; j++)
@@ -548,7 +545,7 @@ void ORD_add_task (uint64_t swID)
 void tuned_STREAM_Add()
 {
 	int j;
-	uint64_t swID;
+	uint64_t swID = 0;
 	for (j=0; j<N; j+=BSIZE) {
 		// add_task(&a[j], &b[j], &c[j], BSIZE); 
 		swID = getNewSWID(swID);
@@ -560,9 +557,9 @@ void tuned_STREAM_Add()
 
 		make_submission_request_or_work(12, 0, numPendingWorkRequests);
 		submit_three_or_work(swID, 3, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) &(a[j]), 2, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) &(b[j]), 2, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) &(c[j]), 2, numPendingWorkRequests);
+		submit_three_or_work((unsigned long long) &(_a[j]), 0, numPendingWorkRequests);
+		submit_three_or_work((unsigned long long) &(_b[j]), 0, numPendingWorkRequests);
+		submit_three_or_work((unsigned long long) &(_c[j]), 2, numPendingWorkRequests);
 	}
 }
 
@@ -578,9 +575,9 @@ void triad_task (double *a, double *b, double *c, double scalar, int bs)
 void ORD_triad_task (uint64_t swID)
 {
 	uint64_t i = (uint64_t) metadataArray[swID].depAddresses0[0];
-	double *a = &(a[i]);
-	double *b = &(b[i]);
-	double *c = &(c[i]);
+	double *a = &(_a[i]);
+	double *b = &(_b[i]);
+	double *c = &(_c[i]);
 
 	int j;	
 	for (j=0; j < BSIZE; j++)
@@ -591,7 +588,7 @@ void ORD_triad_task (uint64_t swID)
 void tuned_STREAM_Triad(double scalar)
 {
 	int j;
-	uint64_t swID;
+	uint64_t swID = 0;
 
 	for (j=0; j<N; j+=BSIZE) {
 		// triad_task (&a[j], &b[j], &c[j], scalar, BSIZE);
@@ -604,9 +601,9 @@ void tuned_STREAM_Triad(double scalar)
 
 		make_submission_request_or_work(12, 0, numPendingWorkRequests);
 		submit_three_or_work(swID, 3, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) &(a[j]), 2, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) &(b[j]), 2, numPendingWorkRequests);
-		submit_three_or_work((unsigned long long) &(c[j]), 2, numPendingWorkRequests);
+		submit_three_or_work((unsigned long long) &(_a[j]), 2, numPendingWorkRequests);
+		submit_three_or_work((unsigned long long) &(_b[j]), 0, numPendingWorkRequests);
+		submit_three_or_work((unsigned long long) &(_c[j]), 0, numPendingWorkRequests);
 	}
 }
 
