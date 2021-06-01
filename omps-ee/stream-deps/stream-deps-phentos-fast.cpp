@@ -594,7 +594,7 @@ printf("WARNING: This version is a port to SMPSs that only works for TUNED optio
 	}
 
 // #pragma omp taskwait 
-task_wait_and_try_executing_tasks(num_iterations);
+fast_task_wait_and_try_executing_tasks(num_iterations);
 
 total_time = mysecond() - total_time;
     /*	--- SUMMARY --- */
