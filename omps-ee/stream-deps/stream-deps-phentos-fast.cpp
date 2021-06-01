@@ -208,144 +208,6 @@ void tuned_initialization()
 		}
 }
 
-int
-main(int argc, char *argv[])
-    {
-    int			quantum, checktick();
-    int			BytesPerWord;
-    register int	j, k;
-    double		t, times[4][NTIMES], total_time, total_bytes;
-
-	functionAddresses[0] = (unsigned long long) FAST_add_task;
-	functionAddresses[1] = (unsigned long long) FAST_copy_task;
-	functionAddresses[2] = (unsigned long long) FAST_init_task;
-	functionAddresses[3] = (unsigned long long) FAST_scale_task;
-	functionAddresses[4] = (unsigned long long) FAST_triad_task;
-
-    /* --- SETUP --- determine precision and check timing --- */
-
-    printf(HLINE);
-    printf("STREAM version $Revision: 5.8 $\n");
-    printf(HLINE);
-    BytesPerWord = sizeof(double);
-    printf("This system uses %d bytes per DOUBLE PRECISION word.\n",
-	BytesPerWord);
-
-    printf(HLINE);
-    printf("Array size = %d, Offset = %d\n" , N, OFFSET);
-    printf("Total memory required = %.1f MB.\n",
-	(3.0 * BytesPerWord) * ( (double) N / 1048576.0));
-    printf("Each test is run %d times, but only\n", NTIMES);
-    printf("the *best* time for each is used.\n");
-
-#ifdef OmpSs
-    printf(HLINE);
-    k = omp_get_num_threads();
-    printf ("Number of Threads = %i\n",k);
-#endif    
-#ifdef SMPSs
-    printf(HLINE);
-    k = atoi (getenv ("CSS_NUM_CPUS"));
-    printf ("Number of CSS Threads = %i\n",k);
-#endif
-#ifdef CellSs
-    printf(HLINE);
-    k = atoi (getenv ("CSS_NUM_SPUS"));
-    printf ("Number of CSS Threads = %i\n",k);
-#endif
-#ifdef CellSs_tracing
-    printf(HLINE);
-    k = atoi (getenv ("CSS_NUM_SPUS"));
-    printf ("Number of CSS Threads = %i\n",k);
-#endif
-#ifdef PHENTOS
-	femtos_fast_init();
-#endif
-
-    printf(HLINE);
-
-    printf ("Printing one line per active thread....\n");
-
-    /* Get initial value for system clock. */
-
-total_time = mysecond();
-    tuned_initialization();
-
-    /*	--- MAIN LOOP --- repeat test cases NTIMES times --- */
-
-    scalar = 3.0;
-    for (k=0; k<NTIMES; k++)
-	{
-	times[0][k] = mysecond();
-#ifdef TUNED
-        tuned_STREAM_Copy();
-#else
-printf("WARNING: This version is a port to SMPSs that only works for TUNED option \n");
-	for (j=0; j<N; j++)
-	    c[j] = a[j];
-#endif
-	times[0][k] = mysecond() - times[0][k];
-	
-	times[1][k] = mysecond();
-#ifdef TUNED
-        tuned_STREAM_Scale(scalar);
-#else
-	for (j=0; j<N; j++)
-	    b[j] = scalar*c[j];
-#endif
-	times[1][k] = mysecond() - times[1][k];
-	
-	times[2][k] = mysecond();
-#ifdef TUNED
-        tuned_STREAM_Add();
-#else
-	for (j=0; j<N; j++)
-	    c[j] = a[j]+b[j];
-#endif
-	times[2][k] = mysecond() - times[2][k];
-	
-	times[3][k] = mysecond();
-#ifdef TUNED
-        tuned_STREAM_Triad(scalar);
-#else
-	for (j=0; j<N; j++)
-	    a[j] = b[j]+scalar*c[j];
-#endif
-	times[3][k] = mysecond() - times[3][k];
-	}
-
-// #pragma omp taskwait 
-task_wait_and_try_executing_tasks(num_iterations);
-
-total_time = mysecond() - total_time;
-    /*	--- SUMMARY --- */
-
-    for (k=1; k<NTIMES; k++) /* note -- skip first iteration */
-	{
-	for (j=0; j<4; j++)
-	    {
-	    avgtime[j] = avgtime[j] + times[j][k];
-	    mintime[j] = MIN(mintime[j], times[j][k]);
-	    maxtime[j] = MAX(maxtime[j], times[j][k]);
-	    }
-	}
-    
-
-   total_bytes = bytes[0] + bytes[1] + bytes [2] + bytes [3];
-    printf ("Average Rate (MB/s): %11.4f \n", 1.0E-06 * total_bytes*NTIMES/total_time);
-    printf ("note: in this version, the average rate per function\n");
-    printf ("can not be provided, use tracing to check it\n");
-
-    printf(HLINE);
-
-    printf("TOTAL time (including initialization) =  %11.4f seconds\n", total_time);
-    /* --- Check Results --- */
-    checkSTREAMresults();
-    printf(HLINE);
-
-    return 0;
-}
-
 # define	M	20
 
 int
@@ -627,3 +489,138 @@ void tuned_STREAM_Triad(double scalar)
 	}
 }
 
+int main(int argc, char *argv[]) {
+    int			quantum, checktick();
+    int			BytesPerWord;
+    register int	j, k;
+    double		t, times[4][NTIMES], total_time, total_bytes;
+
+	functionAddresses[0] = (unsigned long long) FAST_add_task;
+	functionAddresses[1] = (unsigned long long) FAST_copy_task;
+	functionAddresses[2] = (unsigned long long) FAST_init_task;
+	functionAddresses[3] = (unsigned long long) FAST_scale_task;
+	functionAddresses[4] = (unsigned long long) FAST_triad_task;
+
+    /* --- SETUP --- determine precision and check timing --- */
+
+    printf(HLINE);
+    printf("STREAM version $Revision: 5.8 $\n");
+    printf(HLINE);
+    BytesPerWord = sizeof(double);
+    printf("This system uses %d bytes per DOUBLE PRECISION word.\n",
+	BytesPerWord);
+
+    printf(HLINE);
+    printf("Array size = %d, Offset = %d\n" , N, OFFSET);
+    printf("Total memory required = %.1f MB.\n",
+	(3.0 * BytesPerWord) * ( (double) N / 1048576.0));
+    printf("Each test is run %d times, but only\n", NTIMES);
+    printf("the *best* time for each is used.\n");
+
+#ifdef OmpSs
+    printf(HLINE);
+    k = omp_get_num_threads();
+    printf ("Number of Threads = %i\n",k);
+#endif    
+#ifdef SMPSs
+    printf(HLINE);
+    k = atoi (getenv ("CSS_NUM_CPUS"));
+    printf ("Number of CSS Threads = %i\n",k);
+#endif
+#ifdef CellSs
+    printf(HLINE);
+    k = atoi (getenv ("CSS_NUM_SPUS"));
+    printf ("Number of CSS Threads = %i\n",k);
+#endif
+#ifdef CellSs_tracing
+    printf(HLINE);
+    k = atoi (getenv ("CSS_NUM_SPUS"));
+    printf ("Number of CSS Threads = %i\n",k);
+#endif
+#ifdef PHENTOS
+	femtos_fast_init();
+#endif
+
+    printf(HLINE);
+
+    printf ("Printing one line per active thread....\n");
+
+    /* Get initial value for system clock. */
+
+total_time = mysecond();
+    tuned_initialization();
+
+    /*	--- MAIN LOOP --- repeat test cases NTIMES times --- */
+
+    scalar = 3.0;
+    for (k=0; k<NTIMES; k++)
+	{
+	times[0][k] = mysecond();
+#ifdef TUNED
+        tuned_STREAM_Copy();
+#else
+printf("WARNING: This version is a port to SMPSs that only works for TUNED option \n");
+	for (j=0; j<N; j++)
+	    c[j] = a[j];
+#endif
+	times[0][k] = mysecond() - times[0][k];
+	
+	times[1][k] = mysecond();
+#ifdef TUNED
+        tuned_STREAM_Scale(scalar);
+#else
+	for (j=0; j<N; j++)
+	    b[j] = scalar*c[j];
+#endif
+	times[1][k] = mysecond() - times[1][k];
+	
+	times[2][k] = mysecond();
+#ifdef TUNED
+        tuned_STREAM_Add();
+#else
+	for (j=0; j<N; j++)
+	    c[j] = a[j]+b[j];
+#endif
+	times[2][k] = mysecond() - times[2][k];
+	
+	times[3][k] = mysecond();
+#ifdef TUNED
+        tuned_STREAM_Triad(scalar);
+#else
+	for (j=0; j<N; j++)
+	    a[j] = b[j]+scalar*c[j];
+#endif
+	times[3][k] = mysecond() - times[3][k];
+	}
+
+// #pragma omp taskwait 
+task_wait_and_try_executing_tasks(num_iterations);
+
+total_time = mysecond() - total_time;
+    /*	--- SUMMARY --- */
+
+    for (k=1; k<NTIMES; k++) /* note -- skip first iteration */
+	{
+	for (j=0; j<4; j++)
+	    {
+	    avgtime[j] = avgtime[j] + times[j][k];
+	    mintime[j] = MIN(mintime[j], times[j][k]);
+	    maxtime[j] = MAX(maxtime[j], times[j][k]);
+	    }
+	}
+    
+
+   total_bytes = bytes[0] + bytes[1] + bytes [2] + bytes [3];
+    printf ("Average Rate (MB/s): %11.4f \n", 1.0E-06 * total_bytes*NTIMES/total_time);
+    printf ("note: in this version, the average rate per function\n");
+    printf ("can not be provided, use tracing to check it\n");
+
+    printf(HLINE);
+
+    printf("TOTAL time (including initialization) =  %11.4f seconds\n", total_time);
+    /* --- Check Results --- */
+    checkSTREAMresults();
+    printf(HLINE);
+
+    return 0;
+}
