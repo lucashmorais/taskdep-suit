@@ -120,11 +120,11 @@
 #define MASK3BITS 0x7
 
 #define getOneParameter(swID, a) {\
-	a = (swID >> 4) & MASK15BITS;\
+	a = (swID >> 4);\
 }
 
 #define buildSWIDWithOneParameter(swID, funcIdx, a) {\
-	swID = ((a & MASK15BITS) << 4) | ((funcIdx & MASK3BITS) << 1) | 0x1;\
+	swID = ((a) << 4) | ((funcIdx & MASK3BITS) << 1) | 0x1;\
 }
 
 static double	_a[N+OFFSET],
