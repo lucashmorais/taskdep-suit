@@ -1,7 +1,7 @@
 PROGRAM=stream-deps
 
 # TARGETS=$(PROGRAM)-p $(PROGRAM)-i $(PROGRAM)-d
-TARGETS=$(PROGRAM)-p
+TARGETS=$(PROGRAM)-phentos-ord $(PROGRAM)-phentos-fast
 
 JOB_SCHED_VERSION=-smp
 
@@ -26,6 +26,9 @@ EXTRA = -std=c99 -O3 -Wall -Wno-unused
 EXTRA_PHENTOS = -O3 -Wall -Wno-unused -DPHENTOS
 
 $(PROGRAM)-phentos-ord: $(PROGRAM)-phentos-ord.cpp
+	$(CXX) $(GFLAGS) $(CFLAGS) $(CFLAGS_P) $(EXTRA_PHENTOS) $(INCS) -o $@ $< $(LIBS)
+
+$(PROGRAM)-phentos-fast: $(PROGRAM)-phentos-fast.cpp
 	$(CXX) $(GFLAGS) $(CFLAGS) $(CFLAGS_P) $(EXTRA_PHENTOS) $(INCS) -o $@ $< $(LIBS)
 
 $(PROGRAM)-p: $(PROGRAM).c
