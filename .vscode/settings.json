@@ -2,5 +2,8 @@
 	"C_Cpp.dimInactiveRegions": false,
 	"cSpell.words": [
 		"sparselu"
+	],
+	"cSpell.ignoreWords": [
+		"unew"
 	]
 }

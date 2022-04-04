@@ -1,5 +1,6 @@
 include ../../conf
 JACOBI=-DMSIZE -DSMSIZE
+FLAGS_BENCH=-DZERO_PACKETS_V2
 
 build:
 	$(PREFIX)$(CC) $(ARCH_CCARGS) src/sparselu.c src/main.c src/sparselu-seq.c $(BENCH_PATH)bench.c $(BENCH_PATH)sha256.c $(FLAGS_BENCH) $(JACOBI) -lm -o bin/sparselu-seq -Wno-write-strings 

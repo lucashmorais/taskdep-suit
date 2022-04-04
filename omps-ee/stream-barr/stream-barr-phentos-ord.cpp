@@ -60,8 +60,10 @@
  */
 
 // # define N	128*1024*1024 
+# ifndef N
 # define N	16*1024*1024 
-# define NTIMES	10
+# endif
+# define NTIMES	3
 # define OFFSET	0
 
 /*
@@ -244,6 +246,11 @@ main(int argc, char *argv[])
 #endif
 #ifdef PHENTOS
 	femtos_init();
+  #ifdef ZERO_PACKETS_V2
+		#pragma message ("Benchmark compiled with support for ZERO_PACKETS_V2")
+		#pragma message ("Benchmark compiled with support for SW-BASED PADDING")
+		#pragma message ("Benchmark compiled with support for RESET COUNT OF SUBMITTED TASKS")
+  #endif
 #endif
 
     printf(HLINE);
@@ -483,10 +490,30 @@ void tuned_STREAM_Copy()
 			asm volatile ("fence" ::: "memory");
 			num_iterations++;
 
+#ifdef ZERO_PACKETS_V2
+			make_submission_request_or_work(48, 0, numPendingWorkRequests);
+			submit_three_or_work(swID, 15, numPendingWorkRequests);
+#else
 			make_submission_request_or_work(9, 0, numPendingWorkRequests);
 			submit_three_or_work(swID, 2, numPendingWorkRequests);
+#endif
 			submit_three_or_work((unsigned long long) &(_a[j]), 0, numPendingWorkRequests);
 			submit_three_or_work((unsigned long long) &(_c[j]), 2, numPendingWorkRequests);
+#ifdef ZERO_PACKETS_V2
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+#endif
 		}
 }
 
@@ -523,10 +550,30 @@ void tuned_STREAM_Scale(double scalar)
 			asm volatile ("fence" ::: "memory");
 			num_iterations++;
 
+#ifdef ZERO_PACKETS_V2
+			make_submission_request_or_work(48, 0, numPendingWorkRequests);
+			submit_three_or_work(swID, 15, numPendingWorkRequests);
+#else
 			make_submission_request_or_work(9, 0, numPendingWorkRequests);
 			submit_three_or_work(swID, 2, numPendingWorkRequests);
+#endif
 			submit_three_or_work((unsigned long long) &(_b[j]), 2, numPendingWorkRequests);
 			submit_three_or_work((unsigned long long) &(_c[j]), 0, numPendingWorkRequests);
+#ifdef ZERO_PACKETS_V2
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+			submit_three_or_work(0, 0, numPendingWorkRequests);
+#endif
 	}
 }
 
@@ -563,11 +610,31 @@ void tuned_STREAM_Add()
 		asm volatile ("fence" ::: "memory");
 		num_iterations++;
 
+#ifdef ZERO_PACKETS_V2
+		make_submission_request_or_work(48, 0, numPendingWorkRequests);
+		submit_three_or_work(swID, 15, numPendingWorkRequests);
+#else
 		make_submission_request_or_work(12, 0, numPendingWorkRequests);
 		submit_three_or_work(swID, 3, numPendingWorkRequests);
+#endif
+
 		submit_three_or_work((unsigned long long) &(_a[j]), 0, numPendingWorkRequests);
 		submit_three_or_work((unsigned long long) &(_b[j]), 0, numPendingWorkRequests);
 		submit_three_or_work((unsigned long long) &(_c[j]), 2, numPendingWorkRequests);
+#ifdef ZERO_PACKETS_V2
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+#endif
 	}
 }
 
@@ -607,11 +674,31 @@ void tuned_STREAM_Triad(double scalar)
 		asm volatile ("fence" ::: "memory");
 		num_iterations++;
 
+#ifdef ZERO_PACKETS_V2
+		make_submission_request_or_work(48, 0, numPendingWorkRequests);
+		submit_three_or_work(swID, 15, numPendingWorkRequests);
+#else
 		make_submission_request_or_work(12, 0, numPendingWorkRequests);
 		submit_three_or_work(swID, 3, numPendingWorkRequests);
+#endif
+
 		submit_three_or_work((unsigned long long) &(_a[j]), 2, numPendingWorkRequests);
 		submit_three_or_work((unsigned long long) &(_b[j]), 0, numPendingWorkRequests);
 		submit_three_or_work((unsigned long long) &(_c[j]), 0, numPendingWorkRequests);
+#ifdef ZERO_PACKETS_V2
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+		submit_three_or_work(0, 0, numPendingWorkRequests);
+#endif
 	}
 }
 

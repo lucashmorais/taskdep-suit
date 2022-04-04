@@ -78,7 +78,16 @@ int numError = 0;
 
 void extra_init()
 {
+	totalNumberOfSubmittedTasks = 0;
 	femtos_fast_init();
+#ifdef ZERO_PACKETS_V2
+	#pragma message ("Benchmark compiled with support for ZERO_PACKETS_V2")
+	#pragma message ("Benchmark compiled with support for SW-BASED PADDING")
+	#pragma message ("Benchmark compiled with support for RESET COUNT OF SUBMITTED TASKS")
+	std::cout << "[feature]: ZERO_PACKETS_V2" << std::endl;
+	std::cout << "[feature]: SW-BASED PADDING" << std::endl;
+	std::cout << "[feature]: RESET COUNT OF SUBMITTED TASKS" << std::endl;
+#endif
 }
 
 fptype CNDF(fptype InputX)
@@ -263,8 +272,14 @@ void bs_thread(void *tid_ptr, fptype *prices)
 #endif
 
 			num_iterations++;
+#ifdef ZERO_PACKETS_V2
+				make_submission_request_or_work_fast(48, 0, numPendingWorkRequests);
+				submit_three_or_work_fast(swID, 15, numPendingWorkRequests);
+#else
 			make_submission_request_or_work_fast(24, 0, numPendingWorkRequests);
 			submit_three_or_work_fast(swID, 7, numPendingWorkRequests);
+#endif
+
 			submit_three_or_work_fast((unsigned long long)(&sptprice[i]), 0, numPendingWorkRequests);
 			submit_three_or_work_fast((unsigned long long)(&strike[i]), 0, numPendingWorkRequests);
 			submit_three_or_work_fast((unsigned long long)(&rate[i]), 0, numPendingWorkRequests);
@@ -272,6 +287,16 @@ void bs_thread(void *tid_ptr, fptype *prices)
 			submit_three_or_work_fast((unsigned long long)(&otime[i]), 0, numPendingWorkRequests);
 			submit_three_or_work_fast((unsigned long long)(&otype[i]), 0, numPendingWorkRequests);
 			submit_three_or_work_fast((unsigned long long)(&prices[i]), 1, numPendingWorkRequests);
+#ifdef ZERO_PACKETS_V2
+			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+#endif
 
 #ifdef DEBUG
 			printf("[bs_thread, run %d, stride %d]: We have just sent all dependences\n", j, i);

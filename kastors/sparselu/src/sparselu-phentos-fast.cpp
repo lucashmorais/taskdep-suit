@@ -55,6 +55,15 @@ unsigned int GLOBAL_submatrix_size;
 
 void resetTaskWaitCounters() {
 	numRetiredTasks = 0;
+	totalNumberOfSubmittedTasks = 0;
+	#pragma message ("Benchmark compiled with support for ZERO_PACKETS_V2")
+	#pragma message ("Benchmark compiled with support for SW-BASED PADDING")
+	#pragma message ("Benchmark compiled with support for RESET COUNT OF SUBMITTED TASKS")
+#ifdef ZERO_PACKETS_V2
+	std::cout << "[feature]: ZERO_PACKETS_V2" << std::endl;
+	std::cout << "[feature]: SW-BASED PADDING" << std::endl;
+	std::cout << "[feature]: RESET COUNT OF SUBMITTED TASKS" << std::endl;
+#endif
 }
 
 #if 0
@@ -208,9 +217,30 @@ void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
                         swID = ((kk & MASK15BITS) << 4) | 0x1;
 
                         num_iterations++;
+#ifdef ZERO_PACKETS_V2
+												make_submission_request_or_work_fast(48, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(swID, 15, numPendingWorkRequests);
+#else
                         make_submission_request_or_work_fast(6, 0, numPendingWorkRequests);
                         submit_three_or_work_fast(swID, 1, numPendingWorkRequests);
+#endif
                         submit_three_or_work_fast((unsigned long long) BENCH[kk*matrix_size+kk], 2, numPendingWorkRequests);
+#ifdef ZERO_PACKETS_V2
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+#endif
 
 
                         for (jj=kk+1; jj<matrix_size; jj++)
@@ -219,10 +249,30 @@ void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
                                         swID = ((((kk & MASK15BITS) << 15) | (jj & MASK15BITS)) << 4) | 0x3;
 
                                         num_iterations++;
+#ifdef ZERO_PACKETS_V2
+																				make_submission_request_or_work_fast(48, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(swID, 15, numPendingWorkRequests);
+#else
                                         make_submission_request_or_work_fast(9, 0, numPendingWorkRequests);
                                         submit_three_or_work_fast(swID, 2, numPendingWorkRequests);
+#endif
                                         submit_three_or_work_fast((unsigned long long) BENCH[kk*matrix_size+kk], 0, numPendingWorkRequests);
                                         submit_three_or_work_fast((unsigned long long) BENCH[kk*matrix_size+jj], 2, numPendingWorkRequests);
+#ifdef ZERO_PACKETS_V2
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+#endif
                                 }
 
                         for (ii=kk+1; ii<matrix_size; ii++)
@@ -230,10 +280,30 @@ void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
                                         swID = ((((kk & MASK15BITS) << 15) | (ii & MASK15BITS)) << 4) | 0x5;
 
                                         num_iterations++;
+#ifdef ZERO_PACKETS_V2
+																				make_submission_request_or_work_fast(48, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(swID, 15, numPendingWorkRequests);
+#else
                                         make_submission_request_or_work_fast(9, 0, numPendingWorkRequests);
                                         submit_three_or_work_fast(swID, 2, numPendingWorkRequests);
+#endif
                                         submit_three_or_work_fast((unsigned long long) BENCH[kk*matrix_size+kk], 0, numPendingWorkRequests);
                                         submit_three_or_work_fast((unsigned long long) BENCH[ii*matrix_size+kk], 2, numPendingWorkRequests);
+#ifdef ZERO_PACKETS_V2
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																				submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+#endif
                                 }
 
                         for (ii=kk+1; ii<matrix_size; ii++)
@@ -247,14 +317,33 @@ void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
                                                         swID = ((  ((kk & MASK15BITS) << 30) | ((ii & MASK15BITS) << 15) | (jj & MASK15BITS)  ) << 4) | 0x7;
 
                                                         num_iterations++;
+#ifdef ZERO_PACKETS_V2
+																												make_submission_request_or_work_fast(48, 0, numPendingWorkRequests);
+																												submit_three_or_work_fast(swID, 15, numPendingWorkRequests);
+#else
                                                         make_submission_request_or_work_fast(12, 0, numPendingWorkRequests);
                                                         submit_three_or_work_fast(swID, 3, numPendingWorkRequests);
+#endif
                                                         submit_three_or_work_fast((unsigned long long) BENCH[ii*matrix_size+kk], 0, numPendingWorkRequests);
                                                         submit_three_or_work_fast((unsigned long long) BENCH[kk*matrix_size+jj], 0, numPendingWorkRequests);
 
                                                         asm volatile ("fence" ::: "memory");
 
                                                         submit_three_or_work_fast((unsigned long long) BENCH[ii*matrix_size+jj], 2, numPendingWorkRequests);
+#ifdef ZERO_PACKETS_V2
+																												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+																												submit_three_or_work_fast(0, 0, numPendingWorkRequests);
+#endif
                                                 }
                                 }
                 }

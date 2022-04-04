@@ -3,3 +3,7 @@ old/*
 .DS_Store
 **/*.swp
 kastors/sparselu/bin/*
+kastors/jacobi/bin/jacobi-phentos-fast
+kastors/jacobi/bin/jacobi-phentos-ord
+kastors/jacobi/bin/jacobi-seq
+omps-ee/stream-deps/stream-deps-phentos-ord

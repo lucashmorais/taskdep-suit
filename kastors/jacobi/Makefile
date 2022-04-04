@@ -1,6 +1,10 @@
 include ../../conf
 JACOBI=-DMSIZE -DBSIZE -DTITER
 
+CC=riscv64-buildroot-linux-gnu-g++
+CXX=riscv64-buildroot-linux-gnu-g++
+FLAGS_BENCH=-DZERO_PACKETS_V2
+
 build:
 	$(PREFIX)$(CC) $(ARCH_CCARGS) src/jacobi-main.c src/main.c src/jacobi-seq.c src/poisson.c $(BENCH_PATH)bench.c $(BENCH_PATH)sha256.c $(FLAGS_BENCH) $(JACOBI) -lm -o bin/jacobi-seq
 	$(PREFIX)$(CXX) $(ARCH_CCARGS) src/jacobi-phentos-ord.cpp src/jacobi-seq.c src/jacobi-main.c src/main.c src/poisson.c $(BENCH_PATH)bench.c $(BENCH_PATH)sha256.c $(FLAGS_BENCH) $(JACOBI) -lm -lpthread -DPHENTOS -o bin/jacobi-phentos-ord -w
@@ -45,3 +49,5 @@ run:
 	echo ','
 	BENCH_SILENT= ./bin/jacobi-ompss -n 2048 -b 512
 	echo "]}"
+copy-to-overlay:
+	cp ./bin/* ~/Downloads/Compressed/buildroot-2021.08.1/overlay_dir/root/kastors/jacobi/

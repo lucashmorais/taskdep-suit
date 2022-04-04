@@ -59,8 +59,10 @@
  *          that should be good to about 5% precision.
  */
 
-# define N	128*1024*1024 
-# define NTIMES	10
+# ifndef N
+# define N	16*1024*1024 
+# endif
+# define NTIMES	3
 # define OFFSET	0
 
 /*
@@ -142,7 +144,7 @@ extern void tuned_STREAM_Add();
 extern void tuned_STREAM_Triad(double scalar);
 #endif
 
-#pragma omp task out ([bs]a, [bs]b, [bs]c)
+//#pragma omp task out ([bs]a, [bs]b, [bs]c)
 void init_task(double *a, double *b, double *c, int bs)
 {
 	int j;	
@@ -226,7 +228,7 @@ main(int argc, char *argv[])
 */
 total_time = mysecond();
     tuned_initialization();
-#pragma omp taskwait
+//#pragma omp taskwait
 
     /*	--- MAIN LOOP --- repeat test cases NTIMES times --- */
 
@@ -241,7 +243,7 @@ printf("WARNING: This version is a port to StarSs that only works for TUNED opti
 	for (j=0; j<N; j++)
 	    c[j] = a[j];
 #endif
-#pragma omp taskwait  
+//#pragma omp taskwait  
 	times[0][k] = mysecond() - times[0][k];
 	
 	times[1][k] = mysecond();
@@ -251,7 +253,7 @@ printf("WARNING: This version is a port to StarSs that only works for TUNED opti
 	for (j=0; j<N; j++)
 	    b[j] = scalar*c[j];
 #endif
-#pragma omp taskwait
+//#pragma omp taskwait
 	times[1][k] = mysecond() - times[1][k];
 	
 	times[2][k] = mysecond();
@@ -261,7 +263,7 @@ printf("WARNING: This version is a port to StarSs that only works for TUNED opti
 	for (j=0; j<N; j++)
 	    c[j] = a[j]+b[j];
 #endif
-#pragma omp taskwait 
+//#pragma omp taskwait 
 	times[2][k] = mysecond() - times[2][k];
 	
 	times[3][k] = mysecond();
@@ -271,11 +273,11 @@ printf("WARNING: This version is a port to StarSs that only works for TUNED opti
 	for (j=0; j<N; j++)
 	    a[j] = b[j]+scalar*c[j];
 #endif
-#pragma omp  taskwait
+//#pragma omp  taskwait
 	times[3][k] = mysecond() - times[3][k];
 	}
 total_time = mysecond() - total_time;
-#pragma omp taskwait
+//#pragma omp taskwait
     /*	--- SUMMARY --- */
 
     for (k=1; k<NTIMES; k++) /* note -- skip first iteration */
@@ -422,7 +424,7 @@ void checkSTREAMresults ()
 		printf ("Solution Validates\n");
 	}
 }
-#pragma omp task in ([bs]a) out ([bs]c)
+//#pragma omp task in ([bs]a) out ([bs]c)
 void copy_task(double *a, double *c, int bs)
 {
 	int j;	
@@ -438,7 +440,7 @@ void tuned_STREAM_Copy()
             copy_task (&a[j], &c[j], BSIZE); 
 }
 
-#pragma omp task in ([bs]c ) out ([bs]b)
+//#pragma omp task in ([bs]c ) out ([bs]b)
 void scale_task (double *b, double *c, double scalar, int bs)
 {
 	int j;	
@@ -454,7 +456,7 @@ void tuned_STREAM_Scale(double scalar)
 	       scale_task (&b[j], &c[j], scalar, BSIZE); 
 }
 
-#pragma omp task in ([bs]a, [bs]b) out ([bs]c)
+//#pragma omp task in ([bs]a, [bs]b) out ([bs]c)
 void add_task (double *a, double *b, double *c, int bs)
 {
 	int j;	
@@ -470,7 +472,7 @@ void tuned_STREAM_Add()
 	    add_task(&a[j], &b[j], &c[j], BSIZE); 
 }
 
-#pragma omp task in ([bs]b, [bs]c) out ([bs]a)
+//#pragma omp task in ([bs]b, [bs]c) out ([bs]a)
 void triad_task (double *a, double *b, double *c, double scalar, int bs)
 {
 	int j;	
