@@ -159,7 +159,7 @@ static void sparselu_init (float ***pBENCH, int matrix_size, int submatrix_size)
     genmat(*pBENCH, matrix_size, submatrix_size);
 }
 
-#if defined(_OPENMP) || defined(_PHENTOS)
+#if defined(_OPENMP) || defined(_PHENTOS) || defined(_OMPSS) || defined(_OMPSS2)
 #pragma message "The implementations of checkmat and sparselu_check have been compiled"
 
 /***********************************************************************
@@ -239,7 +239,7 @@ double run(struct user_parameters* params)
     process_stop_measure();
     END_TIMER;
 
-#if defined(_OPENMP) || defined(_PHENTOS)
+#if defined(_OPENMP) || defined(_PHENTOS) || defined(_OMPSS) || defined(_OMPSS2)
     if(params->check) {
         float **BENCH_SEQ;
         sparselu_init(&BENCH_SEQ, matrix_size, submatrix_size);
