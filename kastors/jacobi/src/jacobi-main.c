@@ -155,7 +155,7 @@ double run(struct user_parameters* params)
     process_stop_measure();
     END_TIMER;
 
-#if defined(_OPENMP) || defined(PHENTOS)
+#if defined(_OPENMP) || defined(PHENTOS) || defined(_OMPSS) || defined(_OMPSS2)
     if(params->check) {
         double x;
         double y;

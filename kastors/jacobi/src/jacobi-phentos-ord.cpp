@@ -146,8 +146,8 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 				initiate_task_or_work(swID, 2, numPendingWorkRequests);
 				add_args_and_parent_info_or_work(0, 0, numPendingWorkRequests);
 
-				submit_v4_in_dep_or_work((unsigned long long) (&((*u)[i][0])), numPendingWorkRequests);
-				submit_v4_out_dep_or_work((unsigned long long) (&((*unew)[i][0])), numPendingWorkRequests);
+				submit_v4_out_dep_or_work((unsigned long long) (&((*u)[i][0])), numPendingWorkRequests);
+				submit_v4_in_dep_or_work((unsigned long long) (&((*unew)[i][0])), numPendingWorkRequests);
             }
             // Compute a new estimate.
             for (i = 0; i < nx; i++) {
