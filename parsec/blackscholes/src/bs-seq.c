@@ -50,6 +50,7 @@ int _M4_numThreads = MAX_THREADS;
 #define fptype float
 
 #define NUM_RUNS 100
+int NRUNS;
 
 typedef struct OptionData_ {
         fptype s;          // spot price
@@ -220,7 +221,7 @@ int bs_thread(void *tid_ptr) {
     int start = tid * (numOptions / nThreads);
     int end = start + (numOptions / nThreads);
 
-    for (j=0; j<NUM_RUNS; j++) {
+    for (j=0; j<NRUNS; j++) {
 #ifdef ENABLE_OPENMP
 #pragma omp parallel for private(i, price, priceDelta) schedule(SCHED_POLICY)
         for (i=0; i<numOptions; i++) {
@@ -274,6 +275,13 @@ int main (int argc, char **argv)
     nThreads = atoi(argv[1]);
     char *inputFile = argv[2];
     char *outputFile = argv[3];
+
+    if(argc > 4 ) {
+      NRUNS = atoi(argv[4]);
+    }
+    else {
+      NRUNS = NUM_RUNS;
+    }
 
     //Read input data from file
     file = fopen(inputFile, "r");
@@ -329,7 +337,7 @@ int main (int argc, char **argv)
     }
 #endif
     if(allow_out) printf("Num of Options: %d\n", numOptions);
-    if(allow_out) printf("Num of Runs: %d\n", NUM_RUNS);
+    if(allow_out) printf("Num of Runs: %d\n", NRUNS);
 
 #define PAD 256
 #define LINESIZE 64

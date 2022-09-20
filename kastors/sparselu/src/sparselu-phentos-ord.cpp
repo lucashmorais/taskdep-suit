@@ -173,30 +173,16 @@ void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
 						asm volatile ("fence" ::: "memory");
 
                         num_iterations++;
-#ifdef ZERO_PACKETS_V2
-												make_submission_request_or_work(48, 0, numPendingWorkRequests);
-												submit_three_or_work(swID, 15, numPendingWorkRequests);
-#else
+#ifdef OLD
                         make_submission_request_or_work(6, 0, numPendingWorkRequests);
                         submit_three_or_work(swID, 1, numPendingWorkRequests);
-#endif
                         submit_three_or_work((unsigned long long) BENCH[kk*matrix_size+kk], 2, numPendingWorkRequests);
-#ifdef ZERO_PACKETS_V2
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
-												submit_three_or_work(0, 0, numPendingWorkRequests);
 #endif
+												initiate_task_or_work(swID, 1, numPendingWorkRequests);
+												add_args_and_parent_info_or_work(0, 0, numPendingWorkRequests);
+												
+												//submit_v4_in_dep_or_work((unsigned long long) (&(testVar[j])), numPendingWorkRequests);
+                        submit_v4_out_dep_or_work((unsigned long long) BENCH[kk*matrix_size+kk], numPendingWorkRequests);
 
                         for (jj=kk+1; jj<matrix_size; jj++)
                                 if (BENCH[kk*matrix_size+jj] != NULL) {
@@ -210,30 +196,17 @@ void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
 										asm volatile ("fence" ::: "memory");
 
                                         num_iterations++;
-#ifdef ZERO_PACKETS_V2
-																				make_submission_request_or_work(48, 0, numPendingWorkRequests);
-																				submit_three_or_work(swID, 15, numPendingWorkRequests);
-#else
+#ifdef OLD
                                         make_submission_request_or_work(9, 0, numPendingWorkRequests);
                                         submit_three_or_work(swID, 2, numPendingWorkRequests);
-#endif
                                         submit_three_or_work((unsigned long long) BENCH[kk*matrix_size+kk], 0, numPendingWorkRequests);
                                         submit_three_or_work((unsigned long long) BENCH[kk*matrix_size+jj], 2, numPendingWorkRequests);
-#ifdef ZERO_PACKETS_V2
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
 #endif
+																				initiate_task_or_work(swID, 2, numPendingWorkRequests);
+																				add_args_and_parent_info_or_work(0, 0, numPendingWorkRequests);
+																				
+                                        submit_v4_in_dep_or_work((unsigned long long) BENCH[kk*matrix_size+kk], numPendingWorkRequests);
+                                        submit_v4_out_dep_or_work((unsigned long long) BENCH[kk*matrix_size+jj], numPendingWorkRequests);
                                 }
 
                         for (ii=kk+1; ii<matrix_size; ii++)
@@ -247,30 +220,18 @@ void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
 										asm volatile ("fence" ::: "memory");
 
                                         num_iterations++;
-#ifdef ZERO_PACKETS_V2
-																				make_submission_request_or_work(48, 0, numPendingWorkRequests);
-																				submit_three_or_work(swID, 15, numPendingWorkRequests);
-#else
+#ifdef OLD
                                         make_submission_request_or_work(9, 0, numPendingWorkRequests);
                                         submit_three_or_work(swID, 2, numPendingWorkRequests);
-#endif
                                         submit_three_or_work((unsigned long long) BENCH[kk*matrix_size+kk], 0, numPendingWorkRequests);
                                         submit_three_or_work((unsigned long long) BENCH[ii*matrix_size+kk], 2, numPendingWorkRequests);
-#ifdef ZERO_PACKETS_V2
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
-																				submit_three_or_work(0, 0, numPendingWorkRequests);
 #endif
+																				initiate_task_or_work(swID, 2, numPendingWorkRequests);
+																				add_args_and_parent_info_or_work(0, 0, numPendingWorkRequests);
+																				
+																				//submit_v4_in_dep_or_work((unsigned long long) (&(testVar[j])), numPendingWorkRequests);
+                                        submit_v4_in_dep_or_work((unsigned long long) BENCH[kk*matrix_size+kk], numPendingWorkRequests);
+                                        submit_v4_out_dep_or_work((unsigned long long) BENCH[ii*matrix_size+kk], numPendingWorkRequests);
                                 }
 
                         for (ii=kk+1; ii<matrix_size; ii++)
@@ -291,33 +252,25 @@ void sparselu_par_call_core(float **BENCH, int matrix_size, int submatrix_size)
 														asm volatile ("fence" ::: "memory");
 
                                                         num_iterations++;
-#ifdef ZERO_PACKETS_V2
-																												make_submission_request_or_work(48, 0, numPendingWorkRequests);
-																												submit_three_or_work(swID, 15, numPendingWorkRequests);
-#else
+#ifdef OLD
                                                         make_submission_request_or_work(12, 0, numPendingWorkRequests);
                                                         submit_three_or_work(swID, 3, numPendingWorkRequests);
-#endif
                                                         submit_three_or_work((unsigned long long) BENCH[ii*matrix_size+kk], 0, numPendingWorkRequests);
                                                         submit_three_or_work((unsigned long long) BENCH[kk*matrix_size+jj], 0, numPendingWorkRequests);
+#endif
+																												initiate_task_or_work(swID, 3, numPendingWorkRequests);
+																												add_args_and_parent_info_or_work(0, 0, numPendingWorkRequests);
+																												
+																												//submit_v4_in_dep_or_work((unsigned long long) (&(testVar[j])), numPendingWorkRequests);
+                                                        submit_v4_in_dep_or_work((unsigned long long) BENCH[ii*matrix_size+kk], numPendingWorkRequests);
+                                                        submit_v4_in_dep_or_work((unsigned long long) BENCH[kk*matrix_size+jj], numPendingWorkRequests);
 
 														asm volatile ("fence" ::: "memory");
 
+#ifdef OLD
                                                         submit_three_or_work((unsigned long long) BENCH[ii*matrix_size+jj], 2, numPendingWorkRequests);
-#ifdef ZERO_PACKETS_V2
-																												submit_three_or_work(0, 0, numPendingWorkRequests);
-																												submit_three_or_work(0, 0, numPendingWorkRequests);
-																												submit_three_or_work(0, 0, numPendingWorkRequests);
-																												submit_three_or_work(0, 0, numPendingWorkRequests);
-																												submit_three_or_work(0, 0, numPendingWorkRequests);
-																												submit_three_or_work(0, 0, numPendingWorkRequests);
-																												submit_three_or_work(0, 0, numPendingWorkRequests);
-																												submit_three_or_work(0, 0, numPendingWorkRequests);
-																												submit_three_or_work(0, 0, numPendingWorkRequests);
-																												submit_three_or_work(0, 0, numPendingWorkRequests);
-																												submit_three_or_work(0, 0, numPendingWorkRequests);
-																												submit_three_or_work(0, 0, numPendingWorkRequests);
 #endif
+                                                        submit_v4_out_dep_or_work((unsigned long long) BENCH[ii*matrix_size+jj], numPendingWorkRequests);
                                                 }
                                 }
                 }

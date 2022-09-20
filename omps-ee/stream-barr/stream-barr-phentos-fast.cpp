@@ -202,11 +202,19 @@ void tuned_initialization()
 			asm volatile ("fence" ::: "memory");
 			num_iterations++;
 
+#ifdef OLD
 			make_submission_request_or_work_fast(12, 0, numPendingWorkRequests);
 			submit_three_or_work_fast(swID, 3, numPendingWorkRequests);
 			submit_three_or_work_fast((unsigned long long) &(_a[j]), 2, numPendingWorkRequests);
 			submit_three_or_work_fast((unsigned long long) &(_b[j]), 2, numPendingWorkRequests);
 			submit_three_or_work_fast((unsigned long long) &(_c[j]), 2, numPendingWorkRequests);
+#endif
+			initiate_task_or_work_fast(swID, 3, numPendingWorkRequests);
+			add_args_and_parent_info_or_work_fast(0, 0, numPendingWorkRequests);
+			
+			submit_v4_out_dep_or_work_fast((unsigned long long) &(_a[j]), numPendingWorkRequests);
+			submit_v4_out_dep_or_work_fast((unsigned long long) &(_b[j]), numPendingWorkRequests);
+			submit_v4_out_dep_or_work_fast((unsigned long long) &(_c[j]), numPendingWorkRequests);
 		}
 }
 
@@ -356,31 +364,18 @@ void tuned_STREAM_Copy()
 			asm volatile ("fence" ::: "memory");
 			num_iterations++;
 
-#ifdef ZERO_PACKETS_V2
-			make_submission_request_or_work_fast(48, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(swID, 15, numPendingWorkRequests);
-#else
+#ifdef OLD
 			make_submission_request_or_work_fast(9, 0, numPendingWorkRequests);
 			submit_three_or_work_fast(swID, 2, numPendingWorkRequests);
-#endif
 
 			submit_three_or_work_fast((unsigned long long) &(_a[j]), 0, numPendingWorkRequests);
 			submit_three_or_work_fast((unsigned long long) &(_c[j]), 2, numPendingWorkRequests);
-#ifdef ZERO_PACKETS_V2
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
 #endif
+			initiate_task_or_work_fast(swID, 2, numPendingWorkRequests);
+			add_args_and_parent_info_or_work_fast(0, 0, numPendingWorkRequests);
+			
+			submit_v4_in_dep_or_work_fast((unsigned long long) &(_a[j]), numPendingWorkRequests);
+			submit_v4_out_dep_or_work_fast((unsigned long long) &(_c[j]), numPendingWorkRequests);
 		}
 }
 
@@ -418,31 +413,18 @@ void tuned_STREAM_Scale(double scalar)
 			asm volatile ("fence" ::: "memory");
 			num_iterations++;
 
-#ifdef ZERO_PACKETS_V2
-			make_submission_request_or_work_fast(48, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(swID, 15, numPendingWorkRequests);
-#else
+#ifdef OLD
 			make_submission_request_or_work_fast(9, 0, numPendingWorkRequests);
 			submit_three_or_work_fast(swID, 2, numPendingWorkRequests);
-#endif
 
 			submit_three_or_work_fast((unsigned long long) &(_b[j]), 2, numPendingWorkRequests);
 			submit_three_or_work_fast((unsigned long long) &(_c[j]), 0, numPendingWorkRequests);
-#ifdef ZERO_PACKETS_V2
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-			submit_three_or_work_fast(0, 0, numPendingWorkRequests);
 #endif
+			initiate_task_or_work_fast(swID, 2, numPendingWorkRequests);
+			add_args_and_parent_info_or_work_fast(0, 0, numPendingWorkRequests);
+			
+			submit_v4_out_dep_or_work_fast((unsigned long long) &(_b[j]), numPendingWorkRequests);
+			submit_v4_in_dep_or_work_fast((unsigned long long) &(_c[j]), numPendingWorkRequests);
 	}
 }
 
@@ -480,31 +462,20 @@ void tuned_STREAM_Add()
 		asm volatile ("fence" ::: "memory");
 		num_iterations++;
 
-#ifdef ZERO_PACKETS_V2
-		make_submission_request_or_work_fast(48, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(swID, 15, numPendingWorkRequests);
-#else
+#ifdef OLD
 		make_submission_request_or_work_fast(12, 0, numPendingWorkRequests);
 		submit_three_or_work_fast(swID, 3, numPendingWorkRequests);
-#endif
 
 		submit_three_or_work_fast((unsigned long long) &(_a[j]), 0, numPendingWorkRequests);
 		submit_three_or_work_fast((unsigned long long) &(_b[j]), 0, numPendingWorkRequests);
 		submit_three_or_work_fast((unsigned long long) &(_c[j]), 2, numPendingWorkRequests);
-#ifdef ZERO_PACKETS_V2
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
 #endif
+		initiate_task_or_work_fast(swID, 3, numPendingWorkRequests);
+		add_args_and_parent_info_or_work_fast(0, 0, numPendingWorkRequests);
+			
+		submit_v4_in_dep_or_work_fast((unsigned long long) &(_a[j]), numPendingWorkRequests);
+		submit_v4_in_dep_or_work_fast((unsigned long long) &(_b[j]), numPendingWorkRequests);
+		submit_v4_out_dep_or_work_fast((unsigned long long) &(_c[j]), numPendingWorkRequests);
 	}
 }
 
@@ -545,31 +516,20 @@ void tuned_STREAM_Triad(double scalar)
 		asm volatile ("fence" ::: "memory");
 		num_iterations++;
 
-#ifdef ZERO_PACKETS_V2
-		make_submission_request_or_work_fast(48, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(swID, 15, numPendingWorkRequests);
-#else
+#ifdef OLD
 		make_submission_request_or_work_fast(12, 0, numPendingWorkRequests);
 		submit_three_or_work_fast(swID, 3, numPendingWorkRequests);
-#endif
 
 		submit_three_or_work_fast((unsigned long long) &(_a[j]), 2, numPendingWorkRequests);
 		submit_three_or_work_fast((unsigned long long) &(_b[j]), 0, numPendingWorkRequests);
 		submit_three_or_work_fast((unsigned long long) &(_c[j]), 0, numPendingWorkRequests);
-#ifdef ZERO_PACKETS_V2
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
-		submit_three_or_work_fast(0, 0, numPendingWorkRequests);
 #endif
+		initiate_task_or_work_fast(swID, 3, numPendingWorkRequests);
+		add_args_and_parent_info_or_work_fast(0, 0, numPendingWorkRequests);
+			
+		submit_v4_out_dep_or_work_fast((unsigned long long) &(_a[j]), numPendingWorkRequests);
+		submit_v4_in_dep_or_work_fast((unsigned long long) &(_b[j]), numPendingWorkRequests);
+		submit_v4_in_dep_or_work_fast((unsigned long long) &(_c[j]), numPendingWorkRequests);
 	}
 }
 

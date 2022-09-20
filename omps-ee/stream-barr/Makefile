@@ -23,7 +23,8 @@ INCS  =
 
 EXTRA = -std=c99 -O3 -Wall -Wno-unused -mcmodel=large 
 EXTRA = -std=c99 -O3 -Wall -Wno-unused -DN=${TARGET_N}
-EXTRA_PHENTOS = -O3 -Wall -Wno-unused -DPHENTOS -DZERO_PACKETS_V2 -DN=${TARGET_N}
+#EXTRA_PHENTOS = -O3 -Wall -Wno-unused -DPHENTOS -DZERO_PACKETS_V2 -DN=${TARGET_N}
+EXTRA_PHENTOS = -O3 -Wall -Wno-unused -DPHENTOS -DN=${TARGET_N}
 
 $(PROGRAM)-phentos-ord-${TARGET_N}: $(PROGRAM)-phentos-ord.cpp
 	echo $(PROGRAM)-phentos-ord-${TARGET_N}

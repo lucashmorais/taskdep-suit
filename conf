@@ -2,8 +2,12 @@
 #CXX=g++
 #CC=riscv64-unknown-linux-gnu-gcc
 #CXX=riscv64-unknown-linux-gnu-g++
+
+#CC=gcc
 CC=riscv64-linux-gnu-gcc
 CXX=riscv64-linux-gnu-g++
+ARCH_CCARGS=-DRISCV64
+#ARCH_CCARGS=
 MCC=mcc
 FLAGS_BENCH=
 FLAGS_OMP=-fopenmp
@@ -11,4 +15,3 @@ FLAGS_OMPSS=--ompss
 BENCH_PATH=../../c/
 BENCH_FILES=bench.c sha256.c
 PREFIX=
-ARCH_CCARGS=-DRISCV64

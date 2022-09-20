@@ -229,7 +229,7 @@ double run(struct user_parameters* params)
     /// KERNEL INTENSIVE COMPUTATION
     START_TIMER;
     process_start_measure();
-#if defined(_OPENMP) || defined(_PHENTOS)
+#if defined(_OPENMP) || defined(_PHENTOS) || defined(_OMPSS) || defined(_OMPSS2)
 	#pragma message "Call to 'sparselu_par_call' has been enabled"
     sparselu_par_call(BENCH, matrix_size, submatrix_size);
 #else

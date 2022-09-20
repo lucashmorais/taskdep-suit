@@ -13,11 +13,7 @@ double dx, dy;
 void extra_init() {
 	numRetiredTasks = 0;
 	totalNumberOfSubmittedTasks = 0;
-#ifdef ZERO_PACKETS_V2
-	std::cout << "[feature]: ZERO_PACKETS_V2" << std::endl;
-	std::cout << "[feature]: SW-BASED PADDING" << std::endl;
 	std::cout << "[feature]: RESET COUNT OF SUBMITTED TASKS" << std::endl;
-#endif
 	femtos_init();
 }
 
@@ -139,31 +135,19 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 				asm volatile ("fence" ::: "memory");
 				num_iterations++;
 
-#ifdef ZERO_PACKETS_V2
-				make_submission_request_or_work(48, 0, numPendingWorkRequests);
-				submit_three_or_work(swID, 15, numPendingWorkRequests);
-#else
+#ifdef OLD
 				make_submission_request_or_work(9, 0, numPendingWorkRequests);
 				submit_three_or_work(swID, 2, numPendingWorkRequests);
-#endif
+
 				submit_three_or_work((unsigned long long) &((*u)[i][0]), 1, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*unew)[i][0]), 0, numPendingWorkRequests);
-
-#ifdef ZERO_PACKETS_V2
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
 #endif
+
+				initiate_task_or_work(swID, 2, numPendingWorkRequests);
+				add_args_and_parent_info_or_work(0, 0, numPendingWorkRequests);
+
+				submit_v4_in_dep_or_work((unsigned long long) (&((*u)[i][0])), numPendingWorkRequests);
+				submit_v4_out_dep_or_work((unsigned long long) (&((*unew)[i][0])), numPendingWorkRequests);
             }
             // Compute a new estimate.
             for (i = 0; i < nx; i++) {
@@ -175,31 +159,25 @@ void sweep (int nx_, int ny_, double dx_, double dy_, double *f__,
 				asm volatile ("fence" ::: "memory");
 				num_iterations++;
 
-#ifdef ZERO_PACKETS_V2
-				make_submission_request_or_work(48, 0, numPendingWorkRequests);
-				submit_three_or_work(swID, 15, numPendingWorkRequests);
-#else
+#ifdef OLD
 				make_submission_request_or_work(18, 0, numPendingWorkRequests);
 				submit_three_or_work(swID, 5, numPendingWorkRequests);
-#endif
+
 				submit_three_or_work((unsigned long long) &((*f)[i][0]), 0, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*u)[i-1][0]), 0, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*u)[i][0]), 0, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*u)[i+1][0]), 0, numPendingWorkRequests);
 				submit_three_or_work((unsigned long long) &((*unew)[i][0]), 1, numPendingWorkRequests);
-
-#ifdef ZERO_PACKETS_V2
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
-				submit_three_or_work(0, 0, numPendingWorkRequests);
 #endif
+
+				initiate_task_or_work(swID, 5, numPendingWorkRequests);
+				add_args_and_parent_info_or_work(0, 0, numPendingWorkRequests);
+
+				submit_v4_in_dep_or_work((unsigned long long) &((*f)[i][0]), numPendingWorkRequests);
+				submit_v4_in_dep_or_work((unsigned long long) &((*u)[i-1][0]), numPendingWorkRequests);
+				submit_v4_in_dep_or_work((unsigned long long) &((*u)[i][0]), numPendingWorkRequests);
+				submit_v4_in_dep_or_work((unsigned long long) &((*u)[i+1][0]), numPendingWorkRequests);
+				submit_v4_out_dep_or_work((unsigned long long) &((*unew)[i][0]), numPendingWorkRequests);
             }
         }
         printf("Going to task wait until %d tasks were retired.\n", num_iterations);

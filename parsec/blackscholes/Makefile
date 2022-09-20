@@ -1,6 +1,7 @@
 include ../../conf
 JACOBI=-DCHK_ERR
-FLAGS_BENCH=-DZERO_PACKETS_V2
+#FLAGS_BENCH=-DZERO_PACKETS_V2
+FLAGS_BENCH=
 
 build:
 	$(PREFIX)$(CC) $(ARCH_CCARGS) src/bs-seq.c $(BENCH_PATH)bench.c $(BENCH_PATH)sha256.c $(FLAGS_BENCH) $(JACOBI) -lm -o bin/blackscholes-seq

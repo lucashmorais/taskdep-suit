@@ -35,6 +35,7 @@ int BSIZE;
 #define fptype float
 
 #define NUM_RUNS 100
+int NRUNS;
 
 typedef struct OptionData_ {
 		fptype s;          // spot price
@@ -239,7 +240,7 @@ void bs_thread(void *tid_ptr,fptype *prices) {
 	printf("[bs_thread]: We are about to start the first run.\n");
 #endif
 
-    for (j=0; j<NUM_RUNS; j++) {
+    for (j=0; j<NRUNS; j++) {
 #ifdef DEBUG
 		printf("[bs_thread]: Run #%d\n", j);
 #endif
@@ -269,13 +270,9 @@ void bs_thread(void *tid_ptr,fptype *prices) {
 #endif
 
 			num_iterations++;
-#ifdef ZERO_PACKETS_V2
-			make_submission_request_or_work(48, 0, numPendingWorkRequests);
-			submit_three_or_work(swID, 15, numPendingWorkRequests);
-#else
+#ifdef OLD
 			make_submission_request_or_work(24, 0, numPendingWorkRequests);
 			submit_three_or_work(swID, 7, numPendingWorkRequests);
-#endif
 
 			submit_three_or_work((unsigned long long) (&sptprice[i]), 0, numPendingWorkRequests);
 			submit_three_or_work((unsigned long long) (&strike[i]), 0, numPendingWorkRequests);
@@ -284,16 +281,17 @@ void bs_thread(void *tid_ptr,fptype *prices) {
 			submit_three_or_work((unsigned long long) (&otime[i]), 0, numPendingWorkRequests);
 			submit_three_or_work((unsigned long long) (&otype[i]), 0, numPendingWorkRequests);
 			submit_three_or_work((unsigned long long) (&prices[i]), 1, numPendingWorkRequests);
-#ifdef ZERO_PACKETS_V2
-			submit_three_or_work(0, 0, numPendingWorkRequests);
-			submit_three_or_work(0, 0, numPendingWorkRequests);
-			submit_three_or_work(0, 0, numPendingWorkRequests);
-			submit_three_or_work(0, 0, numPendingWorkRequests);
-			submit_three_or_work(0, 0, numPendingWorkRequests);
-			submit_three_or_work(0, 0, numPendingWorkRequests);
-			submit_three_or_work(0, 0, numPendingWorkRequests);
-			submit_three_or_work(0, 0, numPendingWorkRequests);
 #endif
+			initiate_task_or_work(swID, 7, numPendingWorkRequests);
+			add_args_and_parent_info_or_work(0, 0, numPendingWorkRequests);
+			
+			submit_v4_in_dep_or_work((unsigned long long) (&sptprice[i]), numPendingWorkRequests);
+			submit_v4_in_dep_or_work((unsigned long long) (&strike[i]), numPendingWorkRequests);
+			submit_v4_in_dep_or_work((unsigned long long) (&rate[i]), numPendingWorkRequests);
+			submit_v4_in_dep_or_work((unsigned long long) (&volatility[i]), numPendingWorkRequests);
+			submit_v4_in_dep_or_work((unsigned long long) (&otime[i]), numPendingWorkRequests);
+			submit_v4_in_dep_or_work((unsigned long long) (&otype[i]), numPendingWorkRequests);
+			submit_v4_out_dep_or_work((unsigned long long) (&prices[i]), numPendingWorkRequests);
 
 #ifdef DEBUG
 			printf("[bs_thread, run %d, stride %d]: We have just sent all dependences\n", j, i);
@@ -361,6 +359,13 @@ int main (int argc, char **argv)
 		BSIZE = BSIZE_UNIT;
 	}
 
+	if(argc > 5 ) {
+		NRUNS = atoi(argv[5]);
+	}
+	else {
+		NRUNS = NUM_RUNS;
+	}
+
     //Read input data from file
     file = fopen(inputFile, "r");
     if(file == NULL) {
@@ -405,7 +410,7 @@ int main (int argc, char **argv)
     }
 
     if(allow_out) printf("Num of Options: %d\n", numOptions);
-    if(allow_out) printf("Num of Runs: %d\n", NUM_RUNS);
+    if(allow_out) printf("Num of Runs: %d\n", NRUNS);
 
 #define PAD 256
 #define LINESIZE 64

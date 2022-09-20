@@ -34,7 +34,7 @@ void parse(int argc, char* argv[], struct user_parameters* params)
 #endif
 
     int i;
-    params->check = 1; /*Always check*/
+    params->check = 0;
     for(i=1; i<argc; i++) {
         if(!strcmp(argv[i], "-c"))
             params->check = 1;
